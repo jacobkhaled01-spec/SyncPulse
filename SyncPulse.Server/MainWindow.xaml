@@ -2,10 +2,11 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:SyncPulse.Server.ViewModels"
-        Title="⚡ SyncPulse Central Server - لوحة التحكم الإدارية"
-        Height="720" Width="1100"
+        Title="⚡ SyncPulse Enterprise Server | لوحة التحكم المركزية"
+        Height="760" Width="1180"
+        MinHeight="680" MinWidth="980"
         WindowStartupLocation="CenterScreen"
-        Background="#0F172A"
+        Background="#0B0F19"
         Foreground="#F8FAFC"
         FontFamily="Segoe UI"
         FlowDirection="RightToLeft">
@@ -14,61 +15,159 @@
         <vm:ServerMainViewModel />
     </Window.DataContext>
 
-    <Grid Margin="16">
+    <Window.Resources>
+        <!-- أنماط البطاقات الفاخرة (Glassmorphism & Card Styles) -->
+        <Style x:Key="ModernCard" TargetType="Border">
+            <Setter Property="Background" Value="#151D2E" />
+            <Setter Property="BorderBrush" Value="#26334D" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="14" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="20" Direction="270" ShadowDepth="4" Opacity="0.35" Color="#000000" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- نمط الأزرار الحديثة بتأثير التمرير والظلال -->
+        <Style x:Key="PrimaryStartBtn" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#059669" Offset="0" />
+                        <GradientStop Color="#10B981" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.4" Color="#10B981" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryStopBtn" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#E11D48" Offset="0" />
+                        <GradientStop Color="#F43F5E" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="Padding" Value="20,10" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.4" Color="#E11D48" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- تخصيص شريط التمرير -->
+        <Style TargetType="ScrollBar">
+            <Setter Property="Background" Value="#0F172A" />
+            <Setter Property="Foreground" Value="#334155" />
+            <Setter Property="Width" Value="8" />
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- 1. الشريط العلوي: شريط الحالة والتحكم بالخادم -->
-        <Border Grid.Row="0" Background="#1E293B" CornerRadius="12" Padding="16" Margin="0,0,0,16" BorderBrush="#334155" BorderThickness="1">
+        <!-- 1. شريط التحكم العلوي والمقاييس اللحظية (Top Header & Metric Badges) -->
+        <Border Grid.Row="0" Style="{StaticResource ModernCard}" Padding="18,14" Margin="0,0,0,18">
             <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <Border Background="#0EA5E9" CornerRadius="8" Width="42" Height="42" Margin="0,0,14,0">
-                        <TextBlock Text="⚡" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                <!-- شعار النظام واسم الخادم -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,24,0">
+                    <Border CornerRadius="12" Width="48" Height="48" Margin="0,0,14,0">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#6366F1" Offset="0" />
+                                <GradientStop Color="#06B6D4" Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
+                        <TextBlock Text="⚡" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="SyncPulse Server Dashboard" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
-                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
-                            <TextBlock Text="الحالة: " Foreground="#94A3B8" FontSize="13" />
-                            <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
-                            <TextBlock Text="عنوان IP: " Foreground="#94A3B8" FontSize="13" />
-                            <TextBlock Text="{Binding ServerIP}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
-                            <TextBlock Text="المنفذ TCP: " Foreground="#94A3B8" FontSize="13" />
-                            <TextBlock Text="{Binding ServerPort}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
-                            <TextBlock Text="المتصلين: " Foreground="#94A3B8" FontSize="13" />
-                            <TextBlock Text="{Binding ActiveClientsCount}" Foreground="#4ADE80" FontWeight="Bold" FontSize="13" />
-                        </StackPanel>
+                        <TextBlock Text="SyncPulse Enterprise" FontSize="19" FontWeight="Bold" Foreground="#F8FAFC" />
+                        <TextBlock Text="Local TCP &amp; UDP High-Performance Hub" FontSize="11" Foreground="#64748B" Margin="0,2,0,0" />
                     </StackPanel>
                 </StackPanel>
 
-                <!-- أزرار التشغيل والإيقاف -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="▶ تشغيل الخادم" Command="{Binding StartCommand}"
-                            Background="#10B981" Foreground="White" FontWeight="Bold"
-                            Padding="16,10" Margin="0,0,10,0" BorderThickness="0" Cursor="Hand">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="8" />
-                            </Style>
-                        </Button.Resources>
-                    </Button>
+                <!-- بطاقات المقاييس والإحصائيات الحية -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!-- بطاقة الحالة -->
+                    <Border Background="#101827" CornerRadius="10" Padding="14,8" Margin="0,0,12,0" BorderBrush="#1E293B" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="الحالة: " Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding StatusText}" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
 
-                    <Button Content="⏹ إيقاف الخادم" Command="{Binding StopCommand}"
-                            Background="#EF4444" Foreground="White" FontWeight="Bold"
-                            Padding="16,10" BorderThickness="0" Cursor="Hand">
-                        <Button.Resources>
-                            <Style TargetType="Border">
-                                <Setter Property="CornerRadius" Value="8" />
-                            </Style>
-                        </Button.Resources>
-                    </Button>
+                    <!-- بطاقة عنوان IP -->
+                    <Border Background="#101827" CornerRadius="10" Padding="14,8" Margin="0,0,12,0" BorderBrush="#1E293B" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🌐 الـ IP المحلي: " Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding ServerIP}" Foreground="#38BDF8" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- بطاقة المنفذ -->
+                    <Border Background="#101827" CornerRadius="10" Padding="14,8" Margin="0,0,12,0" BorderBrush="#1E293B" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🔌 المنفذ: " Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding ServerPort}" Foreground="#818CF8" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+
+                    <!-- بطاقة عدد المتصلين -->
+                    <Border Background="#101827" CornerRadius="10" Padding="14,8" BorderBrush="#1E293B" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="👥 المتصلون: " Foreground="#94A3B8" FontSize="12" VerticalAlignment="Center" />
+                            <TextBlock Text="{Binding ActiveClientsCount}" Foreground="#4ADE80" FontWeight="Bold" FontSize="13" Margin="4,0,0,0" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- أزرار الإدارة -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="▶ تشغيل الخادم" Command="{Binding StartCommand}" Style="{StaticResource PrimaryStartBtn}" Margin="0,0,10,0" />
+                    <Button Content="⏹ إيقاف الخادم" Command="{Binding StopCommand}" Style="{StaticResource PrimaryStopBtn}" />
                 </StackPanel>
             </Grid>
         </Border>
@@ -76,50 +175,66 @@
         <!-- 2. منطقة العمل الرئيسية: جدول المتصلين + سجل الحزم اللحظي -->
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*" />
-                <ColumnDefinition Width="4*" />
+                <ColumnDefinition Width="6.2*" />
+                <ColumnDefinition Width="3.8*" />
             </Grid.ColumnDefinitions>
 
-            <!-- القسم الأيمن: جدول العملاء المتصلين -->
-            <Border Grid.Column="0" Background="#1E293B" CornerRadius="12" Padding="14" Margin="0,0,12,0" BorderBrush="#334155" BorderThickness="1">
+            <!-- القسم الأيمن: جدول المتصلين النشطين -->
+            <Border Grid.Column="0" Style="{StaticResource ModernCard}" Padding="18" Margin="0,0,16,0">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
-                        <TextBlock Text="👥 العملاء المتصلون حالياً (Active Sessions)" FontSize="15" FontWeight="Bold" Foreground="#E2E8F0" />
-                    </StackPanel>
+                    <Grid Margin="0,0,0,14">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Background="#1E293B" CornerRadius="6" Width="26" Height="26" Margin="0,0,8,0">
+                                <TextBlock Text="👥" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="الجلسات المتصلة حالياً (Active Client Sessions)" FontSize="15" FontWeight="Bold" Foreground="#F1F5F9" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
 
                     <DataGrid Grid.Row="1" ItemsSource="{Binding ConnectedClients}" AutoGenerateColumns="False"
                               Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
-                              HorizontalGridLinesBrush="#334155" RowBackground="#1E293B" AlternatingRowBackground="#0F172A"
-                              Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single">
+                              HorizontalGridLinesBrush="#1E293B" RowBackground="Transparent" AlternatingRowBackground="#0E1524"
+                              Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                              RowHeight="40" FontSize="12">
+                        
                         <DataGrid.ColumnHeaderStyle>
                             <Style TargetType="DataGridColumnHeader">
-                                <Setter Property="Background" Value="#334155" />
+                                <Setter Property="Background" Value="#0F172A" />
                                 <Setter Property="Foreground" Value="#94A3B8" />
-                                <Setter Property="Padding" Value="8,6" />
+                                <Setter Property="Padding" Value="10,10" />
                                 <Setter Property="FontWeight" Value="SemiBold" />
+                                <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                <Setter Property="BorderBrush" Value="#334155" />
                             </Style>
                         </DataGrid.ColumnHeaderStyle>
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="60" />
-                            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="110" />
-                            <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="130" />
-                            <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="120" />
-                            <DataGridTextColumn Header="المنفذ" Binding="{Binding ClientPort}" Width="70" />
-                            <DataGridTextColumn Header="وقت الاتصال" Binding="{Binding ConnectedAt, StringFormat='{}{0:HH:mm:ss}'}" Width="90" />
-                            <DataGridTemplateColumn Header="إجراء" Width="70">
+                            <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="65" />
+                            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="120" />
+                            <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="140" />
+                            <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="125" />
+                            <DataGridTextColumn Header="المنفذ" Binding="{Binding ClientPort}" Width="75" />
+                            <DataGridTextColumn Header="وقت الاتصال" Binding="{Binding ConnectedAt, StringFormat='{}{0:HH:mm:ss}'}" Width="95" />
+                            
+                            <DataGridTemplateColumn Header="إجراء" Width="80">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Button Content="طرد"
                                                 Command="{Binding DataContext.KickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                                 CommandParameter="{Binding}"
-                                                Background="#EF4444" Foreground="White" FontSize="11"
-                                                Padding="6,2" BorderThickness="0" Cursor="Hand" />
+                                                Background="#EF4444" Foreground="White" FontWeight="Bold" FontSize="11"
+                                                Padding="10,4" BorderThickness="0" Cursor="Hand">
+                                            <Button.Resources>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="CornerRadius" Value="6" />
+                                                </Style>
+                                            </Button.Resources>
+                                        </Button>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
@@ -128,40 +243,73 @@
                 </Grid>
             </Border>
 
-            <!-- القسم الأيسر: سجل الحزم والنشاط اللحظي -->
-            <Border Grid.Column="1" Background="#1E293B" CornerRadius="12" Padding="14" BorderBrush="#334155" BorderThickness="1">
+            <!-- القسم الأيسر: كونسول سجل الحزم والنشاط اللحظي -->
+            <Border Grid.Column="1" Style="{StaticResource ModernCard}" Padding="18">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
 
-                    <Grid Margin="0,0,0,10">
-                        <TextBlock Text="📡 سجل الحزم والنشاط اللحظي" FontSize="15" FontWeight="Bold" Foreground="#E2E8F0" VerticalAlignment="Center" />
+                    <Grid Margin="0,0,0,14">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <Border Background="#1E293B" CornerRadius="6" Width="26" Height="26" Margin="0,0,8,0">
+                                <TextBlock Text="📡" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            </Border>
+                            <TextBlock Text="سجل تدفق الحزم (Live Stream)" FontSize="15" FontWeight="Bold" Foreground="#F1F5F9" VerticalAlignment="Center" />
+                        </StackPanel>
+
                         <Button Content="مسح السجل" Command="{Binding ClearLogsCommand}" HorizontalAlignment="Left"
-                                Background="#475569" Foreground="#F8FAFC" FontSize="11" Padding="8,3" BorderThickness="0" Cursor="Hand" />
+                                Background="#1E293B" Foreground="#94A3B8" FontSize="11" Padding="12,5" BorderBrush="#334155" BorderThickness="1" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="6" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
                     </Grid>
 
-                    <ListBox Grid.Row="1" ItemsSource="{Binding PacketLogs}"
-                             Background="#0A0F1D" BorderThickness="1" BorderBrush="#1E293B"
-                             Foreground="#38BDF8" FontFamily="Consolas" FontSize="12" Padding="8">
-                        <ListBox.ItemContainerStyle>
-                            <Style TargetType="ListBoxItem">
-                                <Setter Property="Padding" Value="2" />
-                            </Style>
-                        </ListBox.ItemContainerStyle>
-                    </ListBox>
+                    <!-- شاشة الكونسول السوداء المتطورة -->
+                    <Border Grid.Row="1" Background="#060911" CornerRadius="10" BorderBrush="#1E293B" BorderThickness="1" Padding="6">
+                        <ListBox ItemsSource="{Binding PacketLogs}"
+                                 Background="Transparent" BorderThickness="0"
+                                 Foreground="#38BDF8" FontFamily="Consolas" FontSize="11.5">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="4,2" />
+                                    <Setter Property="Margin" Value="0,1" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" CornerRadius="4">
+                                                    <ContentPresenter />
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#111A2E" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Border>
                 </Grid>
             </Border>
         </Grid>
 
-        <!-- 3. الشريط السفلي: مؤشرات النظام ومعلومات البروتوكول -->
-        <Border Grid.Row="2" Background="#1E293B" CornerRadius="8" Padding="12,6" Margin="0,12,0,0" BorderBrush="#334155" BorderThickness="1">
+        <!-- 3. الشريط السفلي: شارات البروتوكول والمعايير -->
+        <Border Grid.Row="2" Style="{StaticResource ModernCard}" Padding="16,8" Margin="0,16,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                <TextBlock Text="🔒 النواة المشتركة: SyncPulse.Core | " Foreground="#64748B" FontSize="12" />
-                <TextBlock Text="بروتوكول التأطير: IETF 12-Byte FrameHeader | " Foreground="#64748B" FontSize="12" />
-                <TextBlock Text="قاعدة البيانات: SQLite 3NF (WAL Enabled) | " Foreground="#64748B" FontSize="12" />
-                <TextBlock Text="المنافذ: TCP 8888 (Control), UDP 8889 (Media Relay), UDP 8887 (Discovery)" Foreground="#0EA5E9" FontWeight="SemiBold" FontSize="12" />
+                <TextBlock Text="🔒 النواة: SyncPulse.Core" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
+                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
+                <TextBlock Text="📦 التأطير: IETF 12-Byte FrameHeader" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
+                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
+                <TextBlock Text="💾 قاعدة البيانات: SQLite 3NF (WAL Enabled)" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
+                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
+                <TextBlock Text="⚡ المنافذ: TCP 8888 (Control), UDP 8889 (Media Relay), UDP 8887 (Discovery)" Foreground="#0EA5E9" FontWeight="SemiBold" FontSize="11.5" />
             </StackPanel>
         </Border>
     </Grid>
