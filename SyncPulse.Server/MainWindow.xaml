@@ -1,12 +1,168 @@
-﻿<Window x:Class="SyncPulse.Server.MainWindow"
+<Window x:Class="SyncPulse.Server.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SyncPulse.Server"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:vm="clr-namespace:SyncPulse.Server.ViewModels"
+        Title="⚡ SyncPulse Central Server - لوحة التحكم الإدارية"
+        Height="720" Width="1100"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A"
+        Foreground="#F8FAFC"
+        FontFamily="Segoe UI"
+        FlowDirection="RightToLeft">
 
+    <Window.DataContext>
+        <vm:ServerMainViewModel />
+    </Window.DataContext>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 1. الشريط العلوي: شريط الحالة والتحكم بالخادم -->
+        <Border Grid.Row="0" Background="#1E293B" CornerRadius="12" Padding="16" Margin="0,0,0,16" BorderBrush="#334155" BorderThickness="1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Background="#0EA5E9" CornerRadius="8" Width="42" Height="42" Margin="0,0,14,0">
+                        <TextBlock Text="⚡" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock Text="SyncPulse Server Dashboard" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
+                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                            <TextBlock Text="الحالة: " Foreground="#94A3B8" FontSize="13" />
+                            <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
+                            <TextBlock Text="عنوان IP: " Foreground="#94A3B8" FontSize="13" />
+                            <TextBlock Text="{Binding ServerIP}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
+                            <TextBlock Text="المنفذ TCP: " Foreground="#94A3B8" FontSize="13" />
+                            <TextBlock Text="{Binding ServerPort}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="13" Margin="0,0,16,0" />
+                            <TextBlock Text="المتصلين: " Foreground="#94A3B8" FontSize="13" />
+                            <TextBlock Text="{Binding ActiveClientsCount}" Foreground="#4ADE80" FontWeight="Bold" FontSize="13" />
+                        </StackPanel>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- أزرار التشغيل والإيقاف -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="▶ تشغيل الخادم" Command="{Binding StartCommand}"
+                            Background="#10B981" Foreground="White" FontWeight="Bold"
+                            Padding="16,10" Margin="0,0,10,0" BorderThickness="0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="⏹ إيقاف الخادم" Command="{Binding StopCommand}"
+                            Background="#EF4444" Foreground="White" FontWeight="Bold"
+                            Padding="16,10" BorderThickness="0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- 2. منطقة العمل الرئيسية: جدول المتصلين + سجل الحزم اللحظي -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*" />
+                <ColumnDefinition Width="4*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- القسم الأيمن: جدول العملاء المتصلين -->
+            <Border Grid.Column="0" Background="#1E293B" CornerRadius="12" Padding="14" Margin="0,0,12,0" BorderBrush="#334155" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
+                        <TextBlock Text="👥 العملاء المتصلون حالياً (Active Sessions)" FontSize="15" FontWeight="Bold" Foreground="#E2E8F0" />
+                    </StackPanel>
+
+                    <DataGrid Grid.Row="1" ItemsSource="{Binding ConnectedClients}" AutoGenerateColumns="False"
+                              Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#334155" RowBackground="#1E293B" AlternatingRowBackground="#0F172A"
+                              Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single">
+                        <DataGrid.ColumnHeaderStyle>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Background" Value="#334155" />
+                                <Setter Property="Foreground" Value="#94A3B8" />
+                                <Setter Property="Padding" Value="8,6" />
+                                <Setter Property="FontWeight" Value="SemiBold" />
+                            </Style>
+                        </DataGrid.ColumnHeaderStyle>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="60" />
+                            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="110" />
+                            <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="130" />
+                            <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="120" />
+                            <DataGridTextColumn Header="المنفذ" Binding="{Binding ClientPort}" Width="70" />
+                            <DataGridTextColumn Header="وقت الاتصال" Binding="{Binding ConnectedAt, StringFormat='{}{0:HH:mm:ss}'}" Width="90" />
+                            <DataGridTemplateColumn Header="إجراء" Width="70">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Content="طرد"
+                                                Command="{Binding DataContext.KickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                CommandParameter="{Binding}"
+                                                Background="#EF4444" Foreground="White" FontSize="11"
+                                                Padding="6,2" BorderThickness="0" Cursor="Hand" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <!-- القسم الأيسر: سجل الحزم والنشاط اللحظي -->
+            <Border Grid.Column="1" Background="#1E293B" CornerRadius="12" Padding="14" BorderBrush="#334155" BorderThickness="1">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Margin="0,0,0,10">
+                        <TextBlock Text="📡 سجل الحزم والنشاط اللحظي" FontSize="15" FontWeight="Bold" Foreground="#E2E8F0" VerticalAlignment="Center" />
+                        <Button Content="مسح السجل" Command="{Binding ClearLogsCommand}" HorizontalAlignment="Left"
+                                Background="#475569" Foreground="#F8FAFC" FontSize="11" Padding="8,3" BorderThickness="0" Cursor="Hand" />
+                    </Grid>
+
+                    <ListBox Grid.Row="1" ItemsSource="{Binding PacketLogs}"
+                             Background="#0A0F1D" BorderThickness="1" BorderBrush="#1E293B"
+                             Foreground="#38BDF8" FontFamily="Consolas" FontSize="12" Padding="8">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="2" />
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <!-- 3. الشريط السفلي: مؤشرات النظام ومعلومات البروتوكول -->
+        <Border Grid.Row="2" Background="#1E293B" CornerRadius="8" Padding="12,6" Margin="0,12,0,0" BorderBrush="#334155" BorderThickness="1">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <TextBlock Text="🔒 النواة المشتركة: SyncPulse.Core | " Foreground="#64748B" FontSize="12" />
+                <TextBlock Text="بروتوكول التأطير: IETF 12-Byte FrameHeader | " Foreground="#64748B" FontSize="12" />
+                <TextBlock Text="قاعدة البيانات: SQLite 3NF (WAL Enabled) | " Foreground="#64748B" FontSize="12" />
+                <TextBlock Text="المنافذ: TCP 8888 (Control), UDP 8889 (Media Relay), UDP 8887 (Discovery)" Foreground="#0EA5E9" FontWeight="SemiBold" FontSize="12" />
+            </StackPanel>
+        </Border>
     </Grid>
 </Window>

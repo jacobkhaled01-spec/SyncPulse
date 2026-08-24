@@ -6,6 +6,7 @@ using SyncPulse.Core.Enums;
 using SyncPulse.Core.Packets;
 using SyncPulse.Core.Protocol;
 using SyncPulse.Core.Security;
+using SyncPulse.Server.Data;
 
 namespace SyncPulse.Tests
 {
@@ -19,7 +20,7 @@ namespace SyncPulse.Tests
             Console.OutputEncoding = Encoding.UTF8;
             Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("===================================================================");
-            Console.WriteLine("🧪 SecureTalk / SyncPulse.Core Automated Verification Suite");
+            Console.WriteLine("🧪 SecureTalk / SyncPulse.Core & Server Automated Verification Suite");
             Console.WriteLine("===================================================================\n");
             Console.ResetColor();
 
@@ -37,6 +38,9 @@ namespace SyncPulse.Tests
 
             // 4. Stream Parser Simulation (TCP Fragmentation)
             await TestStreamParserWithSimulatedFragmentationAsync();
+
+            // 5. Server Database & 3NF Schema Integration Tests
+            await TestServerDatabaseIntegrationAsync();
 
             // Summary
             Console.WriteLine("\n===================================================================");
@@ -94,7 +98,7 @@ namespace SyncPulse.Tests
         {
             Console.WriteLine("\n--- [2] FrameHeader Security & Rejection Tests ---");
             byte[] invalidMagic = new byte[12];
-            invalidMagic[0] = 0x47; // 'G' (e.g. HTTP GET)
+            invalidMagic[0] = 0x47; // 'G'
             invalidMagic[1] = 0x01;
 
             bool parsed = FrameHeader.TryDeserialize(invalidMagic, out _, out string? error);
@@ -135,7 +139,6 @@ namespace SyncPulse.Tests
 
             Assert(packetBytes.Length == FrameHeader.HeaderSize + packet.Payload.Length, "Packet total bytes must equal 12 + PayloadLength.");
 
-            // Deserialize full packet
             FrameHeader.TryDeserialize(packetBytes.AsSpan(0, 12), out FrameHeader header, out _);
             byte[] payloadOnly = new byte[header.PayloadLength];
             Buffer.BlockCopy(packetBytes, 12, payloadOnly, 0, payloadOnly.Length);
@@ -194,19 +197,105 @@ namespace SyncPulse.Tests
             var originalPacket = SyncPacket.Create(PacketType.DirectChatMessage, chat, 99);
             byte[] fullBytes = originalPacket.ToBytes();
 
-            // Simulate TCP delivering bytes in 3 small fragmented chunks: 5 bytes, 10 bytes, remainder
             using var simulatedStream = new MemoryStream();
             await simulatedStream.WriteAsync(fullBytes.AsMemory(0, fullBytes.Length));
-            simulatedStream.Position = 0; // Rewind for reading
+            simulatedStream.Position = 0;
 
             var parsedPacket = await FrameStreamParser.ReadPacketAsync(simulatedStream);
 
             Assert(parsedPacket != null, "Stream parser must read packet across stream boundaries.");
             Assert(parsedPacket?.Header.Type == PacketType.DirectChatMessage, "Parsed PacketType must match.");
             Assert(parsedPacket?.Header.SequenceNumber == 99, "Parsed SequenceNumber must match.");
-            
+
             var parsedChat = parsedPacket?.GetPayload<ChatMessagePacket>();
             Assert(parsedChat?.Content == "Simulated TCP Stream Test", "Parsed chat content must match original.");
+        }
+
+        private static async Task TestServerDatabaseIntegrationAsync()
+        {
+            Console.WriteLine("\n--- [7] Server SQLite Database & 3NF Repositories Integration ---");
+
+            string testDbFile = $"test_syncpulse_{Guid.NewGuid():N}.db";
+            var db = new DatabaseManager(testDbFile);
+            var users = new UserRepository(db);
+            var contacts = new ContactRepository(db);
+            var messages = new MessageRepository(db);
+            var calls = new CallRepository(db);
+            var audit = new AuditLogRepository(db);
+
+            try
+            {
+                // 1. Initialize Tables and Indexes
+                await db.InitializeDatabaseAsync();
+                Assert(File.Exists(db.DatabasePath), "SQLite database file must be created.");
+
+                // 2. Register Users
+                var (reg1Success, user1Id, _) = await users.RegisterUserAsync("yacoub", "Pass1234!", "يعقوب خالد");
+                var (reg2Success, user2Id, _) = await users.RegisterUserAsync("omar", "Pass5678!", "عمر بن الخطاب");
+                var (duplicateReg, _, _) = await users.RegisterUserAsync("yacoub", "OtherPass", "Duplicate");
+
+                Assert(reg1Success && user1Id > 0, "User 1 registration must succeed.");
+                Assert(reg2Success && user2Id > 0, "User 2 registration must succeed.");
+                Assert(!duplicateReg, "Duplicate username registration must be rejected.");
+
+                // 3. Authenticate User
+                var (authSuccess, authUserId, authUsername, displayName, _) = await users.AuthenticateUserAsync("yacoub", "Pass1234!");
+                var (authFail, _, _, _, _) = await users.AuthenticateUserAsync("yacoub", "WrongPassword");
+
+                Assert(authSuccess && authUserId == user1Id && authUsername == "yacoub", "Valid login credentials must succeed.");
+                Assert(!authFail, "Invalid password login must fail.");
+
+                // 4. Search and Add Contact
+                var searchedUser = await users.SearchUserByUsernameAsync("omar");
+                Assert(searchedUser != null && searchedUser.UserID == user2Id, "Search by @username must find the user.");
+
+                bool addedContact = await contacts.AddContactAsync(user1Id, user2Id, "صديقي عمر");
+                Assert(addedContact, "Adding contact must succeed.");
+
+                var user1Contacts = await contacts.GetContactsAsync(user1Id);
+                Assert(user1Contacts.Count == 1 && user1Contacts[0].DisplayName == "صديقي عمر", "Contact list must return added contact with custom name.");
+
+                // 5. Direct 1-to-1 Conversations & Messaging
+                int convId = await messages.GetOrCreateConversationAsync(user1Id, user2Id);
+                int convIdReversed = await messages.GetOrCreateConversationAsync(user2Id, user1Id);
+                Assert(convId > 0 && convId == convIdReversed, "ConversationID must be identical regardless of user order.");
+
+                int msg1Id = await messages.SaveMessageAsync(convId, user1Id, user2Id, "مرحبا يا عمر!", null);
+                Assert(msg1Id > 0, "Saving direct message must return valid MessageID.");
+
+                // 6. Telegram-Style Offline Messages & Acks
+                var pendingOmar = await messages.GetUndeliveredMessagesAsync(user2Id);
+                Assert(pendingOmar.Count == 1 && pendingOmar[0].MessageID == msg1Id && pendingOmar[0].Status == MessageStatus.Sent, "Offline message queue must contain pending message.");
+
+                await messages.UpdateMessageStatusAsync(msg1Id, MessageStatus.Delivered);
+                var history = await messages.GetConversationHistoryAsync(convId);
+                Assert(history.Count == 1 && history[0].Status == MessageStatus.Delivered, "Message status update to Delivered (✓✓) must persist.");
+
+                // 7. Call Records
+                int callId = await calls.LogCallStartAsync(user1Id, user2Id, CallType.Video);
+                Assert(callId > 0, "Logging call start must return valid CallID.");
+
+                await calls.EndCallAsync(callId, 125, "Completed");
+                var recentCalls = await calls.GetRecentCallsAsync(10);
+                Assert(recentCalls.Count == 1 && recentCalls[0].DurationSeconds == 125, "Call duration and end reason must be recorded.");
+
+                // 8. Audit Logs
+                await audit.LogAsync("Info", "Test", "Test audit log entry", user1Id);
+                var logs = await audit.GetRecentLogsAsync(10);
+                Assert(logs.Count >= 1, "Audit log entry must be retrieved.");
+            }
+            finally
+            {
+                // Cleanup temp test DB
+                try
+                {
+                    if (File.Exists(db.DatabasePath))
+                    {
+                        File.Delete(db.DatabasePath);
+                    }
+                }
+                catch { }
+            }
         }
     }
 }
