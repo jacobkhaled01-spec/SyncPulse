@@ -16,6 +16,8 @@ namespace SyncPulse.Client.ViewModels
         private object _currentView;
         private AuthViewModel _authVM;
         private ChatViewModel? _chatVM;
+        private CallViewModel? _activeCallVM;
+        private CallWindow? _activeCallWindow;
 
         public object CurrentView
         {
@@ -57,17 +59,22 @@ namespace SyncPulse.Client.ViewModels
         {
             App.Current?.Dispatcher.Invoke(() =>
             {
-                var callVM = new CallViewModel(_network, _media);
-                callVM.InitializeOutgoing(targetUserId, targetUsername, targetDisplayName, callType);
+                _activeCallVM = new CallViewModel(_network, _media);
+                _activeCallVM.InitializeOutgoing(targetUserId, targetUsername, targetDisplayName, callType);
 
-                var callWindow = new CallWindow
+                _activeCallWindow = new CallWindow
                 {
-                    DataContext = callVM,
+                    DataContext = _activeCallVM,
                     Owner = App.Current?.MainWindow
                 };
 
-                callVM.CallClosed += () => callWindow.Close();
-                callWindow.Show();
+                _activeCallVM.CallClosed += () =>
+                {
+                    _activeCallWindow?.Close();
+                    _activeCallVM = null;
+                    _activeCallWindow = null;
+                };
+                _activeCallWindow.Show();
             });
         }
 
@@ -77,17 +84,27 @@ namespace SyncPulse.Client.ViewModels
             {
                 if (signal.Action == CallAction.Offer)
                 {
-                    var callVM = new CallViewModel(_network, _media);
-                    callVM.InitializeIncoming(signal);
+                    _activeCallVM = new CallViewModel(_network, _media);
+                    _activeCallVM.InitializeIncoming(signal);
 
-                    var callWindow = new CallWindow
+                    _activeCallWindow = new CallWindow
                     {
-                        DataContext = callVM,
+                        DataContext = _activeCallVM,
                         Owner = App.Current?.MainWindow
                     };
 
-                    callVM.CallClosed += () => callWindow.Close();
-                    callWindow.Show();
+                    _activeCallVM.CallClosed += () =>
+                    {
+                        _activeCallWindow?.Close();
+                        _activeCallVM = null;
+                        _activeCallWindow = null;
+                    };
+                    _activeCallWindow.Show();
+                }
+                else
+                {
+                    // تمرير إشارات القبول والرنين والرفض والإنهاء لنموذج المكالمة النشط
+                    _activeCallVM?.HandleRemoteSignal(signal);
                 }
             });
         }

@@ -173,6 +173,47 @@ namespace SyncPulse.Server.Data
             return history;
         }
 
+        /// <summary>
+        /// جلب سجل كافة الرسائل وتاريخ المحادثات الكامل للمستخدم (Telegram Full History Sync)
+        /// </summary>
+        public async Task<List<ChatMessagePacket>> GetAllUserMessagesAsync(int userId, int limit = 500)
+        {
+            var history = new List<ChatMessagePacket>();
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+
+            cmd.CommandText = @"
+                SELECT m.MessageID, m.ConversationID, m.SenderID, u.Username, m.ReceiverID,
+                       m.Content, m.AttachmentPath, m.Status, m.Timestamp
+                FROM MESSAGES m
+                INNER JOIN USERS u ON m.SenderID = u.UserID
+                WHERE m.SenderID = @uid OR m.ReceiverID = @uid
+                ORDER BY m.MessageID ASC
+                LIMIT @lim;
+            ";
+            cmd.Parameters.AddWithValue("@uid", userId);
+            cmd.Parameters.AddWithValue("@lim", limit);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                history.Add(new ChatMessagePacket
+                {
+                    MessageID = reader.GetInt32(0),
+                    ConversationID = reader.GetInt32(1),
+                    SenderID = reader.GetInt32(2),
+                    SenderUsername = reader.GetString(3),
+                    ReceiverID = reader.GetInt32(4),
+                    Content = reader.GetString(5),
+                    AttachmentPath = reader.IsDBNull(6) ? null : reader.GetString(6),
+                    Status = (MessageStatus)reader.GetInt32(7),
+                    Timestamp = DateTime.Parse(reader.GetString(8))
+                });
+            }
+
+            return history;
+        }
+
         public async Task<int> GetTotalMessagesCountAsync()
         {
             using var conn = await _db.CreateConnectionAsync();

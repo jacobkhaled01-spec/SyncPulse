@@ -78,6 +78,9 @@ namespace SyncPulse.Server.Services
             }
 
             // 2. تسجيل بدء طلب المكالمة في قاعدة البيانات
+            signal.CallerDisplayName = string.IsNullOrEmpty(signal.CallerDisplayName) ? callerSession.DisplayName : signal.CallerDisplayName;
+            signal.CallerUsername = string.IsNullOrEmpty(signal.CallerUsername) ? callerSession.Username : signal.CallerUsername;
+
             int callId = await _callRepo.LogCallStartAsync(signal.CallerID, signal.ReceiverID, signal.Type);
             signal.CallID = callId;
 
@@ -103,6 +106,7 @@ namespace SyncPulse.Server.Services
             }
 
             // إشعار المتصل بأن المكالمة قُبلت
+            signal.Action = CallAction.Accept;
             await RelaySignalAsync(signal.CallerID, signal);
         }
 

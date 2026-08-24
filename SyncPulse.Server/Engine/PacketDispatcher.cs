@@ -243,12 +243,13 @@ namespace SyncPulse.Server.Engine
             var req = packet.GetPayload<SyncHistoryRequestPacket>();
             if (req == null || !session.IsAuthenticated) return;
 
-            var pending = await _messageRepo.GetUndeliveredMessagesAsync(session.UserID);
+            // جلب تاريخ المحادثات والرسائل الكامل
+            var allMessages = await _messageRepo.GetAllUserMessagesAsync(session.UserID);
             var response = new SyncHistoryResponsePacket
             {
                 UserID = session.UserID,
-                Messages = pending,
-                UndeliveredCount = pending.Count
+                Messages = allMessages,
+                UndeliveredCount = 0
             };
 
             await session.SendPacketAsync(SyncPacket.Create(PacketType.SyncHistoryResponse, response, packet.Header.SequenceNumber));

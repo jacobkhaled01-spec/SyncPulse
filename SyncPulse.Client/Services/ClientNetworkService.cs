@@ -144,7 +144,16 @@ namespace SyncPulse.Client.Services
                         case PacketType.CallBusy:
                         case PacketType.CallEnd:
                             var callSig = packet.GetPayload<CallSignalPacket>();
-                            if (callSig != null) CallSignalReceived?.Invoke(callSig);
+                            if (callSig != null)
+                            {
+                                if (packet.Header.Type == PacketType.CallAnswer) callSig.Action = CallAction.Accept;
+                                else if (packet.Header.Type == PacketType.CallRinging) callSig.Action = CallAction.Ringing;
+                                else if (packet.Header.Type == PacketType.CallReject) callSig.Action = CallAction.Reject;
+                                else if (packet.Header.Type == PacketType.CallBusy) callSig.Action = CallAction.Busy;
+                                else if (packet.Header.Type == PacketType.CallEnd) callSig.Action = CallAction.End;
+
+                                CallSignalReceived?.Invoke(callSig);
+                            }
                             break;
 
                         case PacketType.UserPresenceChanged:
