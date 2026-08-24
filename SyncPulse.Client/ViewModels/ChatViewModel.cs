@@ -29,15 +29,24 @@ namespace SyncPulse.Client.ViewModels
         private string _inputMessage = string.Empty;
         private string _systemAnnouncement = string.Empty;
         private bool _hasSystemAnnouncement;
+        private bool _isCallHistoryOpen;
         private DateTime _lastTypingSentTime = DateTime.MinValue;
         private readonly ConcurrentDictionary<int, DispatcherTimer> _typingTimers = new();
+        private readonly string _downloadsDir;
 
         public ObservableCollection<ContactItem> Contacts { get; } = new();
         public ObservableCollection<MessageItem> Messages { get; } = new();
+        public ObservableCollection<CallHistoryItem> CallHistory { get; } = new();
 
         public string CurrentUsername => _network.Session.Username;
         public string CurrentDisplayName => _network.Session.DisplayName;
         public string UserInitial => string.IsNullOrEmpty(CurrentDisplayName) ? "?" : CurrentDisplayName[0].ToString().ToUpper();
+
+        public bool IsCallHistoryOpen
+        {
+            get => _isCallHistoryOpen;
+            set { _isCallHistoryOpen = value; OnPropertyChanged(); }
+        }
 
         public ContactItem? SelectedContact
         {
@@ -50,6 +59,7 @@ namespace SyncPulse.Client.ViewModels
                 {
                     _selectedContact.IsSelected = true;
                     _selectedContact.UnreadCount = 0;
+                    IsCallHistoryOpen = false;
                 }
 
                 OnPropertyChanged();
@@ -116,6 +126,9 @@ namespace SyncPulse.Client.ViewModels
         public ICommand SendMessageCommand { get; }
         public ICommand AttachFileCommand { get; }
         public ICommand OpenFileCommand { get; }
+        public ICommand SaveFileCommand { get; }
+        public ICommand ToggleCallHistoryCommand { get; }
+        public ICommand CallFromHistoryCommand { get; }
         public ICommand ClearChatHistoryCommand { get; }
         public ICommand DeleteContactCommand { get; }
         public ICommand StartAudioCallCommand { get; }
@@ -129,12 +142,17 @@ namespace SyncPulse.Client.ViewModels
         public ChatViewModel(ClientNetworkService network)
         {
             _network = network;
+            _downloadsDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SyncPulse_Downloads");
+            if (!Directory.Exists(_downloadsDir)) Directory.CreateDirectory(_downloadsDir);
 
             SearchContactCommand = new RelayCommand(async () => await ExecuteSearchContactAsync());
             AddContactCommand = new RelayCommand(async () => await ExecuteAddContactAsync());
             SendMessageCommand = new RelayCommand(async () => await ExecuteSendMessageAsync());
             AttachFileCommand = new RelayCommand(async () => await ExecuteAttachFileAsync());
-            OpenFileCommand = new RelayCommand<string>(ExecuteOpenFile);
+            OpenFileCommand = new RelayCommand<MessageItem>(ExecuteOpenFile);
+            SaveFileCommand = new RelayCommand<MessageItem>(ExecuteSaveFile);
+            ToggleCallHistoryCommand = new RelayCommand(async () => await ToggleCallHistoryAsync());
+            CallFromHistoryCommand = new RelayCommand<CallHistoryItem>(ExecuteCallFromHistory);
             ClearChatHistoryCommand = new RelayCommand(ExecuteClearChatHistory);
             DeleteContactCommand = new RelayCommand<ContactItem>(ExecuteDeleteContact);
             StartAudioCallCommand = new RelayCommand(() => InitiateCall(CallType.Audio));
@@ -195,11 +213,50 @@ namespace SyncPulse.Client.ViewModels
             catch { }
         }
 
+        private async Task ToggleCallHistoryAsync()
+        {
+            IsCallHistoryOpen = !IsCallHistoryOpen;
+            if (IsCallHistoryOpen)
+            {
+                await LoadCallHistoryAsync();
+            }
+        }
+
+        public async Task LoadCallHistoryAsync()
+        {
+            try
+            {
+                var req = new GetCallHistoryRequest { UserID = _network.Session.UserID };
+                var res = await _network.SendRequestAsync<GetCallHistoryRequest, GetCallHistoryResponse>(
+                    PacketType.GetCallHistoryRequest, req);
+
+                if (res != null)
+                {
+                    App.Current?.Dispatcher.Invoke(() =>
+                    {
+                        CallHistory.Clear();
+                        foreach (var call in res.Calls)
+                        {
+                            CallHistory.Add(call);
+                        }
+                    });
+                }
+            }
+            catch { }
+        }
+
+        private void ExecuteCallFromHistory(CallHistoryItem? item)
+        {
+            if (item == null) return;
+            int targetId = item.IsOutgoing ? item.ReceiverID : item.CallerID;
+            string targetName = item.TargetPartyName;
+            CallInitiated?.Invoke(targetId, targetName, targetName, item.CallType);
+        }
+
         private void NotifyTyping()
         {
             if (SelectedContact == null || string.IsNullOrWhiteSpace(InputMessage)) return;
 
-            // كبح إرسال حزم الكتابة بمعدل مرة واحدة كل 2.5 ثانية
             if ((DateTime.UtcNow - _lastTypingSentTime).TotalSeconds > 2.5)
             {
                 _lastTypingSentTime = DateTime.UtcNow;
@@ -223,7 +280,6 @@ namespace SyncPulse.Client.ViewModels
                 {
                     contact.IsTyping = true;
 
-                    // إعادة تعيين مؤقت إخفاء شارة الكتابة بعد 3 ثوانٍ
                     if (_typingTimers.TryGetValue(contact.ContactUserID, out var existingTimer))
                     {
                         existingTimer.Stop();
@@ -248,22 +304,26 @@ namespace SyncPulse.Client.ViewModels
 
             var dlg = new OpenFileDialog
             {
-                Title = "اختر ملفاً أو صورة لإرسالها",
-                Filter = "كافة الملفات المدعومة (*.*)|*.*|الصور (*.png;*.jpg;*.jpeg;*.gif)|*.png;*.jpg;*.jpeg;*.gif|المستندات (*.pdf;*.docx;*.txt)|*.pdf;*.docx;*.txt"
+                Title = "اختر ملفاً أو صورة لنقلها وحفظها",
+                Filter = "كافة الملفات (*.*)|*.*|الصور (*.png;*.jpg;*.jpeg;*.gif)|*.png;*.jpg;*.jpeg;*.gif|المستندات (*.pdf;*.docx;*.txt)|*.pdf;*.docx;*.txt"
             };
 
             if (dlg.ShowDialog() == true)
             {
                 string filePath = dlg.FileName;
                 string fileName = Path.GetFileName(filePath);
+                byte[] fileBytes = await File.ReadAllBytesAsync(filePath);
 
                 var outgoingPacket = new ChatMessagePacket
                 {
                     SenderID = _network.Session.UserID,
                     SenderUsername = _network.Session.Username,
                     ReceiverID = SelectedContact.ContactUserID,
-                    Content = $"📁 مرفق: {fileName}",
+                    Content = $"📁 ملف: {fileName}",
                     AttachmentPath = filePath,
+                    AttachmentFileName = fileName,
+                    AttachmentData = fileBytes,
+                    AttachmentSize = fileBytes.Length,
                     Status = MessageStatus.Sent,
                     Timestamp = DateTime.UtcNow
                 };
@@ -273,8 +333,11 @@ namespace SyncPulse.Client.ViewModels
                     SenderID = _network.Session.UserID,
                     SenderUsername = _network.Session.Username,
                     ReceiverID = SelectedContact.ContactUserID,
-                    Content = $"📁 مرفق: {fileName}",
+                    Content = $"📁 ملف: {fileName}",
                     AttachmentPath = filePath,
+                    AttachmentFileName = fileName,
+                    AttachmentData = fileBytes,
+                    AttachmentSize = fileBytes.Length,
                     Timestamp = DateTime.UtcNow,
                     Status = MessageStatus.Sent,
                     IsOutgoing = true
@@ -283,7 +346,7 @@ namespace SyncPulse.Client.ViewModels
                 App.Current?.Dispatcher.Invoke(() =>
                 {
                     Messages.Add(localItem);
-                    SelectedContact.LastMessage = $"📁 مرفق: {fileName}";
+                    SelectedContact.LastMessage = $"📁 ملف: {fileName}";
                     SelectedContact.LastMessageTime = DateTime.UtcNow;
                 });
 
@@ -291,15 +354,54 @@ namespace SyncPulse.Client.ViewModels
             }
         }
 
-        private void ExecuteOpenFile(string? filePath)
+        private void ExecuteOpenFile(MessageItem? item)
         {
-            if (string.IsNullOrEmpty(filePath) || !File.Exists(filePath)) return;
+            if (item == null) return;
 
-            try
+            string? targetPath = item.AttachmentPath;
+
+            // إذا لم يكن الملف موجوداً محلياً ولكن لدينا البايتات، نحفظه في مجلد التنزيلات
+            if ((string.IsNullOrEmpty(targetPath) || !File.Exists(targetPath)) && item.AttachmentData != null && item.AttachmentData.Length > 0)
             {
-                Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                string savePath = Path.Combine(_downloadsDir, item.DisplayFileName);
+                File.WriteAllBytes(savePath, item.AttachmentData);
+                item.AttachmentPath = savePath;
+                targetPath = savePath;
             }
-            catch { }
+
+            if (!string.IsNullOrEmpty(targetPath) && File.Exists(targetPath))
+            {
+                try
+                {
+                    Process.Start(new ProcessStartInfo(targetPath) { UseShellExecute = true });
+                }
+                catch { }
+            }
+        }
+
+        private void ExecuteSaveFile(MessageItem? item)
+        {
+            if (item == null) return;
+
+            byte[]? data = item.AttachmentData;
+            if (data == null && !string.IsNullOrEmpty(item.AttachmentPath) && File.Exists(item.AttachmentPath))
+            {
+                try { data = File.ReadAllBytes(item.AttachmentPath); } catch { }
+            }
+
+            if (data == null || data.Length == 0) return;
+
+            var sfd = new SaveFileDialog
+            {
+                Title = "حفظ الملف المرفق",
+                FileName = item.DisplayFileName,
+                Filter = "الملف الأصلي|*" + Path.GetExtension(item.DisplayFileName) + "|كافة الملفات (*.*)|*.*"
+            };
+
+            if (sfd.ShowDialog() == true)
+            {
+                File.WriteAllBytes(sfd.FileName, data);
+            }
         }
 
         private void ExecuteClearChatHistory()
@@ -448,12 +550,14 @@ namespace SyncPulse.Client.ViewModels
                                 ReceiverID = msg.ReceiverID,
                                 Content = msg.Content,
                                 AttachmentPath = msg.AttachmentPath,
+                                AttachmentFileName = msg.AttachmentFileName,
+                                AttachmentData = msg.AttachmentData,
+                                AttachmentSize = msg.AttachmentSize,
                                 Timestamp = msg.Timestamp,
                                 Status = msg.Status,
                                 IsOutgoing = msg.SenderID == _network.Session.UserID
                             });
 
-                            // إشعار قراءة الرسائل الواردة غير المقروءة
                             if (msg.ReceiverID == _network.Session.UserID && msg.Status != MessageStatus.Read)
                             {
                                 var readAck = new MessageAckPacket
@@ -514,6 +618,18 @@ namespace SyncPulse.Client.ViewModels
 
         private void OnMessageReceived(ChatMessagePacket msg)
         {
+            // حفظ المرفق تلقائياً في مجلد التنزيلات إن وجد
+            if (msg.AttachmentData != null && msg.AttachmentData.Length > 0 && !string.IsNullOrEmpty(msg.AttachmentFileName))
+            {
+                try
+                {
+                    string localSavedPath = Path.Combine(_downloadsDir, msg.AttachmentFileName);
+                    File.WriteAllBytes(localSavedPath, msg.AttachmentData);
+                    msg.AttachmentPath = localSavedPath;
+                }
+                catch { }
+            }
+
             App.Current?.Dispatcher.Invoke(() =>
             {
                 var contact = Contacts.FirstOrDefault(c => c.ContactUserID == msg.SenderID);
@@ -543,12 +659,14 @@ namespace SyncPulse.Client.ViewModels
                         ReceiverID = msg.ReceiverID,
                         Content = msg.Content,
                         AttachmentPath = msg.AttachmentPath,
+                        AttachmentFileName = msg.AttachmentFileName,
+                        AttachmentData = msg.AttachmentData,
+                        AttachmentSize = msg.AttachmentSize,
                         Timestamp = msg.Timestamp,
                         Status = MessageStatus.Read,
                         IsOutgoing = false
                     });
 
-                    // إرسال تأكيد قراءة مباشر لأن المحادثة مفتوحة حالياً
                     var ack = new MessageAckPacket
                     {
                         MessageID = msg.MessageID,

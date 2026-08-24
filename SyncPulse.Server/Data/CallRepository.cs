@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Data.Sqlite;
 using SyncPulse.Core.Enums;
+using SyncPulse.Core.Packets;
 
 namespace SyncPulse.Server.Data
 {
@@ -94,6 +95,51 @@ namespace SyncPulse.Server.Data
                     DurationSeconds = reader.GetInt32(6),
                     EndReason = reader.GetString(7),
                     StartedAt = DateTime.Parse(reader.GetString(8))
+                });
+            }
+
+            return list;
+        }
+
+        public async Task<List<CallHistoryItem>> GetUserCallHistoryAsync(int userId, int limit = 50)
+        {
+            var list = new List<CallHistoryItem>();
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+
+            cmd.CommandText = @"
+                SELECT c.CallID, c.CallerID, COALESCE(u1.DisplayName, u1.Username, 'Unknown') AS CallerName,
+                       c.ReceiverID, COALESCE(u2.DisplayName, u2.Username, 'Unknown') AS ReceiverName,
+                       c.CallType, c.DurationSeconds, c.EndReason, c.StartedAt
+                FROM CALL_RECORDS c
+                LEFT JOIN USERS u1 ON c.CallerID = u1.UserID
+                LEFT JOIN USERS u2 ON c.ReceiverID = u2.UserID
+                WHERE c.CallerID = @uid OR c.ReceiverID = @uid
+                ORDER BY c.CallID DESC
+                LIMIT @lim;
+            ";
+            cmd.Parameters.AddWithValue("@uid", userId);
+            cmd.Parameters.AddWithValue("@lim", limit);
+
+            using var reader = await cmd.ExecuteReaderAsync();
+            while (await reader.ReadAsync())
+            {
+                int callerId = reader.GetInt32(1);
+                string typeStr = reader.GetString(5);
+                Enum.TryParse<CallType>(typeStr, out var type);
+
+                list.Add(new CallHistoryItem
+                {
+                    CallID = reader.GetInt32(0),
+                    CallerID = callerId,
+                    CallerName = reader.GetString(2),
+                    ReceiverID = reader.GetInt32(3),
+                    ReceiverName = reader.GetString(4),
+                    CallType = type,
+                    DurationSeconds = reader.GetInt32(6),
+                    Status = reader.GetString(7),
+                    Timestamp = DateTime.Parse(reader.GetString(8)),
+                    IsOutgoing = callerId == userId
                 });
             }
 

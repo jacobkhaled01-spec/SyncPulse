@@ -10,6 +10,9 @@ namespace SyncPulse.Client.Models
     {
         private MessageStatus _status;
         private string? _attachmentPath;
+        private string? _attachmentFileName;
+        private byte[]? _attachmentData;
+        private long _attachmentSize;
 
         public int MessageID { get; set; }
         public int ConversationID { get; set; }
@@ -26,21 +29,79 @@ namespace SyncPulse.Client.Models
                 _attachmentPath = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasAttachment));
-                OnPropertyChanged(nameof(AttachmentFileName));
+                OnPropertyChanged(nameof(DisplayFileName));
                 OnPropertyChanged(nameof(IsImageAttachment));
             }
         }
 
-        public bool HasAttachment => !string.IsNullOrEmpty(AttachmentPath);
-        public string AttachmentFileName => string.IsNullOrEmpty(AttachmentPath) ? string.Empty : Path.GetFileName(AttachmentPath);
+        public string? AttachmentFileName
+        {
+            get => _attachmentFileName;
+            set
+            {
+                _attachmentFileName = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayFileName));
+            }
+        }
+
+        public byte[]? AttachmentData
+        {
+            get => _attachmentData;
+            set
+            {
+                _attachmentData = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasAttachment));
+            }
+        }
+
+        public long AttachmentSize
+        {
+            get => _attachmentSize;
+            set
+            {
+                _attachmentSize = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(FormattedSize));
+            }
+        }
+
+        public bool HasAttachment => !string.IsNullOrEmpty(AttachmentPath) || (AttachmentData != null && AttachmentData.Length > 0);
+
+        public string DisplayFileName
+        {
+            get
+            {
+                if (!string.IsNullOrEmpty(AttachmentFileName)) return AttachmentFileName;
+                if (!string.IsNullOrEmpty(AttachmentPath)) return Path.GetFileName(AttachmentPath);
+                return "ملف مرفق";
+            }
+        }
+
+        public string FormattedSize
+        {
+            get
+            {
+                long bytes = AttachmentSize;
+                if (bytes <= 0 && AttachmentData != null) bytes = AttachmentData.Length;
+                if (bytes <= 0 && !string.IsNullOrEmpty(AttachmentPath) && File.Exists(AttachmentPath))
+                {
+                    try { bytes = new FileInfo(AttachmentPath).Length; } catch { }
+                }
+
+                if (bytes < 1024) return $"{bytes} B";
+                if (bytes < 1024 * 1024) return $"{(bytes / 1024.0):F1} KB";
+                return $"{(bytes / (1024.0 * 1024.0)):F2} MB";
+            }
+        }
 
         public bool IsImageAttachment
         {
             get
             {
-                if (string.IsNullOrEmpty(AttachmentPath)) return false;
-                string ext = Path.GetExtension(AttachmentPath).ToLowerInvariant();
-                return ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif";
+                string fn = DisplayFileName.ToLowerInvariant();
+                return fn.EndsWith(".png") || fn.EndsWith(".jpg") || fn.EndsWith(".jpeg") || fn.EndsWith(".bmp") || fn.EndsWith(".gif");
             }
         }
 

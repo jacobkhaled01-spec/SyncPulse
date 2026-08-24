@@ -44,6 +44,8 @@ namespace SyncPulse.Core.Enums
         CallReject = 0x0404,
         CallBusy = 0x0405,
         CallEnd = 0x0406,
+        GetCallHistoryRequest = 0x0407,
+        GetCallHistoryResponse = 0x0408,
 
         // 0x0500 - 0x05FF: حزم بث وتدفق الوسائط (Media Streaming via UDP Relay)
         AudioFrame = 0x0501,

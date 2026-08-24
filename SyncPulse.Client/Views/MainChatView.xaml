@@ -21,8 +21,8 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
-                <!-- أ. ترويسة المستخدم الحالي -->
-                <Border Grid.Row="0" Background="#F1F5F9" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                <!-- أ. ترويسة المستخدم الحالي مع أزرار سجل المكالمات والخروج -->
+                <Border Grid.Row="0" Background="#F1F5F9" Padding="14,12" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
@@ -31,26 +31,38 @@
                         </Grid.ColumnDefinitions>
 
                         <!-- أفاتار المستخدم الحالي -->
-                        <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Background="#2563EB" Margin="0,0,12,0">
-                            <TextBlock Text="{Binding UserInitial}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Border Grid.Column="0" Width="42" Height="42" CornerRadius="21" Background="#2563EB" Margin="0,0,10,0">
+                            <TextBlock Text="{Binding UserInitial}" Foreground="White" FontSize="17" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
 
                         <!-- بيانات المستخدم الحالي -->
                         <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                            <TextBlock Text="{Binding CurrentDisplayName}" FontWeight="Bold" FontSize="14" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
-                            <TextBlock Text="{Binding CurrentUsername, StringFormat='{}@{0}'}" FontSize="12" Foreground="#64748B" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding CurrentDisplayName}" FontWeight="Bold" FontSize="13.5" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding CurrentUsername, StringFormat='{}@{0}'}" FontSize="11.5" Foreground="#64748B" TextTrimming="CharacterEllipsis" />
                         </StackPanel>
 
-                        <!-- زر تسجيل الخروج -->
-                        <Button Grid.Column="2" Content="خروج" Command="{Binding LogoutCommand}"
-                                Background="#FEE2E2" Foreground="#DC2626" BorderBrush="#FECDD3" BorderThickness="1"
-                                FontSize="11" FontWeight="SemiBold" Padding="8,4" Cursor="Hand">
-                            <Button.Resources>
-                                <Style TargetType="Border">
-                                    <Setter Property="CornerRadius" Value="6" />
-                                </Style>
-                            </Button.Resources>
-                        </Button>
+                        <!-- أزرار سجل المكالمات والخروج -->
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Content="📞 السجل" Command="{Binding ToggleCallHistoryCommand}"
+                                    Background="#EFF6FF" Foreground="#2563EB" BorderBrush="#BFDBFE" BorderThickness="1"
+                                    FontSize="11" FontWeight="Bold" Padding="7,4" Margin="0,0,4,0" Cursor="Hand" ToolTip="سجل المكالمات">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+
+                            <Button Content="خروج" Command="{Binding LogoutCommand}"
+                                    Background="#FEE2E2" Foreground="#DC2626" BorderBrush="#FECDD3" BorderThickness="1"
+                                    FontSize="11" FontWeight="SemiBold" Padding="7,4" Cursor="Hand">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="6" />
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </StackPanel>
                     </Grid>
                 </Border>
 
@@ -112,92 +124,154 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ج. قائمة جهات الاتصال مع قائمة الخيارات التفاعلية (ContextMenu) -->
-                <ListBox Grid.Row="2" x:Name="ContactsListBox" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}"
-                         Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-                    <ListBox.ItemContainerStyle>
-                        <Style TargetType="ListBoxItem">
-                            <Setter Property="Padding" Value="0" />
-                            <Setter Property="Margin" Value="6,3" />
-                            <Setter Property="Cursor" Value="Hand" />
-                            <Setter Property="ContextMenu">
-                                <Setter.Value>
-                                    <ContextMenu FlowDirection="RightToLeft">
-                                        <MenuItem Header="📞 اتصال صوتي" Command="{Binding DataContext.StartAudioCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                                        <MenuItem Header="📹 مكالمة فيديو" Command="{Binding DataContext.StartVideoCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                                        <Separator />
-                                        <MenuItem Header="🗑️ حذف من جهات الاتصال" Command="{Binding DataContext.DeleteContactCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Foreground="#DC2626" />
-                                    </ContextMenu>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListBoxItem">
-                                        <Border x:Name="ItemBorder" Background="Transparent" CornerRadius="10" Padding="12,10">
-                                            <ContentPresenter />
+                <!-- ج. قائمة جهات الاتصال أو درج سجل المكالمات -->
+                <Grid Grid.Row="2">
+                    <!-- 1. قائمة جهات الاتصال الافتراضية -->
+                    <ListBox ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}"
+                             Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="Padding" Value="0" />
+                                <Setter Property="Margin" Value="6,3" />
+                                <Setter Property="Cursor" Value="Hand" />
+                                <Setter Property="ContextMenu">
+                                    <Setter.Value>
+                                        <ContextMenu FlowDirection="RightToLeft">
+                                            <MenuItem Header="📞 اتصال صوتي" Command="{Binding DataContext.StartAudioCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                            <MenuItem Header="📹 مكالمة فيديو" Command="{Binding DataContext.StartVideoCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                            <Separator />
+                                            <MenuItem Header="🗑️ حذف من جهات الاتصال" Command="{Binding DataContext.DeleteContactCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Foreground="#DC2626" />
+                                        </ContextMenu>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border x:Name="ItemBorder" Background="Transparent" CornerRadius="10" Padding="12,10">
+                                                <ContentPresenter />
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsSelected" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#EFF6FF" />
+                                                    <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#BFDBFE" />
+                                                    <Setter TargetName="ItemBorder" Property="BorderThickness" Value="1" />
+                                                </Trigger>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="ItemBorder" Property="Background" Value="#F8FAFC" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+
+                                    <!-- أفاتار جهة الاتصال مع نقطة الحالة -->
+                                    <Grid Grid.Column="0" Margin="0,0,10,0">
+                                        <Border Width="42" Height="42" CornerRadius="21" Background="{Binding AvatarBackground}">
+                                            <TextBlock Text="{Binding InitialChar}" Foreground="White" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                                         </Border>
-                                        <ControlTemplate.Triggers>
-                                            <Trigger Property="IsSelected" Value="True">
-                                                <Setter TargetName="ItemBorder" Property="Background" Value="#EFF6FF" />
-                                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#BFDBFE" />
-                                                <Setter TargetName="ItemBorder" Property="BorderThickness" Value="1" />
-                                            </Trigger>
-                                            <Trigger Property="IsMouseOver" Value="True">
-                                                <Setter TargetName="ItemBorder" Property="Background" Value="#F8FAFC" />
-                                            </Trigger>
-                                        </ControlTemplate.Triggers>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListBox.ItemContainerStyle>
+                                        <Border Width="12" Height="12" CornerRadius="6" Background="{Binding StatusColor}" BorderBrush="White" BorderThickness="2"
+                                                HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    </Grid>
 
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
+                                    <!-- اسم جهة الاتصال والقصاصة اللحظية -->
+                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
+                                        <TextBlock Text="{Binding DisplaySnippet}" FontSize="11.5" Foreground="{Binding StatusColor}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                    </StackPanel>
 
-                                <!-- أفاتار جهة الاتصال مع نقطة الحالة -->
-                                <Grid Grid.Column="0" Margin="0,0,10,0">
-                                    <Border Width="42" Height="42" CornerRadius="21" Background="{Binding AvatarBackground}">
-                                        <TextBlock Text="{Binding InitialChar}" Foreground="White" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                                    </Border>
-                                    <!-- نقطة الحالة متصل / غير متصل -->
-                                    <Border Width="12" Height="12" CornerRadius="6" Background="{Binding StatusColor}" BorderBrush="White" BorderThickness="2"
-                                            HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                    <!-- الوقت والرسائل غير المقروءة -->
+                                    <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                        <TextBlock Text="{Binding FormattedTime}" FontSize="10.5" Foreground="#94A3B8" HorizontalAlignment="Right" />
+                                        <Border Background="#2563EB" CornerRadius="8" Padding="6,2" Margin="0,4,0,0" HorizontalAlignment="Right">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasUnread}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding UnreadCount}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                        </Border>
+                                    </StackPanel>
                                 </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-                                <!-- اسم جهة الاتصال وآخر رسالة أو مؤشر يكتب الآن -->
-                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
-                                    <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
-                                    <TextBlock Text="{Binding DisplaySnippet}" FontSize="11.5" Foreground="{Binding StatusColor}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
-                                </StackPanel>
+                    <!-- 2. درج سجل المكالمات (Call History Overlay Drawer) -->
+                    <Border Background="#FFFFFF" Padding="8,10">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsCallHistoryOpen}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
 
-                                <!-- الوقت وعدد الرسائل غير المقروءة -->
-                                <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                    <TextBlock Text="{Binding FormattedTime}" FontSize="10.5" Foreground="#94A3B8" HorizontalAlignment="Right" />
-                                    <Border Background="#2563EB" CornerRadius="8" Padding="6,2" Margin="0,4,0,0" HorizontalAlignment="Right">
-                                        <Border.Style>
-                                            <Style TargetType="Border">
-                                                <Setter Property="Visibility" Value="Collapsed" />
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding HasUnread}" Value="True">
-                                                        <Setter Property="Visibility" Value="Visible" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </Border.Style>
-                                        <TextBlock Text="{Binding UnreadCount}" Foreground="White" FontSize="10" FontWeight="Bold" />
-                                    </Border>
-                                </StackPanel>
+                            <Grid Grid.Row="0" Margin="6,0,6,8">
+                                <TextBlock Text="📞 سجل المكالمات السابقة" FontSize="13" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center" />
+                                <Button Content="✕ إغلاق" Command="{Binding ToggleCallHistoryCommand}"
+                                        Background="#F1F5F9" Foreground="#64748B" FontSize="11" Padding="6,2" HorizontalAlignment="Left" Cursor="Hand" BorderThickness="0">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="4" />
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
+
+                            <ListBox Grid.Row="1" ItemsSource="{Binding CallHistory}" Background="Transparent" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="#F8FAFC" CornerRadius="8" BorderBrush="#E2E8F0" BorderThickness="1" Padding="10,8" Margin="0,3">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+
+                                                <TextBlock Grid.Column="0" Text="{Binding TypeIcon}" FontSize="18" VerticalAlignment="Center" Margin="0,0,10,0" />
+
+                                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding TargetPartyName}" FontWeight="Bold" FontSize="12.5" Foreground="#0F172A" />
+                                                    <TextBlock Text="{Binding FormattedTime}" FontSize="10" Foreground="#64748B" Margin="0,2,0,0" />
+                                                </StackPanel>
+
+                                                <StackPanel Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding DirectionIcon}" FontSize="10.5" FontWeight="SemiBold" Foreground="#2563EB" HorizontalAlignment="Right" />
+                                                    <TextBlock Text="{Binding DurationFormatted, StringFormat='{}⏱ {0}'}" FontSize="10" Foreground="#059669" HorizontalAlignment="Right" Margin="0,2,0,0" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
 
@@ -298,7 +372,7 @@
                 </Grid>
             </Border>
 
-            <!-- ج. دفق الرسائل وفقاعات المحادثة مع دعم المرفقات (Message Bubbles & Attachments) -->
+            <!-- ج. دفق الرسائل وفقاعات المحادثة مع دعم نقل وحفظ الملفات الفعلي (Message Bubbles & Files) -->
             <ScrollViewer Grid.Row="2" Background="#F8FAFC" Padding="18,14" VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Messages}">
                     <ItemsControl.ItemTemplate>
@@ -315,8 +389,8 @@
                                         <!-- نص الرسالة -->
                                         <TextBlock Text="{Binding Content}" Foreground="{Binding TextColor}" FontSize="13.5" TextWrapping="Wrap" LineHeight="20" />
 
-                                        <!-- بطاقة المرفق إن وجد (ملف أو صورة) -->
-                                        <Border Background="#F1F5F9" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Padding="10,6" Margin="0,8,0,0">
+                                        <!-- بطاقة المرفق مع الحجم وزري الفتح والحفظ -->
+                                        <Border Background="#F1F5F9" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Padding="10,8" Margin="0,8,0,0">
                                             <Border.Style>
                                                 <Style TargetType="Border">
                                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -332,17 +406,39 @@
                                                     <ColumnDefinition Width="*" />
                                                     <ColumnDefinition Width="Auto" />
                                                 </Grid.ColumnDefinitions>
-                                                <TextBlock Grid.Column="0" Text="{Binding AttachmentFileName}" FontSize="12" FontWeight="SemiBold" Foreground="#1E293B" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                                                <Button Grid.Column="1" Content="📂 فتح المرفق"
-                                                        Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                                        CommandParameter="{Binding AttachmentPath}"
-                                                        Background="#2563EB" Foreground="White" FontWeight="Bold" FontSize="11" Padding="8,4" Cursor="Hand" BorderThickness="0" Margin="8,0,0,0">
-                                                    <Button.Resources>
-                                                        <Style TargetType="Border">
-                                                            <Setter Property="CornerRadius" Value="6" />
-                                                        </Style>
-                                                    </Button.Resources>
-                                                </Button>
+
+                                                <!-- اسم وحجم الملف -->
+                                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                                    <TextBlock Text="{Binding DisplayFileName}" FontSize="12.5" FontWeight="Bold" Foreground="#1E293B" TextTrimming="CharacterEllipsis" />
+                                                    <TextBlock Text="{Binding FormattedSize}" FontSize="10.5" Foreground="#64748B" Margin="0,2,0,0" />
+                                                </StackPanel>
+
+                                                <!-- أزرار الفتح والحفظ باسم -->
+                                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <!-- زر فتح المرفق -->
+                                                    <Button Content="📂 فتح"
+                                                            Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Background="#2563EB" Foreground="White" FontWeight="Bold" FontSize="11" Padding="8,4" Margin="0,0,4,0" Cursor="Hand" BorderThickness="0">
+                                                        <Button.Resources>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="CornerRadius" Value="6" />
+                                                            </Style>
+                                                        </Button.Resources>
+                                                    </Button>
+
+                                                    <!-- زر حفظ باسم -->
+                                                    <Button Content="💾 حفظ باسم..."
+                                                            Command="{Binding DataContext.SaveFileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                            CommandParameter="{Binding}"
+                                                            Background="#059669" Foreground="White" FontWeight="Bold" FontSize="11" Padding="8,4" Cursor="Hand" BorderThickness="0">
+                                                        <Button.Resources>
+                                                            <Style TargetType="Border">
+                                                                <Setter Property="CornerRadius" Value="6" />
+                                                            </Style>
+                                                        </Button.Resources>
+                                                    </Button>
+                                                </StackPanel>
                                             </Grid>
                                         </Border>
 
@@ -382,7 +478,7 @@
                     <!-- زر إرفاق الملفات والمستندات والصور 📎 -->
                     <Button Grid.Column="0" Content="📎" Command="{Binding AttachFileCommand}"
                             Width="42" Height="42" Background="#F1F5F9" Foreground="#2563EB" BorderBrush="#CBD5E1" BorderThickness="1"
-                            FontSize="18" FontWeight="Bold" Cursor="Hand" Margin="0,0,10,0" ToolTip="إرفاق ملف أو صورة">
+                            FontSize="18" FontWeight="Bold" Cursor="Hand" Margin="0,0,10,0" ToolTip="إرفاق ونقل ملف أو صورة">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="10" />

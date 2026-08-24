@@ -58,7 +58,7 @@ namespace SyncPulse.Server.Engine
             CallCoordinator = new CallCoordinator(Sessions, Calls, AuditLogs);
             MediaRelay = new UdpMediaRelay();
             DiscoveryBroadcaster = new ServerDiscoveryBroadcaster();
-            Dispatcher = new PacketDispatcher(Users, Contacts, Messages, Sessions, CallCoordinator, AuditLogs);
+            Dispatcher = new PacketDispatcher(Users, Contacts, Messages, Calls, Sessions, CallCoordinator, AuditLogs);
         }
 
         public async Task StartAsync()

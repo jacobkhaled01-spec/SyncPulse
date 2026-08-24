@@ -17,6 +17,7 @@ namespace SyncPulse.Server.Engine
         private readonly UserRepository _userRepo;
         private readonly ContactRepository _contactRepo;
         private readonly MessageRepository _messageRepo;
+        private readonly CallRepository _callRepo;
         private readonly SessionManager _sessionManager;
         private readonly CallCoordinator _callCoordinator;
         private readonly AuditLogRepository _auditRepo;
@@ -27,6 +28,7 @@ namespace SyncPulse.Server.Engine
             UserRepository userRepo,
             ContactRepository contactRepo,
             MessageRepository messageRepo,
+            CallRepository callRepo,
             SessionManager sessionManager,
             CallCoordinator callCoordinator,
             AuditLogRepository auditRepo)
@@ -34,6 +36,7 @@ namespace SyncPulse.Server.Engine
             _userRepo = userRepo;
             _contactRepo = contactRepo;
             _messageRepo = messageRepo;
+            _callRepo = callRepo;
             _sessionManager = sessionManager;
             _callCoordinator = callCoordinator;
             _auditRepo = auditRepo;
@@ -97,6 +100,10 @@ namespace SyncPulse.Server.Engine
 
                 case PacketType.TypingIndicator:
                     await HandleTypingIndicatorAsync(session, packet);
+                    break;
+
+                case PacketType.GetCallHistoryRequest:
+                    await HandleGetCallHistoryAsync(session, packet);
                     break;
             }
         }
@@ -330,6 +337,20 @@ namespace SyncPulse.Server.Engine
             {
                 await receiverSession.SendPacketAsync(packet);
             }
+        }
+
+        private async Task HandleGetCallHistoryAsync(ClientSession session, SyncPacket packet)
+        {
+            if (!session.IsAuthenticated) return;
+
+            var calls = await _callRepo.GetUserCallHistoryAsync(session.UserID);
+            var response = new GetCallHistoryResponse
+            {
+                UserID = session.UserID,
+                Calls = calls
+            };
+
+            await session.SendPacketAsync(SyncPacket.Create(PacketType.GetCallHistoryResponse, response, packet.Header.SequenceNumber));
         }
     }
 }

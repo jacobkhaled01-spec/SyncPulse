@@ -16,6 +16,9 @@ namespace SyncPulse.Core.Packets
         public int ReceiverID { get; set; }
         public string Content { get; set; } = string.Empty;
         public string? AttachmentPath { get; set; }
+        public string? AttachmentFileName { get; set; }
+        public byte[]? AttachmentData { get; set; }
+        public long AttachmentSize { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.UtcNow;
         public MessageStatus Status { get; set; } = MessageStatus.Sent;
     }
