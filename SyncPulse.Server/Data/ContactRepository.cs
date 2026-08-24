@@ -43,11 +43,19 @@ namespace SyncPulse.Server.Data
 
             cmd.CommandText = @"
                 SELECT u.UserID, u.Username, COALESCE(c.CustomName, u.DisplayName) AS DisplayName,
-                       u.AvatarPath, u.LastSeenAt
+                       u.AvatarPath, u.LastSeenAt,
+                       (SELECT Content FROM MESSAGES 
+                        WHERE (SenderID = @o AND ReceiverID = u.UserID) OR (SenderID = u.UserID AND ReceiverID = @o) 
+                        ORDER BY MessageID DESC LIMIT 1) AS LastMsg,
+                       (SELECT Timestamp FROM MESSAGES 
+                        WHERE (SenderID = @o AND ReceiverID = u.UserID) OR (SenderID = u.UserID AND ReceiverID = @o) 
+                        ORDER BY MessageID DESC LIMIT 1) AS LastMsgTime,
+                       (SELECT COUNT(*) FROM MESSAGES 
+                        WHERE SenderID = u.UserID AND ReceiverID = @o AND Status = 0) AS UnreadCount
                 FROM USER_CONTACTS c
                 INNER JOIN USERS u ON c.ContactUserID = u.UserID
                 WHERE c.OwnerUserID = @o AND u.IsActive = 1
-                ORDER BY DisplayName ASC;
+                ORDER BY COALESCE(LastMsgTime, c.AddedAt) DESC;
             ";
             cmd.Parameters.AddWithValue("@o", ownerUserId);
 
@@ -60,7 +68,10 @@ namespace SyncPulse.Server.Data
                     Username = reader.GetString(1),
                     DisplayName = reader.GetString(2),
                     AvatarPath = reader.IsDBNull(3) ? null : reader.GetString(3),
-                    LastSeenAt = reader.IsDBNull(4) ? null : DateTime.Parse(reader.GetString(4))
+                    LastSeenAt = reader.IsDBNull(4) ? null : DateTime.Parse(reader.GetString(4)),
+                    LastMessageContent = reader.IsDBNull(5) ? null : reader.GetString(5),
+                    LastMessageTimestamp = reader.IsDBNull(6) ? null : DateTime.Parse(reader.GetString(6)),
+                    UnreadCount = reader.IsDBNull(7) ? 0 : reader.GetInt32(7)
                 });
             }
 

@@ -274,24 +274,29 @@ namespace SyncPulse.Client.ViewModels
                     var chatMessages = res.Messages
                         .Where(m => (m.SenderID == contact.ContactUserID && m.ReceiverID == _network.Session.UserID) ||
                                     (m.SenderID == _network.Session.UserID && m.ReceiverID == contact.ContactUserID))
-                        .OrderBy(m => m.Timestamp);
+                        .OrderBy(m => m.Timestamp)
+                        .ToList();
 
-                    foreach (var msg in chatMessages)
+                    App.Current?.Dispatcher.Invoke(() =>
                     {
-                        Messages.Add(new MessageItem
+                        Messages.Clear();
+                        foreach (var msg in chatMessages)
                         {
-                            MessageID = msg.MessageID,
-                            ConversationID = msg.ConversationID,
-                            SenderID = msg.SenderID,
-                            SenderUsername = msg.SenderUsername,
-                            ReceiverID = msg.ReceiverID,
-                            Content = msg.Content,
-                            AttachmentPath = msg.AttachmentPath,
-                            Timestamp = msg.Timestamp,
-                            Status = msg.Status,
-                            IsOutgoing = msg.SenderID == _network.Session.UserID
-                        });
-                    }
+                            Messages.Add(new MessageItem
+                            {
+                                MessageID = msg.MessageID,
+                                ConversationID = msg.ConversationID,
+                                SenderID = msg.SenderID,
+                                SenderUsername = msg.SenderUsername,
+                                ReceiverID = msg.ReceiverID,
+                                Content = msg.Content,
+                                AttachmentPath = msg.AttachmentPath,
+                                Timestamp = msg.Timestamp,
+                                Status = msg.Status,
+                                IsOutgoing = msg.SenderID == _network.Session.UserID
+                            });
+                        }
+                    });
                 }
             }
             catch { }
@@ -325,10 +330,12 @@ namespace SyncPulse.Client.ViewModels
                 IsOutgoing = true
             };
 
-            Messages.Add(localItem);
-
-            SelectedContact.LastMessage = contentToSend;
-            SelectedContact.LastMessageTime = DateTime.UtcNow;
+            App.Current?.Dispatcher.Invoke(() =>
+            {
+                Messages.Add(localItem);
+                SelectedContact.LastMessage = contentToSend;
+                SelectedContact.LastMessageTime = DateTime.UtcNow;
+            });
 
             await _network.SendPacketAsync(SyncPacket.Create(PacketType.DirectChatMessage, outgoingPacket));
         }
