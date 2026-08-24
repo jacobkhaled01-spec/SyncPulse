@@ -38,8 +38,8 @@ namespace SyncPulse.Server.Services
 
         public async Task RegisterAuthenticatedSessionAsync(int userId, ClientSession session)
         {
-            // If already connected from another device/session, disconnect older session gracefully
-            if (_activeSessions.TryRemove(userId, out var oldSession))
+            // إذا كان هناك اتصال قديم مختلف للمستخدم، نغلقه بلطف
+            if (_activeSessions.TryRemove(userId, out var oldSession) && oldSession != session)
             {
                 try { oldSession.Close(); } catch { }
             }

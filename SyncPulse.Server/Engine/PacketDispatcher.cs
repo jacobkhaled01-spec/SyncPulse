@@ -114,7 +114,7 @@ namespace SyncPulse.Server.Engine
                 UserID = userId
             };
 
-            await session.SendPacketAsync(SyncPacket.Create(PacketType.RegisterResponse, res));
+            await session.SendPacketAsync(SyncPacket.Create(PacketType.RegisterResponse, res, packet.Header.SequenceNumber));
             if (success)
             {
                 await _auditRepo.LogAsync("Info", "Auth", $"تسجيل مستخدم جديد: {req.Username}", userId, session.ClientIP);
@@ -133,7 +133,7 @@ namespace SyncPulse.Server.Engine
                 {
                     Success = false,
                     Message = message
-                }));
+                }, packet.Header.SequenceNumber));
                 return;
             }
 
@@ -144,7 +144,7 @@ namespace SyncPulse.Server.Engine
             string token = JwtTokenEngine.GenerateToken(userId, username, TimeSpan.FromDays(7));
             await _sessionManager.RegisterAuthenticatedSessionAsync(userId, session);
 
-            // إرسال رد تسجيل الدخول الناجح
+            // إرسال رد تسجيل الدخول الناجح مع نفس رقم التسلسل
             await session.SendPacketAsync(SyncPacket.Create(PacketType.LoginResponse, new LoginResponse
             {
                 Success = true,
@@ -153,7 +153,7 @@ namespace SyncPulse.Server.Engine
                 Username = username,
                 DisplayName = displayName,
                 SessionToken = token
-            }));
+            }, packet.Header.SequenceNumber));
 
             // مرحلة المزامنة التلغرامية الفورية: دفع الرسائل المعلقة
             await DeliverPendingOfflineMessagesAsync(session);
@@ -251,7 +251,7 @@ namespace SyncPulse.Server.Engine
                 UndeliveredCount = pending.Count
             };
 
-            await session.SendPacketAsync(SyncPacket.Create(PacketType.SyncHistoryResponse, response));
+            await session.SendPacketAsync(SyncPacket.Create(PacketType.SyncHistoryResponse, response, packet.Header.SequenceNumber));
         }
 
         private async Task HandleSearchUserAsync(ClientSession session, SyncPacket packet)
@@ -274,7 +274,7 @@ namespace SyncPulse.Server.Engine
                 User = user
             };
 
-            await session.SendPacketAsync(SyncPacket.Create(PacketType.SearchUserResponse, response));
+            await session.SendPacketAsync(SyncPacket.Create(PacketType.SearchUserResponse, response, packet.Header.SequenceNumber));
         }
 
         private async Task HandleAddContactAsync(ClientSession session, SyncPacket packet)
@@ -296,7 +296,7 @@ namespace SyncPulse.Server.Engine
                 Success = success,
                 Message = success ? "تمت إضافة جهة الاتصال بنجاح." : "فشلت عملية الإضافة.",
                 Contact = contactDetails
-            }));
+            }, packet.Header.SequenceNumber));
         }
 
         private async Task HandleGetContactsListAsync(ClientSession session, SyncPacket packet)
@@ -314,7 +314,7 @@ namespace SyncPulse.Server.Engine
             {
                 UserID = session.UserID,
                 Contacts = contacts
-            }));
+            }, packet.Header.SequenceNumber));
         }
 
         private async Task HandleTypingIndicatorAsync(ClientSession session, SyncPacket packet)

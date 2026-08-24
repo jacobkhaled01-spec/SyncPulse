@@ -38,16 +38,19 @@ namespace SyncPulse.Client.ViewModels
 
         private void OnAuthenticated()
         {
-            _chatVM = new ChatViewModel(_network);
-            _chatVM.CallInitiated += OnOutgoingCallInitiated;
-            _chatVM.LoggedOut += () =>
+            App.Current?.Dispatcher.Invoke(() =>
             {
-                _authVM = new AuthViewModel(_network);
-                _authVM.AuthenticatedSuccessfully += OnAuthenticated;
-                CurrentView = _authVM;
-            };
+                _chatVM = new ChatViewModel(_network);
+                _chatVM.CallInitiated += OnOutgoingCallInitiated;
+                _chatVM.LoggedOut += () =>
+                {
+                    _authVM = new AuthViewModel(_network);
+                    _authVM.AuthenticatedSuccessfully += OnAuthenticated;
+                    CurrentView = _authVM;
+                };
 
-            CurrentView = _chatVM;
+                CurrentView = _chatVM;
+            });
         }
 
         private void OnOutgoingCallInitiated(int targetUserId, string targetUsername, string targetDisplayName, CallType callType)
