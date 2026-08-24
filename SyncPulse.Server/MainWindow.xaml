@@ -2,12 +2,12 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:SyncPulse.Server.ViewModels"
-        Title="⚡ SyncPulse Enterprise Server | لوحة التحكم والإدارة المركزية"
-        Height="780" Width="1200"
-        MinHeight="680" MinWidth="1000"
+        Title="⚡ SyncPulse Enterprise Server | لوحة التحكم المركزية"
+        Height="800" Width="1240"
+        MinHeight="650" MinWidth="900"
         WindowStartupLocation="CenterScreen"
-        Background="#0B0F19"
-        Foreground="#F8FAFC"
+        Background="#F8FAFC"
+        Foreground="#0F172A"
         FontFamily="Segoe UI"
         FlowDirection="RightToLeft">
 
@@ -16,21 +16,31 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <!-- أنماط البطاقات الفاخرة -->
-        <Style x:Key="ModernCard" TargetType="Border">
-            <Setter Property="Background" Value="#151D2E" />
-            <Setter Property="BorderBrush" Value="#26334D" />
+        <!-- بطاقات التصميم الأبيض الحديث النقي مع ظلال ناعمة (Clean White SaaS Cards) -->
+        <Style x:Key="ModernWhiteCard" TargetType="Border">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderBrush" Value="#E2E8F0" />
             <Setter Property="BorderThickness" Value="1" />
             <Setter Property="CornerRadius" Value="14" />
             <Setter Property="Effect">
                 <Setter.Value>
-                    <DropShadowEffect BlurRadius="20" Direction="270" ShadowDepth="4" Opacity="0.35" Color="#000000" />
+                    <DropShadowEffect BlurRadius="18" Direction="270" ShadowDepth="3" Opacity="0.06" Color="#0F172A" />
                 </Setter.Value>
             </Setter>
         </Style>
 
-        <!-- أزرار التشغيل والإيقاف -->
-        <Style x:Key="PrimaryStartBtn" TargetType="Button">
+        <!-- نمط بطاقات الإحصائيات المصغرة (Blue & Ice Metric Badges) -->
+        <Style x:Key="MetricPill" TargetType="Border">
+            <Setter Property="Background" Value="#F0F7FF" />
+            <Setter Property="BorderBrush" Value="#BAE6FD" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="14,8" />
+            <Setter Property="Margin" Value="0,0,10,6" />
+        </Style>
+
+        <!-- زر التشغيل الأساسي (Royal Emerald Gradient) -->
+        <Style x:Key="StartButton" TargetType="Button">
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -50,7 +60,7 @@
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.4" Color="#10B981" />
+                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.25" Color="#10B981" />
                             </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -59,7 +69,8 @@
             </Setter>
         </Style>
 
-        <Style x:Key="PrimaryStopBtn" TargetType="Button">
+        <!-- زر الإيقاف الأساسي (Ruby Rose Gradient) -->
+        <Style x:Key="StopButton" TargetType="Button">
             <Setter Property="Background">
                 <Setter.Value>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
@@ -79,7 +90,7 @@
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.4" Color="#E11D48" />
+                                <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.25" Color="#E11D48" />
                             </Border.Effect>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
                         </Border>
@@ -88,31 +99,74 @@
             </Setter>
         </Style>
 
-        <!-- نمط عناصر التبويبات الفاخرة -->
+        <!-- زر الإجراءات الأزرق الملكي -->
+        <Style x:Key="RoyalBlueBtn" TargetType="Button">
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2563EB" Offset="0" />
+                        <GradientStop Color="#1D4ED8" Offset="1" />
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="#FFFFFF" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" Direction="270" ShadowDepth="2" Opacity="0.2" Color="#2563EB" />
+                            </Border.Effect>
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- تبويبات عصرية باللون الأزرق والأبيض (Modern TabItem) -->
         <Style TargetType="TabItem">
             <Setter Property="Background" Value="Transparent" />
-            <Setter Property="Foreground" Value="#94A3B8" />
-            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Foreground" Value="#64748B" />
+            <Setter Property="FontSize" Value="13.5" />
             <Setter Property="FontWeight" Value="SemiBold" />
             <Setter Property="Padding" Value="16,10" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TabItem">
-                        <Border x:Name="TabBorder" Background="Transparent" CornerRadius="8,8,0,0" Padding="{TemplateBinding Padding}" Margin="0,0,6,0">
+                        <Border x:Name="TabBorder" Background="Transparent" CornerRadius="10,10,0,0" Padding="{TemplateBinding Padding}" Margin="0,0,6,0" BorderThickness="0,0,0,3" BorderBrush="Transparent">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" ContentSource="Header" />
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="TabBorder" Property="Background" Value="#1E293B" />
-                                <Setter Property="Foreground" Value="#38BDF8" />
+                                <Setter TargetName="TabBorder" Property="Background" Value="#FFFFFF" />
+                                <Setter TargetName="TabBorder" Property="BorderBrush" Value="#2563EB" />
+                                <Setter Property="Foreground" Value="#1D4ED8" />
+                                <Setter Property="FontWeight" Value="Bold" />
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Foreground" Value="#F8FAFC" />
+                                <Setter Property="Foreground" Value="#0284C7" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+
+        <!-- نمط ترويسة الجداول الحديثة -->
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F1F5F9" />
+            <Setter Property="Foreground" Value="#334155" />
+            <Setter Property="Padding" Value="10,8" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#CBD5E1" />
         </Style>
     </Window.Resources>
 
@@ -123,102 +177,109 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- 1. شريط التحكم والمقاييس العلوي -->
-        <Border Grid.Row="0" Style="{StaticResource ModernCard}" Padding="16,12" Margin="0,0,0,14">
+        <!-- 1. شريط التحكم والمقاييس العلوي المتجاوب (Responsive Header Bar) -->
+        <Border Grid.Row="0" Style="{StaticResource ModernWhiteCard}" Padding="16,12" Margin="0,0,0,14">
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <!-- الشعار -->
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
-                    <Border CornerRadius="12" Width="44" Height="44" Margin="0,0,12,0">
+                <!-- الشعار والهوية البصرية الزرقاء -->
+                <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <Border CornerRadius="12" Width="46" Height="46" Margin="0,0,12,0">
                         <Border.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#6366F1" Offset="0" />
-                                <GradientStop Color="#06B6D4" Offset="1" />
+                                <GradientStop Color="#2563EB" Offset="0" />
+                                <GradientStop Color="#0284C7" Offset="1" />
                             </LinearGradientBrush>
                         </Border.Background>
-                        <TextBlock Text="⚡" FontSize="22" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="12" Direction="270" ShadowDepth="2" Opacity="0.25" Color="#2563EB" />
+                        </Border.Effect>
+                        <TextBlock Text="⚡" FontSize="22" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </Border>
                     <StackPanel VerticalAlignment="Center">
-                        <TextBlock Text="SyncPulse Enterprise" FontSize="18" FontWeight="Bold" Foreground="#F8FAFC" />
-                        <TextBlock Text="Local Instant Messaging &amp; Media Server" FontSize="11" Foreground="#64748B" />
+                        <TextBlock Text="SyncPulse Server Hub" FontSize="18" FontWeight="Bold" Foreground="#0F172A" />
+                        <TextBlock Text="Local TCP &amp; UDP Network Engine" FontSize="11" Foreground="#64748B" />
                     </StackPanel>
                 </StackPanel>
 
-                <!-- بطاقات المقاييس والإحصائيات -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
-                    <!-- الحالة -->
-                    <Border Background="#101827" CornerRadius="8" Padding="12,6" Margin="0,0,10,0" BorderBrush="#1E293B" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="الحالة: " Foreground="#94A3B8" FontSize="12" />
+                <!-- شريط المقاييس المرن القابل للالتفاف لمنع التداخل (WrapPanel Metrics) -->
+                <WrapPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <!-- حالة الخادم -->
+                    <Border Style="{StaticResource MetricPill}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="الحالة: " Foreground="#475569" FontSize="12" />
                             <TextBlock Text="{Binding StatusText}" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
                         </StackPanel>
                     </Border>
 
-                    <!-- IP المحلي -->
-                    <Border Background="#101827" CornerRadius="8" Padding="12,6" Margin="0,0,10,0" BorderBrush="#1E293B" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🌐 الـ IP: " Foreground="#94A3B8" FontSize="12" />
-                            <TextBlock Text="{Binding ServerIP}" Foreground="#38BDF8" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
+                    <!-- الـ IP المحلي -->
+                    <Border Style="{StaticResource MetricPill}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🌐 الـ IP: " Foreground="#475569" FontSize="12" />
+                            <TextBlock Text="{Binding ServerIP}" Foreground="#0284C7" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
                         </StackPanel>
                     </Border>
 
-                    <!-- إجمالي المتصلين -->
-                    <Border Background="#101827" CornerRadius="8" Padding="12,6" Margin="0,0,10,0" BorderBrush="#1E293B" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="👥 المتصلون: " Foreground="#94A3B8" FontSize="12" />
-                            <TextBlock Text="{Binding ActiveClientsCount}" Foreground="#4ADE80" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
+                    <!-- المتصلين النشطين -->
+                    <Border Style="{StaticResource MetricPill}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="👥 المتصلون: " Foreground="#475569" FontSize="12" />
+                            <TextBlock Text="{Binding ActiveClientsCount}" Foreground="#059669" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
                         </StackPanel>
                     </Border>
 
-                    <!-- إجمالي المستخدمين المسجلين -->
-                    <Border Background="#101827" CornerRadius="8" Padding="12,6" Margin="0,0,10,0" BorderBrush="#1E293B" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="🗄️ المسجلين: " Foreground="#94A3B8" FontSize="12" />
-                            <TextBlock Text="{Binding TotalUsersCount}" Foreground="#FBBF24" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
+                    <!-- المسجلين -->
+                    <Border Style="{StaticResource MetricPill}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="🗄️ المسجلين: " Foreground="#475569" FontSize="12" />
+                            <TextBlock Text="{Binding TotalUsersCount}" Foreground="#D97706" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
                         </StackPanel>
                     </Border>
 
-                    <!-- إجمالي الرسائل المخزنة -->
-                    <Border Background="#101827" CornerRadius="8" Padding="12,6" BorderBrush="#1E293B" BorderThickness="1">
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="💬 الرسائل: " Foreground="#94A3B8" FontSize="12" />
-                            <TextBlock Text="{Binding TotalMessagesCount}" Foreground="#A78BFA" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
+                    <!-- الرسائل المخزنة -->
+                    <Border Style="{StaticResource MetricPill}">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="💬 الرسائل: " Foreground="#475569" FontSize="12" />
+                            <TextBlock Text="{Binding TotalMessagesCount}" Foreground="#7C3AED" FontWeight="Bold" FontSize="12" Margin="4,0,0,0" />
                         </StackPanel>
                     </Border>
-                </StackPanel>
+                </WrapPanel>
 
-                <!-- أزرار الإدارة -->
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
-                    <Button Content="🔄 تحديث" Command="{Binding RefreshDataCommand}" Background="#334155" Foreground="#F8FAFC" FontSize="11" Padding="12,8" Margin="0,0,8,0" Cursor="Hand">
+                <!-- أزرار الإدارة والتشغيل -->
+                <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Content="🔄 تحديث" Command="{Binding RefreshDataCommand}" Background="#F1F5F9" Foreground="#334155" BorderBrush="#CBD5E1" BorderThickness="1" FontSize="11" Padding="12,8" Margin="0,0,8,0" Cursor="Hand">
                         <Button.Resources>
                             <Style TargetType="Border">
                                 <Setter Property="CornerRadius" Value="8" />
                             </Style>
                         </Button.Resources>
                     </Button>
-                    <Button Content="▶ تشغيل" Command="{Binding StartCommand}" Style="{StaticResource PrimaryStartBtn}" Margin="0,0,8,0" />
-                    <Button Content="⏹ إيقاف" Command="{Binding StopCommand}" Style="{StaticResource PrimaryStopBtn}" />
+                    <Button Content="▶ تشغيل" Command="{Binding StartCommand}" Style="{StaticResource StartButton}" Margin="0,0,8,0" />
+                    <Button Content="⏹ إيقاف" Command="{Binding StopCommand}" Style="{StaticResource StopButton}" />
                 </StackPanel>
             </Grid>
         </Border>
 
-        <!-- 2. محتوى التبويبات المتعددة (Tabbed Multi-View Control) -->
+        <!-- 2. منطقة التبويبات المتجاوبة (TabControl Area) -->
         <TabControl Grid.Row="1" Background="Transparent" BorderThickness="0">
             
-            <!-- التبويب 1: المراقبة اللحظية والبث العام -->
+            <!-- التبويب 1: المراقبة اللحظية وبث الإعلانات -->
             <TabItem Header="📡 المراقبة اللحظية والبث العام">
-                <Grid Margin="0,12,0,0">
+                <Grid Margin="0,10,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*" />
-                        <ColumnDefinition Width="4*" />
+                        <ColumnDefinition Width="6*" MinWidth="350" />
+                        <ColumnDefinition Width="4*" MinWidth="280" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- القسم الأيمن: جدول المتصلين النشطين + شريط البث العام -->
+                    <!-- القسم الأيمن: جدول المتصلين + شريط البث العام -->
                     <Grid Grid.Column="0" Margin="0,0,12,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" />
@@ -226,78 +287,72 @@
                         </Grid.RowDefinitions>
 
                         <!-- جدول المتصلين -->
-                        <Border Grid.Row="0" Style="{StaticResource ModernCard}" Padding="16" Margin="0,0,0,12">
+                        <Border Grid.Row="0" Style="{StaticResource ModernWhiteCard}" Padding="16" Margin="0,0,0,12">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <TextBlock Text="👥 الجلسات المتصلة حالياً (Active Sessions)" FontSize="14" FontWeight="Bold" Foreground="#F1F5F9" Margin="0,0,0,10" />
+                                <TextBlock Text="👥 الجلسات المتصلة حالياً (Active Sessions)" FontSize="14" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,10" />
 
-                                <DataGrid Grid.Row="1" ItemsSource="{Binding ConnectedClients}" AutoGenerateColumns="False"
-                                          Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
-                                          HorizontalGridLinesBrush="#1E293B" RowBackground="Transparent" AlternatingRowBackground="#0E1524"
-                                          Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                                          RowHeight="38" FontSize="12">
-                                    <DataGrid.ColumnHeaderStyle>
-                                        <Style TargetType="DataGridColumnHeader">
-                                            <Setter Property="Background" Value="#0F172A" />
-                                            <Setter Property="Foreground" Value="#94A3B8" />
-                                            <Setter Property="Padding" Value="8,8" />
-                                            <Setter Property="FontWeight" Value="SemiBold" />
-                                        </Style>
-                                    </DataGrid.ColumnHeaderStyle>
-                                    <DataGrid.Columns>
-                                        <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="60" />
-                                        <DataGridTextColumn Header="المستخدم" Binding="{Binding Username}" Width="110" />
-                                        <DataGridTextColumn Header="الاسم" Binding="{Binding DisplayName}" Width="130" />
-                                        <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="120" />
-                                        <DataGridTextColumn Header="المنفذ" Binding="{Binding ClientPort}" Width="70" />
-                                        <DataGridTextColumn Header="وقت الاتصال" Binding="{Binding ConnectedAt, StringFormat='{}{0:HH:mm:ss}'}" Width="90" />
-                                        <DataGridTemplateColumn Header="إجراء" Width="70">
-                                            <DataGridTemplateColumn.CellTemplate>
-                                                <DataTemplate>
-                                                    <Button Content="طرد" Command="{Binding DataContext.KickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                            CommandParameter="{Binding}" Background="#EF4444" Foreground="White" FontWeight="Bold" FontSize="11" Padding="8,3" BorderThickness="0" Cursor="Hand" />
-                                                </DataTemplate>
-                                            </DataGridTemplateColumn.CellTemplate>
-                                        </DataGridTemplateColumn>
-                                    </DataGrid.Columns>
-                                </DataGrid>
+                                <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                                    <DataGrid ItemsSource="{Binding ConnectedClients}" AutoGenerateColumns="False"
+                                              Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
+                                              HorizontalGridLinesBrush="#F1F5F9" RowBackground="#FFFFFF" AlternatingRowBackground="#F8FAFC"
+                                              Foreground="#1E293B" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                                              RowHeight="38" FontSize="12">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="65" />
+                                            <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="120" />
+                                            <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="140" />
+                                            <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="125" />
+                                            <DataGridTextColumn Header="المنفذ" Binding="{Binding ClientPort}" Width="75" />
+                                            <DataGridTextColumn Header="وقت الاتصال" Binding="{Binding ConnectedAt, StringFormat='{}{0:HH:mm:ss}'}" Width="95" />
+                                            <DataGridTemplateColumn Header="إجراء" Width="80">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <Button Content="طرد" Command="{Binding DataContext.KickCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                                CommandParameter="{Binding}" Background="#FEE2E2" Foreground="#DC2626" BorderBrush="#FECDD3" BorderThickness="1" FontWeight="Bold" FontSize="11" Padding="8,3" Cursor="Hand">
+                                                            <Button.Resources>
+                                                                <Style TargetType="Border">
+                                                                    <Setter Property="CornerRadius" Value="6" />
+                                                                </Style>
+                                                            </Button.Resources>
+                                                        </Button>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </ScrollViewer>
                             </Grid>
                         </Border>
 
-                        <!-- شريط بث إشعار نظام عام -->
-                        <Border Grid.Row="1" Style="{StaticResource ModernCard}" Padding="14,10">
+                        <!-- شريط بث الإشعار العام -->
+                        <Border Grid.Row="1" Style="{StaticResource ModernWhiteCard}" Padding="14,10">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
                                 <TextBox Text="{Binding BroadcastMessageText, UpdateSourceTrigger=PropertyChanged}"
-                                         Background="#0A0F1D" Foreground="#F8FAFC" BorderBrush="#334155" BorderThickness="1"
-                                         Padding="10,8" FontSize="12" VerticalAlignment="Center" Margin="0,0,10,0">
+                                         Background="#F8FAFC" Foreground="#0F172A" BorderBrush="#CBD5E1" BorderThickness="1"
+                                         Padding="10,8" FontSize="12.5" VerticalAlignment="Center" Margin="0,0,10,0">
                                     <TextBox.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="8" />
                                         </Style>
                                     </TextBox.Resources>
                                 </TextBox>
-                                <Button Grid.Column="1" Content="📢 بث إشعار عام للكل" Command="{Binding SendBroadcastCommand}"
-                                        Background="#6366F1" Foreground="White" FontWeight="Bold" FontSize="12" Padding="14,8" BorderThickness="0" Cursor="Hand">
-                                    <Button.Resources>
-                                        <Style TargetType="Border">
-                                            <Setter Property="CornerRadius" Value="8" />
-                                        </Style>
-                                    </Button.Resources>
-                                </Button>
+                                <Button Grid.Column="1" Content="📢 بث إشعار للجميع" Command="{Binding SendBroadcastCommand}"
+                                        Style="{StaticResource RoyalBlueBtn}" />
                             </Grid>
                         </Border>
                     </Grid>
 
-                    <!-- القسم الأيسر: سجل الحزم اللحظي -->
-                    <Border Grid.Column="1" Style="{StaticResource ModernCard}" Padding="16">
+                    <!-- القسم الأيسر: كونسول سجل الحزم اللحظي -->
+                    <Border Grid.Column="1" Style="{StaticResource ModernWhiteCard}" Padding="16">
                         <Grid>
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
@@ -305,14 +360,21 @@
                             </Grid.RowDefinitions>
 
                             <Grid Margin="0,0,0,10">
-                                <TextBlock Text="📡 تدفق الحزم (Live Packet Stream)" FontSize="14" FontWeight="Bold" Foreground="#F1F5F9" VerticalAlignment="Center" />
-                                <Button Content="مسح" Command="{Binding ClearLogsCommand}" HorizontalAlignment="Left"
-                                        Background="#1E293B" Foreground="#94A3B8" FontSize="11" Padding="10,4" BorderBrush="#334155" BorderThickness="1" Cursor="Hand" />
+                                <TextBlock Text="📡 سجل تدفق الحزم (Live Stream)" FontSize="14" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center" />
+                                <Button Content="مسح السجل" Command="{Binding ClearLogsCommand}" HorizontalAlignment="Left"
+                                        Background="#F1F5F9" Foreground="#64748B" BorderBrush="#CBD5E1" BorderThickness="1" FontSize="11" Padding="10,4" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6" />
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
                             </Grid>
 
-                            <Border Grid.Row="1" Background="#060911" CornerRadius="8" BorderBrush="#1E293B" BorderThickness="1" Padding="6">
+                            <!-- كونسول أزرق وأبيض احترافي مريح -->
+                            <Border Grid.Row="1" Background="#F0F7FF" CornerRadius="8" BorderBrush="#DBEAFE" BorderThickness="1" Padding="6">
                                 <ListBox ItemsSource="{Binding PacketLogs}" Background="Transparent" BorderThickness="0"
-                                         Foreground="#38BDF8" FontFamily="Consolas" FontSize="11.5" />
+                                         Foreground="#1D4ED8" FontFamily="Consolas" FontSize="11.5" />
                             </Border>
                         </Grid>
                     </Border>
@@ -321,160 +383,144 @@
 
             <!-- التبويب 2: إدارة المستخدمين والحظر -->
             <TabItem Header="👥 إدارة الحسابات والحظر">
-                <Border Style="{StaticResource ModernCard}" Padding="18" Margin="0,12,0,0">
+                <Border Style="{StaticResource ModernWhiteCard}" Padding="18" Margin="0,10,0,0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="قائمة كافة المستخدمين المسجلين في قاعدة بيانات SQLite" FontSize="14" FontWeight="Bold" Foreground="#F1F5F9" Margin="0,0,0,12" />
+                        <TextBlock Text="قائمة المستخدمين المسجلين في قاعدة بيانات SQLite المركزية" FontSize="14" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,12" />
 
-                        <DataGrid Grid.Row="1" ItemsSource="{Binding RegisteredUsers}" AutoGenerateColumns="False"
-                                  Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
-                                  HorizontalGridLinesBrush="#1E293B" RowBackground="Transparent" AlternatingRowBackground="#0E1524"
-                                  Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                                  RowHeight="40" FontSize="12">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#0F172A" />
-                                    <Setter Property="Foreground" Value="#94A3B8" />
-                                    <Setter Property="Padding" Value="10,8" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="65" />
-                                <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="130" />
-                                <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="150" />
-                                <DataGridTextColumn Header="آخر ظهور" Binding="{Binding LastSeenAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="150" />
-                                <DataGridTemplateColumn Header="الحالة" Width="100">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding IsOnline, Converter={x:Null}}" FontWeight="Bold" VerticalAlignment="Center">
-                                                <TextBlock.Style>
-                                                    <Style TargetType="TextBlock">
-                                                        <Setter Property="Text" Value="نشط" />
-                                                        <Setter Property="Foreground" Value="#4ADE80" />
-                                                        <Style.Triggers>
-                                                            <DataTrigger Binding="{Binding IsOnline}" Value="False">
-                                                                <Setter Property="Text" Value="محظور 🚫" />
-                                                                <Setter Property="Foreground" Value="#EF4444" />
-                                                            </DataTrigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </TextBlock.Style>
-                                            </TextBlock>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="إجراءات الحساب" Width="200">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Button Content="حظر" Command="{Binding DataContext.BanUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                        CommandParameter="{Binding}" Background="#EF4444" Foreground="White" FontSize="11" Padding="8,2" Margin="0,0,6,0" Cursor="Hand" />
-                                                <Button Content="فك الحظر" Command="{Binding DataContext.UnbanUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                        CommandParameter="{Binding}" Background="#10B981" Foreground="White" FontSize="11" Padding="8,2" Margin="0,0,6,0" Cursor="Hand" />
-                                                <Button Content="تصفير السر" Command="{Binding DataContext.ResetPasswordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
-                                                        CommandParameter="{Binding}" Background="#3B82F6" Foreground="White" FontSize="11" Padding="8,2" Cursor="Hand" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding RegisteredUsers}" AutoGenerateColumns="False"
+                                      Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#F1F5F9" RowBackground="#FFFFFF" AlternatingRowBackground="#F8FAFC"
+                                      Foreground="#1E293B" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                                      RowHeight="40" FontSize="12">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="المعرف" Binding="{Binding UserID}" Width="70" />
+                                    <DataGridTextColumn Header="اسم المستخدم" Binding="{Binding Username}" Width="140" />
+                                    <DataGridTextColumn Header="الاسم الظاهر" Binding="{Binding DisplayName}" Width="160" />
+                                    <DataGridTextColumn Header="آخر ظهور" Binding="{Binding LastSeenAt, StringFormat='{}{0:yyyy-MM-dd HH:mm}'}" Width="160" />
+                                    
+                                    <DataGridTemplateColumn Header="الحالة" Width="110">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding IsOnline, Converter={x:Null}}" FontWeight="Bold" VerticalAlignment="Center">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Setter Property="Text" Value="نشط ✓" />
+                                                            <Setter Property="Foreground" Value="#059669" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding IsOnline}" Value="False">
+                                                                    <Setter Property="Text" Value="محظور 🚫" />
+                                                                    <Setter Property="Foreground" Value="#DC2626" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTemplateColumn Header="إجراءات الحساب" Width="220">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Button Content="حظر" Command="{Binding DataContext.BanUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding}" Background="#FEE2E2" Foreground="#DC2626" BorderBrush="#FECDD3" BorderThickness="1" FontSize="11" Padding="8,2" Margin="0,0,6,0" Cursor="Hand" />
+                                                    <Button Content="فك الحظر" Command="{Binding DataContext.UnbanUserCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding}" Background="#D1FAE5" Foreground="#059669" BorderBrush="#A7F3D0" BorderThickness="1" FontSize="11" Padding="8,2" Margin="0,0,6,0" Cursor="Hand" />
+                                                    <Button Content="تصفير السر" Command="{Binding DataContext.ResetPasswordCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                                            CommandParameter="{Binding}" Background="#DBEAFE" Foreground="#1D4ED8" BorderBrush="#BFDBFE" BorderThickness="1" FontSize="11" Padding="8,2" Cursor="Hand" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
             </TabItem>
 
             <!-- التبويب 3: سجل المكالمات -->
             <TabItem Header="📞 سجل المكالمات (Call History)">
-                <Border Style="{StaticResource ModernCard}" Padding="18" Margin="0,12,0,0">
+                <Border Style="{StaticResource ModernWhiteCard}" Padding="18" Margin="0,10,0,0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="سجل المكالمات الصوتية والمرئية المنفذة عبر مكرر UDP Relay" FontSize="14" FontWeight="Bold" Foreground="#F1F5F9" Margin="0,0,0,12" />
+                        <TextBlock Text="سجل المكالمات الصوتية والمرئية المنفذة عبر مكرر UDP Relay" FontSize="14" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,12" />
 
-                        <DataGrid Grid.Row="1" ItemsSource="{Binding CallHistoryLogs}" AutoGenerateColumns="False"
-                                  Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
-                                  HorizontalGridLinesBrush="#1E293B" RowBackground="Transparent" AlternatingRowBackground="#0E1524"
-                                  Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                                  RowHeight="38" FontSize="12">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#0F172A" />
-                                    <Setter Property="Foreground" Value="#94A3B8" />
-                                    <Setter Property="Padding" Value="10,8" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="المعرف" Binding="{Binding CallID}" Width="70" />
-                                <DataGridTextColumn Header="المتصل" Binding="{Binding CallerUsername}" Width="130" />
-                                <DataGridTextColumn Header="المستقبل" Binding="{Binding ReceiverUsername}" Width="130" />
-                                <DataGridTextColumn Header="النوع" Binding="{Binding CallType}" Width="90" />
-                                <DataGridTextColumn Header="المدة (ثواني)" Binding="{Binding DurationSeconds}" Width="100" />
-                                <DataGridTextColumn Header="الإنهاء" Binding="{Binding EndReason}" Width="110" />
-                                <DataGridTextColumn Header="وقت البدء" Binding="{Binding StartedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="160" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding CallHistoryLogs}" AutoGenerateColumns="False"
+                                      Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#F1F5F9" RowBackground="#FFFFFF" AlternatingRowBackground="#F8FAFC"
+                                      Foreground="#1E293B" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                                      RowHeight="38" FontSize="12">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="المعرف" Binding="{Binding CallID}" Width="75" />
+                                    <DataGridTextColumn Header="المتصل" Binding="{Binding CallerUsername}" Width="140" />
+                                    <DataGridTextColumn Header="المستقبل" Binding="{Binding ReceiverUsername}" Width="140" />
+                                    <DataGridTextColumn Header="نوع المكالمة" Binding="{Binding CallType}" Width="110" />
+                                    <DataGridTextColumn Header="المدة (ثواني)" Binding="{Binding DurationSeconds}" Width="110" />
+                                    <DataGridTextColumn Header="سبب الإنهاء" Binding="{Binding EndReason}" Width="120" />
+                                    <DataGridTextColumn Header="وقت البدء" Binding="{Binding StartedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="170" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
             </TabItem>
 
             <!-- التبويب 4: سجلات التدقيق والأمان -->
             <TabItem Header="🛡️ سجلات التدقيق والأمان (Audit Logs)">
-                <Border Style="{StaticResource ModernCard}" Padding="18" Margin="0,12,0,0">
+                <Border Style="{StaticResource ModernWhiteCard}" Padding="18" Margin="0,10,0,0">
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto" />
                             <RowDefinition Height="*" />
                         </Grid.RowDefinitions>
 
-                        <TextBlock Text="سجلات النظام والأمان وأحداث المصادقة (ISO/IEC 27001 Audit Trail)" FontSize="14" FontWeight="Bold" Foreground="#F1F5F9" Margin="0,0,0,12" />
+                        <TextBlock Text="سجلات الأمان والتدقيق اللحظية لأحداث النظام (ISO/IEC 27001 Audit Trail)" FontSize="14" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,12" />
 
-                        <DataGrid Grid.Row="1" ItemsSource="{Binding AuditLogsList}" AutoGenerateColumns="False"
-                                  Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
-                                  HorizontalGridLinesBrush="#1E293B" RowBackground="Transparent" AlternatingRowBackground="#0E1524"
-                                  Foreground="#F8FAFC" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                                  RowHeight="38" FontSize="12">
-                            <DataGrid.ColumnHeaderStyle>
-                                <Style TargetType="DataGridColumnHeader">
-                                    <Setter Property="Background" Value="#0F172A" />
-                                    <Setter Property="Foreground" Value="#94A3B8" />
-                                    <Setter Property="Padding" Value="10,8" />
-                                    <Setter Property="FontWeight" Value="SemiBold" />
-                                </Style>
-                            </DataGrid.ColumnHeaderStyle>
-                            <DataGrid.Columns>
-                                <DataGridTextColumn Header="المعرف" Binding="{Binding LogID}" Width="70" />
-                                <DataGridTextColumn Header="المستوى" Binding="{Binding LogLevel}" Width="90" />
-                                <DataGridTextColumn Header="المصدر" Binding="{Binding Source}" Width="100" />
-                                <DataGridTextColumn Header="الرسالة والحدث" Binding="{Binding Message}" Width="*" />
-                                <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="120" />
-                                <DataGridTextColumn Header="التاريخ والوقت" Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="150" />
-                            </DataGrid.Columns>
-                        </DataGrid>
+                        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <DataGrid ItemsSource="{Binding AuditLogsList}" AutoGenerateColumns="False"
+                                      Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
+                                      HorizontalGridLinesBrush="#F1F5F9" RowBackground="#FFFFFF" AlternatingRowBackground="#F8FAFC"
+                                      Foreground="#1E293B" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
+                                      RowHeight="38" FontSize="12">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="المعرف" Binding="{Binding LogID}" Width="75" />
+                                    <DataGridTextColumn Header="المستوى" Binding="{Binding LogLevel}" Width="95" />
+                                    <DataGridTextColumn Header="المصدر" Binding="{Binding Source}" Width="110" />
+                                    <DataGridTextColumn Header="نص الرسالة والحدث" Binding="{Binding Message}" Width="*" MinWidth="250" />
+                                    <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="130" />
+                                    <DataGridTextColumn Header="التاريخ والوقت" Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="160" />
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
                     </Grid>
                 </Border>
             </TabItem>
 
         </TabControl>
 
-        <!-- 3. الشريط السفلي: شارات المعايير الدولية -->
-        <Border Grid.Row="2" Style="{StaticResource ModernCard}" Padding="16,8" Margin="0,14,0,0">
+        <!-- 3. الشريط السفلي: شارات المعايير الدولية والبروتوكول -->
+        <Border Grid.Row="2" Style="{StaticResource ModernWhiteCard}" Padding="16,8" Margin="0,14,0,0">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                 <TextBlock Text="🔒 النواة: SyncPulse.Core" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
-                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
+                <TextBlock Text="•" Foreground="#CBD5E1" Margin="0,0,14,0" />
                 <TextBlock Text="📦 التأطير: IETF 12-Byte FrameHeader" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
-                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
+                <TextBlock Text="•" Foreground="#CBD5E1" Margin="0,0,14,0" />
                 <TextBlock Text="💾 قاعدة البيانات: SQLite 3NF (WAL Mode)" Foreground="#64748B" FontSize="11.5" Margin="0,0,14,0" />
-                <TextBlock Text="•" Foreground="#334155" Margin="0,0,14,0" />
-                <TextBlock Text="⚡ المنافذ: TCP 8888, UDP 8889, UDP 8887" Foreground="#0EA5E9" FontWeight="SemiBold" FontSize="11.5" />
+                <TextBlock Text="•" Foreground="#CBD5E1" Margin="0,0,14,0" />
+                <TextBlock Text="⚡ المنافذ: TCP 8888, UDP 8889, UDP 8887" Foreground="#1D4ED8" FontWeight="SemiBold" FontSize="11.5" />
             </StackPanel>
         </Border>
     </Grid>
