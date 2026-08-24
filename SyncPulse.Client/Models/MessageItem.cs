@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Runtime.CompilerServices;
 using SyncPulse.Core.Enums;
 
@@ -8,6 +9,7 @@ namespace SyncPulse.Client.Models
     public class MessageItem : INotifyPropertyChanged
     {
         private MessageStatus _status;
+        private string? _attachmentPath;
 
         public int MessageID { get; set; }
         public int ConversationID { get; set; }
@@ -15,7 +17,33 @@ namespace SyncPulse.Client.Models
         public string SenderUsername { get; set; } = string.Empty;
         public int ReceiverID { get; set; }
         public string Content { get; set; } = string.Empty;
-        public string? AttachmentPath { get; set; }
+
+        public string? AttachmentPath
+        {
+            get => _attachmentPath;
+            set
+            {
+                _attachmentPath = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasAttachment));
+                OnPropertyChanged(nameof(AttachmentFileName));
+                OnPropertyChanged(nameof(IsImageAttachment));
+            }
+        }
+
+        public bool HasAttachment => !string.IsNullOrEmpty(AttachmentPath);
+        public string AttachmentFileName => string.IsNullOrEmpty(AttachmentPath) ? string.Empty : Path.GetFileName(AttachmentPath);
+
+        public bool IsImageAttachment
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(AttachmentPath)) return false;
+                string ext = Path.GetExtension(AttachmentPath).ToLowerInvariant();
+                return ext == ".png" || ext == ".jpg" || ext == ".jpeg" || ext == ".bmp" || ext == ".gif";
+            }
+        }
+
         public DateTime Timestamp { get; set; }
         public bool IsOutgoing { get; set; }
 
@@ -43,9 +71,9 @@ namespace SyncPulse.Client.Models
 
         public string StatusColor => Status switch
         {
-            MessageStatus.Read => "#0284C7", // Cyan / Blue double check
-            MessageStatus.Delivered => "#64748B", // Gray double check
-            _ => "#94A3B8" // Single check
+            MessageStatus.Read => "#0284C7", // أزرق ملكي عند القراءة
+            MessageStatus.Delivered => "#64748B", // رمادي عند الاستلام
+            _ => "#94A3B8" // رمادي فاتح عند الإرسال
         };
 
         // فقاعة الرسالة (Sender: Soft Blue, Receiver: Pure White)

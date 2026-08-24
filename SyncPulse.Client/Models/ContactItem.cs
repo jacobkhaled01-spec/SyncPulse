@@ -12,6 +12,7 @@ namespace SyncPulse.Client.Models
         private int _unreadCount;
         private bool _isOnline;
         private bool _isSelected;
+        private bool _isTyping;
 
         public int ContactUserID { get; set; }
         public string Username { get; set; } = string.Empty;
@@ -25,7 +26,7 @@ namespace SyncPulse.Client.Models
         public string LastMessage
         {
             get => _lastMessage;
-            set { _lastMessage = value; OnPropertyChanged(); }
+            set { _lastMessage = value; OnPropertyChanged(); OnPropertyChanged(nameof(DisplaySnippet)); }
         }
 
         public DateTime LastMessageTime
@@ -56,8 +57,22 @@ namespace SyncPulse.Client.Models
             set { _isSelected = value; OnPropertyChanged(); }
         }
 
-        public string StatusColor => IsOnline ? "#10B981" : "#94A3B8";
-        public string StatusText => IsOnline ? "متصل الآن" : "غير متصل";
+        public bool IsTyping
+        {
+            get => _isTyping;
+            set
+            {
+                _isTyping = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(StatusText));
+                OnPropertyChanged(nameof(StatusColor));
+                OnPropertyChanged(nameof(DisplaySnippet));
+            }
+        }
+
+        public string StatusColor => IsTyping ? "#2563EB" : (IsOnline ? "#10B981" : "#94A3B8");
+        public string StatusText => IsTyping ? "✍️ يكتب الآن..." : (IsOnline ? "متصل الآن" : "غير متصل");
+        public string DisplaySnippet => IsTyping ? "✍️ يكتب الآن..." : LastMessage;
 
         // لون الأفاتار المولد ديناميكياً
         public string AvatarBackground

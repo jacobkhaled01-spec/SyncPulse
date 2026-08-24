@@ -32,6 +32,7 @@ namespace SyncPulse.Client.Services
         public event Action<CallSignalPacket>? CallSignalReceived;
         public event Action<string>? SystemBroadcastReceived;
         public event Action<UserPresenceChangedPacket>? PresenceChanged;
+        public event Action<TypingIndicatorPacket>? TypingIndicatorReceived;
 
         public async Task<bool> ConnectAsync(string host, int port)
         {
@@ -159,6 +160,11 @@ namespace SyncPulse.Client.Services
                         case PacketType.UserPresenceChanged:
                             var presence = packet.GetPayload<UserPresenceChangedPacket>();
                             if (presence != null) PresenceChanged?.Invoke(presence);
+                            break;
+
+                        case PacketType.TypingIndicator:
+                            var typing = packet.GetPayload<TypingIndicatorPacket>();
+                            if (typing != null) TypingIndicatorReceived?.Invoke(typing);
                             break;
 
                         case PacketType.ProtocolError:

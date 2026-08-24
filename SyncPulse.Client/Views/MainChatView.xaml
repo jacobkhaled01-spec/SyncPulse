@@ -112,14 +112,24 @@
                     </StackPanel>
                 </Border>
 
-                <!-- ج. قائمة جهات الاتصال -->
-                <ListBox Grid.Row="2" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}"
+                <!-- ج. قائمة جهات الاتصال مع قائمة الخيارات التفاعلية (ContextMenu) -->
+                <ListBox Grid.Row="2" x:Name="ContactsListBox" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}"
                          Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <Setter Property="Padding" Value="0" />
                             <Setter Property="Margin" Value="6,3" />
                             <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu FlowDirection="RightToLeft">
+                                        <MenuItem Header="📞 اتصال صوتي" Command="{Binding DataContext.StartAudioCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <MenuItem Header="📹 مكالمة فيديو" Command="{Binding DataContext.StartVideoCallCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
+                                        <Separator />
+                                        <MenuItem Header="🗑️ حذف من جهات الاتصال" Command="{Binding DataContext.DeleteContactCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" Foreground="#DC2626" />
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
                             <Setter Property="Template">
                                 <Setter.Value>
                                     <ControlTemplate TargetType="ListBoxItem">
@@ -161,10 +171,10 @@
                                             HorizontalAlignment="Right" VerticalAlignment="Bottom" />
                                 </Grid>
 
-                                <!-- اسم جهة الاتصال وآخر رسالة -->
+                                <!-- اسم جهة الاتصال وآخر رسالة أو مؤشر يكتب الآن -->
                                 <StackPanel Grid.Column="1" VerticalAlignment="Center">
                                     <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
-                                    <TextBlock Text="{Binding LastMessage}" FontSize="11.5" Foreground="#64748B" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                    <TextBlock Text="{Binding DisplaySnippet}" FontSize="11.5" Foreground="{Binding StatusColor}" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
                                 </StackPanel>
 
                                 <!-- الوقت وعدد الرسائل غير المقروءة -->
@@ -202,7 +212,7 @@
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- أ. ترويسة المحادثة النشطة مع أزرار الاتصال -->
+            <!-- أ. ترويسة المحادثة النشطة مع أزرار الاتصال ومسح السجل -->
             <Border Grid.Row="0" Background="#FFFFFF" Padding="18,14" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -210,13 +220,13 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
-                    <!-- بيانات جهة الاتصال النشطة -->
+                    <!-- بيانات جهة الاتصال النشطة ومؤشر يكتب الآن -->
                     <StackPanel Grid.Column="0" VerticalAlignment="Center">
                         <TextBlock Text="{Binding SelectedContactTitle}" FontSize="15" FontWeight="Bold" Foreground="#0F172A" />
                         <TextBlock Text="{Binding SelectedContact.StatusText}" FontSize="11.5" Foreground="{Binding SelectedContact.StatusColor}" Margin="0,2,0,0" />
                     </StackPanel>
 
-                    <!-- أزرار المكالمات الصوتية والمرئية -->
+                    <!-- أزرار المكالمات الصوتية والمرئية ومسح المحادثة -->
                     <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                         <StackPanel.Style>
                             <Style TargetType="StackPanel">
@@ -232,7 +242,7 @@
                         <!-- زر مكالمة صوتية -->
                         <Button Content="📞 اتصال صوتي" Command="{Binding StartAudioCallCommand}"
                                 Background="#ECFDF5" Foreground="#059669" BorderBrush="#A7F3D0" BorderThickness="1"
-                                FontWeight="Bold" FontSize="12" Padding="12,7" Margin="0,0,8,0" Cursor="Hand">
+                                FontWeight="Bold" FontSize="12" Padding="12,7" Margin="0,0,6,0" Cursor="Hand">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="8" />
@@ -243,7 +253,18 @@
                         <!-- زر مكالمة فيديو -->
                         <Button Content="📹 مكالمة فيديو" Command="{Binding StartVideoCallCommand}"
                                 Background="#EFF6FF" Foreground="#2563EB" BorderBrush="#BFDBFE" BorderThickness="1"
-                                FontWeight="Bold" FontSize="12" Padding="12,7" Cursor="Hand">
+                                FontWeight="Bold" FontSize="12" Padding="12,7" Margin="0,0,6,0" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <!-- زر مسح المحادثة -->
+                        <Button Content="مسح السجل" Command="{Binding ClearChatHistoryCommand}"
+                                Background="#F8FAFC" Foreground="#64748B" BorderBrush="#E2E8F0" BorderThickness="1"
+                                FontSize="11.5" FontWeight="SemiBold" Padding="10,7" Cursor="Hand">
                             <Button.Resources>
                                 <Style TargetType="Border">
                                     <Setter Property="CornerRadius" Value="8" />
@@ -277,13 +298,13 @@
                 </Grid>
             </Border>
 
-            <!-- ج. دفق الرسائل وفقاعات المحادثة (Message Bubbles) -->
+            <!-- ج. دفق الرسائل وفقاعات المحادثة مع دعم المرفقات (Message Bubbles & Attachments) -->
             <ScrollViewer Grid.Row="2" Background="#F8FAFC" Padding="18,14" VerticalScrollBarVisibility="Auto">
                 <ItemsControl ItemsSource="{Binding Messages}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Grid Margin="0,4">
-                                <Border CornerRadius="12" Padding="14,10" MaxWidth="500"
+                                <Border CornerRadius="12" Padding="14,10" MaxWidth="520"
                                         Background="{Binding BubbleBackground}" BorderBrush="{Binding BubbleBorder}" BorderThickness="1"
                                         HorizontalAlignment="{Binding Alignment}">
                                     <Border.Effect>
@@ -293,6 +314,37 @@
                                     <StackPanel>
                                         <!-- نص الرسالة -->
                                         <TextBlock Text="{Binding Content}" Foreground="{Binding TextColor}" FontSize="13.5" TextWrapping="Wrap" LineHeight="20" />
+
+                                        <!-- بطاقة المرفق إن وجد (ملف أو صورة) -->
+                                        <Border Background="#F1F5F9" CornerRadius="8" BorderBrush="#CBD5E1" BorderThickness="1" Padding="10,6" Margin="0,8,0,0">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding HasAttachment}" Value="True">
+                                                            <Setter Property="Visibility" Value="Visible" />
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock Grid.Column="0" Text="{Binding AttachmentFileName}" FontSize="12" FontWeight="SemiBold" Foreground="#1E293B" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                                <Button Grid.Column="1" Content="📂 فتح المرفق"
+                                                        Command="{Binding DataContext.OpenFileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                        CommandParameter="{Binding AttachmentPath}"
+                                                        Background="#2563EB" Foreground="White" FontWeight="Bold" FontSize="11" Padding="8,4" Cursor="Hand" BorderThickness="0" Margin="8,0,0,0">
+                                                    <Button.Resources>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="CornerRadius" Value="6" />
+                                                        </Style>
+                                                    </Button.Resources>
+                                                </Button>
+                                            </Grid>
+                                        </Border>
 
                                         <!-- الوقت وعلامات الصح ✓/✓✓ -->
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
@@ -318,16 +370,28 @@
                 </ItemsControl>
             </ScrollViewer>
 
-            <!-- د. شريط إدخال وإرسال الرسالة السفلي -->
+            <!-- د. شريط إدخال وإرسال الرسالة مع زر إرفاق الملفات 📎 -->
             <Border Grid.Row="3" Background="#FFFFFF" Padding="16,12" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0">
                 <Grid>
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
 
+                    <!-- زر إرفاق الملفات والمستندات والصور 📎 -->
+                    <Button Grid.Column="0" Content="📎" Command="{Binding AttachFileCommand}"
+                            Width="42" Height="42" Background="#F1F5F9" Foreground="#2563EB" BorderBrush="#CBD5E1" BorderThickness="1"
+                            FontSize="18" FontWeight="Bold" Cursor="Hand" Margin="0,0,10,0" ToolTip="إرفاق ملف أو صورة">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
                     <!-- صندوق كتابة الرسالة -->
-                    <TextBox Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}"
+                    <TextBox Grid.Column="1" Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}"
                              Background="#F8FAFC" Foreground="#0F172A" BorderBrush="#CBD5E1" BorderThickness="1"
                              Padding="12,10" FontSize="13.5" VerticalAlignment="Center" Margin="0,0,10,0">
                         <TextBox.Resources>
@@ -341,7 +405,7 @@
                     </TextBox>
 
                     <!-- زر الإرسال الأزرق الملكي -->
-                    <Button Grid.Column="1" Content="إرسال ✈" Command="{Binding SendMessageCommand}"
+                    <Button Grid.Column="2" Content="إرسال ✈" Command="{Binding SendMessageCommand}"
                             Height="42" Foreground="White" FontWeight="Bold" FontSize="13" Padding="20,0" Cursor="Hand" BorderThickness="0">
                         <Button.Background>
                             <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
