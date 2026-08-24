@@ -44,7 +44,9 @@ namespace SyncPulse.Server.Services
                     break;
 
                 case CallAction.Ringing:
-                    await RelaySignalAsync(signal.CallerID, signal);
+                    int ringTarget = signal.ReceiverID;
+                    if (_activeCalls.TryGetValue(signal.CallID, out var rState)) ringTarget = rState.CallerID;
+                    await RelaySignalAsync(ringTarget, signal);
                     break;
 
                 case CallAction.Accept:
@@ -56,7 +58,9 @@ namespace SyncPulse.Server.Services
                     break;
 
                 case CallAction.Busy:
-                    await RelaySignalAsync(signal.CallerID, signal);
+                    int busyTarget = signal.ReceiverID;
+                    if (_activeCalls.TryGetValue(signal.CallID, out var bState)) busyTarget = bState.CallerID;
+                    await RelaySignalAsync(busyTarget, signal);
                     break;
 
                 case CallAction.End:
@@ -101,28 +105,34 @@ namespace SyncPulse.Server.Services
 
         private async Task HandleCallAcceptAsync(ClientSession receiverSession, CallSignalPacket signal)
         {
+            int callerTargetId = signal.ReceiverID;
             if (_activeCalls.TryGetValue(signal.CallID, out var callState))
             {
                 callState.ConnectedAt = DateTime.UtcNow;
+                callerTargetId = callState.CallerID;
             }
 
             // إشعار المتصل بأن المكالمة قُبلت
             signal.Action = CallAction.Accept;
-            await RelaySignalAsync(signal.CallerID, signal);
+            await RelaySignalAsync(callerTargetId, signal);
         }
 
         private async Task HandleCallRejectAsync(ClientSession session, CallSignalPacket signal)
         {
-            if (_activeCalls.TryRemove(signal.CallID, out _))
+            int targetId = signal.ReceiverID;
+            if (_activeCalls.TryRemove(signal.CallID, out var callState))
             {
                 await _callRepo.EndCallAsync(signal.CallID, 0, "Rejected");
+                targetId = callState.CallerID;
             }
-            await RelaySignalAsync(signal.CallerID, signal);
+            await RelaySignalAsync(targetId, signal);
         }
 
         private async Task HandleCallEndAsync(ClientSession session, CallSignalPacket signal)
         {
             int duration = 0;
+            int peerId = (session.UserID == signal.CallerID) ? signal.ReceiverID : signal.CallerID;
+
             if (_activeCalls.TryRemove(signal.CallID, out var callState))
             {
                 if (callState.ConnectedAt.HasValue)
@@ -130,12 +140,12 @@ namespace SyncPulse.Server.Services
                     duration = (int)(DateTime.UtcNow - callState.ConnectedAt.Value).TotalSeconds;
                 }
                 await _callRepo.EndCallAsync(signal.CallID, duration, "Completed");
+                peerId = (session.UserID == callState.CallerID) ? callState.ReceiverID : callState.CallerID;
             }
 
             signal.DurationSeconds = duration;
 
             // إشعار كلا الطرفين بانتهاء المكالمة
-            int peerId = (session.UserID == signal.CallerID) ? signal.ReceiverID : signal.CallerID;
             await RelaySignalAsync(peerId, signal);
         }
 
@@ -150,6 +160,7 @@ namespace SyncPulse.Server.Services
                     CallAction.Accept => PacketType.CallAnswer,
                     CallAction.Reject => PacketType.CallReject,
                     CallAction.Busy => PacketType.CallBusy,
+                    CallAction.Offline => PacketType.CallBusy,
                     CallAction.End => PacketType.CallEnd,
                     _ => PacketType.CallOffer
                 };

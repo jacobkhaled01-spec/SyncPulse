@@ -41,7 +41,7 @@
 
             <!-- اسم الطرف الآخر -->
             <TextBlock Text="{Binding TargetDisplayName}" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
-            <TextBlock Text="{Binding TargetUsername, StringFormat='{}@{0}'}" FontSize="13" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,2,0,10" />
+            <TextBlock Text="{Binding DisplayUsername}" FontSize="13" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,2,0,10" />
 
             <!-- حالة المكالمة والمؤقت -->
             <TextBlock Text="{Binding StateText}" FontSize="13" FontWeight="SemiBold" Foreground="#38BDF8" HorizontalAlignment="Center" />

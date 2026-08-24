@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using SyncPulse.Client.Services;
@@ -17,34 +18,41 @@ namespace SyncPulse.Client.ViewModels
         private readonly ClientNetworkService _network;
         private readonly MediaStreamService _media;
         private readonly DispatcherTimer _durationTimer;
-        private int _secondsElapsed;
 
-        private int _callID;
+        private int _callId;
         private int _targetUserID;
         private string _targetUsername = string.Empty;
         private string _targetDisplayName = string.Empty;
-        private CallType _callType;
-        private CallAction _callState;
+        private CallType _callType = CallType.Audio;
+        private CallAction _callState = CallAction.Offer;
+        private bool _isIncoming;
         private bool _isMuted;
         private bool _isCameraOff;
-        private bool _isIncoming;
+        private int _secondsElapsed;
 
         public int CallID
         {
-            get => _callID;
-            set { _callID = value; OnPropertyChanged(); }
-        }
-
-        public string TargetDisplayName
-        {
-            get => _targetDisplayName;
-            set { _targetDisplayName = value; OnPropertyChanged(); OnPropertyChanged(nameof(InitialChar)); }
+            get => _callId;
+            set { _callId = value; OnPropertyChanged(); }
         }
 
         public string TargetUsername
         {
             get => _targetUsername;
-            set { _targetUsername = value; OnPropertyChanged(); }
+            set
+            {
+                _targetUsername = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(DisplayUsername));
+            }
+        }
+
+        public string DisplayUsername => "@" + (_targetUsername ?? string.Empty).Trim().TrimStart('@');
+
+        public string TargetDisplayName
+        {
+            get => _targetDisplayName;
+            set { _targetDisplayName = value; OnPropertyChanged(); OnPropertyChanged(nameof(InitialChar)); }
         }
 
         public CallType CallType
@@ -94,6 +102,7 @@ namespace SyncPulse.Client.ViewModels
         }
 
         public string CallTypeTitle => CallType == CallType.Video ? "مكالمة فيديو مرئية" : "مكالمة صوتية مباشرة";
+
         public string StateText => CallState switch
         {
             CallAction.Offer => IsIncoming ? "مكالمة واردة..." : "جاري الاتصال...",
@@ -144,7 +153,7 @@ namespace SyncPulse.Client.ViewModels
         public void InitializeOutgoing(int targetUserId, string targetUsername, string targetDisplayName, CallType type)
         {
             _targetUserID = targetUserId;
-            TargetUsername = targetUsername;
+            TargetUsername = targetUsername.Trim().TrimStart('@');
             TargetDisplayName = targetDisplayName;
             CallType = type;
             IsIncoming = false;
@@ -158,7 +167,7 @@ namespace SyncPulse.Client.ViewModels
         {
             CallID = offer.CallID;
             _targetUserID = offer.CallerID;
-            TargetUsername = offer.CallerUsername;
+            TargetUsername = offer.CallerUsername.Trim().TrimStart('@');
             TargetDisplayName = string.IsNullOrEmpty(offer.CallerDisplayName) ? offer.CallerUsername : offer.CallerDisplayName;
             CallType = offer.Type;
             IsIncoming = true;
@@ -170,20 +179,23 @@ namespace SyncPulse.Client.ViewModels
 
         public void HandleRemoteSignal(CallSignalPacket signal)
         {
-            CallState = signal.Action;
+            App.Current?.Dispatcher.Invoke(() =>
+            {
+                CallState = signal.Action;
 
-            if (signal.Action == CallAction.Accept)
-            {
-                CallID = signal.CallID;
-                _durationTimer.Start();
-                _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID);
-            }
-            else if (signal.Action == CallAction.Reject || signal.Action == CallAction.End || signal.Action == CallAction.Busy || signal.Action == CallAction.Offline)
-            {
-                _durationTimer.Stop();
-                _media.Stop();
-                CloseCallWithDelay();
-            }
+                if (signal.Action == CallAction.Accept)
+                {
+                    CallID = signal.CallID;
+                    _durationTimer.Start();
+                    _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID);
+                }
+                else if (signal.Action == CallAction.Reject || signal.Action == CallAction.End || signal.Action == CallAction.Busy || signal.Action == CallAction.Offline)
+                {
+                    _durationTimer.Stop();
+                    _media.Stop();
+                    CloseCallWithDelay();
+                }
+            });
         }
 
         private async Task AcceptCallAsync()
@@ -219,9 +231,9 @@ namespace SyncPulse.Client.ViewModels
                 CallerUsername = _network.Session.Username,
                 CallerDisplayName = _network.Session.DisplayName,
                 ReceiverID = _targetUserID,
+                ReceiverUsername = TargetUsername,
                 Action = action,
                 Type = CallType,
-                DurationSeconds = _secondsElapsed,
                 Timestamp = DateTime.UtcNow
             };
 
@@ -232,6 +244,7 @@ namespace SyncPulse.Client.ViewModels
                 CallAction.Accept => PacketType.CallAnswer,
                 CallAction.Reject => PacketType.CallReject,
                 CallAction.Busy => PacketType.CallBusy,
+                CallAction.Offline => PacketType.CallBusy,
                 CallAction.End => PacketType.CallEnd,
                 _ => PacketType.CallOffer
             };
@@ -241,7 +254,7 @@ namespace SyncPulse.Client.ViewModels
 
         private void CloseCallWithDelay()
         {
-            Task.Delay(1500).ContinueWith(_ =>
+            Task.Delay(1400).ContinueWith(_ =>
             {
                 App.Current?.Dispatcher.Invoke(() => CallClosed?.Invoke());
             });
