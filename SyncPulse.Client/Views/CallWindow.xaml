@@ -1,0 +1,153 @@
+<Window x:Class="SyncPulse.Client.Views.CallWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="📞 مكالمة SyncPulse المباشرة"
+        Height="480" Width="380"
+        WindowStartupLocation="CenterScreen"
+        Background="#0F172A"
+        Foreground="White"
+        FontFamily="Segoe UI"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow">
+
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- 1. شارة نوع المكالمة العلوية -->
+        <Border Grid.Row="0" HorizontalAlignment="Center" Background="#1E293B" CornerRadius="12" Padding="14,6" BorderBrush="#334155" BorderThickness="1">
+            <TextBlock Text="{Binding CallTypeTitle}" Foreground="#38BDF8" FontWeight="SemiBold" FontSize="12.5" />
+        </Border>
+
+        <!-- 2. بطاقة الأفاتار والحالة والمؤقت -->
+        <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <!-- الأفاتار النابض -->
+            <Border Width="96" Height="96" CornerRadius="48" Margin="0,0,0,16" HorizontalAlignment="Center">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="#2563EB" Offset="0" />
+                        <GradientStop Color="#0284C7" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="24" Direction="270" ShadowDepth="4" Opacity="0.4" Color="#2563EB" />
+                </Border.Effect>
+                <TextBlock Text="{Binding InitialChar}" Foreground="White" FontSize="36" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <!-- اسم الطرف الآخر -->
+            <TextBlock Text="{Binding TargetDisplayName}" FontSize="20" FontWeight="Bold" Foreground="White" HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" />
+            <TextBlock Text="{Binding TargetUsername, StringFormat='{}@{0}'}" FontSize="13" Foreground="#94A3B8" HorizontalAlignment="Center" Margin="0,2,0,10" />
+
+            <!-- حالة المكالمة والمؤقت -->
+            <TextBlock Text="{Binding StateText}" FontSize="13" FontWeight="SemiBold" Foreground="#38BDF8" HorizontalAlignment="Center" />
+            
+            <TextBlock Text="{Binding DurationText}" FontSize="16" FontWeight="Bold" Foreground="#4ADE80" HorizontalAlignment="Center" Margin="0,6,0,0">
+                <TextBlock.Style>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBlock.Style>
+            </TextBlock>
+        </StackPanel>
+
+        <!-- 3. أزرار التحكم السفلية -->
+        <StackPanel Grid.Row="2">
+            <!-- أزرار الرد والرفض عند الرنين الوارد -->
+            <Grid Margin="0,0,0,8">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <MultiDataTrigger>
+                                <MultiDataTrigger.Conditions>
+                                    <Condition Binding="{Binding IsRinging}" Value="True" />
+                                    <Condition Binding="{Binding IsIncoming}" Value="True" />
+                                </MultiDataTrigger.Conditions>
+                                <Setter Property="Visibility" Value="Visible" />
+                            </MultiDataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <!-- قبول -->
+                <Button Grid.Column="0" Content="رد 📞" Command="{Binding AcceptCommand}"
+                        Background="#10B981" Foreground="White" FontWeight="Bold" FontSize="14" Height="44" Margin="0,0,6,0" Cursor="Hand" BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <!-- رفض -->
+                <Button Grid.Column="1" Content="رفض ✕" Command="{Binding RejectCommand}"
+                        Background="#EF4444" Foreground="White" FontWeight="Bold" FontSize="14" Height="44" Margin="6,0,0,0" Cursor="Hand" BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </Grid>
+
+            <!-- أدوات التحكم أثناء المكالمة المتصلة أو الصادرة -->
+            <StackPanel>
+                <!-- تبديل المايك والكاميرا -->
+                <UniformGrid Columns="2" Margin="0,0,0,10">
+                    <UniformGrid.Style>
+                        <Style TargetType="UniformGrid">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsConnected}" Value="True">
+                                    <Setter Property="Visibility" Value="Visible" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </UniformGrid.Style>
+
+                    <Button Content="{Binding MuteButtonText}" Command="{Binding ToggleMuteCommand}"
+                            Background="#1E293B" Foreground="#F8FAFC" FontSize="11.5" Height="36" Margin="0,0,4,0" Cursor="Hand" BorderBrush="#334155" BorderThickness="1">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="{Binding CameraButtonText}" Command="{Binding ToggleCameraCommand}"
+                            Background="#1E293B" Foreground="#F8FAFC" FontSize="11.5" Height="36" Margin="4,0,0,0" Cursor="Hand" BorderBrush="#334155" BorderThickness="1">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8" />
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+                </UniformGrid>
+
+                <!-- زر إنهاء المكالمة الأحمر -->
+                <Button Content="🔴 إنهاء المكالمة" Command="{Binding EndCallCommand}"
+                        Background="#E11D48" Foreground="White" FontWeight="Bold" FontSize="13.5" Height="44" Cursor="Hand" BorderThickness="0">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="10" />
+                        </Style>
+                    </Button.Resources>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

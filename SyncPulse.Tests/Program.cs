@@ -470,9 +470,10 @@ namespace SyncPulse.Tests
             Assert(pongPacket != null && pongPacket.Header.Type == PacketType.HeartbeatAck, "Server responded with HeartbeatAck.");
 
             // 2. Register User over Socket
+            string testUser = $"sock_{Guid.NewGuid():N}".Substring(0, 15);
             var regReq = new RegisterRequest
             {
-                Username = "socket_user_1",
+                Username = testUser,
                 Password = "Password123!",
                 DisplayName = "Socket Test User"
             };
@@ -486,7 +487,7 @@ namespace SyncPulse.Tests
             // 3. Login User over Socket
             var loginReq = new LoginRequest
             {
-                Username = "socket_user_1",
+                Username = testUser,
                 Password = "Password123!"
             };
             await FrameStreamParser.WritePacketAsync(stream, SyncPacket.Create(PacketType.LoginRequest, loginReq));

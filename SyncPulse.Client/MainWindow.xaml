@@ -1,12 +1,34 @@
-﻿<Window x:Class="SyncPulse.Client.MainWindow"
+<Window x:Class="SyncPulse.Client.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:SyncPulse.Client"
-        mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
+        xmlns:vm="clr-namespace:SyncPulse.Client.ViewModels"
+        xmlns:views="clr-namespace:SyncPulse.Client.Views"
+        Title="💬 SyncPulse Messenger | نظام المراسلة والاتصال الفوري"
+        Height="720" Width="1080"
+        MinHeight="600" MinWidth="850"
+        WindowStartupLocation="CenterScreen"
+        Background="#F8FAFC"
+        FontFamily="Segoe UI"
+        FlowDirection="RightToLeft">
 
+    <Window.DataContext>
+        <vm:ClientMainViewModel />
+    </Window.DataContext>
+
+    <Window.Resources>
+        <!-- ربط AuthViewModel بـ AuthView -->
+        <DataTemplate DataType="{x:Type vm:AuthViewModel}">
+            <views:AuthView />
+        </DataTemplate>
+
+        <!-- ربط ChatViewModel بـ MainChatView -->
+        <DataTemplate DataType="{x:Type vm:ChatViewModel}">
+            <views:MainChatView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <!-- العارض الديناميكي للواجهة الحالية -->
+        <ContentControl Content="{Binding CurrentView}" />
     </Grid>
 </Window>

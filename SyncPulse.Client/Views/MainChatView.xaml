@@ -1,0 +1,367 @@
+<UserControl x:Class="SyncPulse.Client.Views.MainChatView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             FlowDirection="RightToLeft"
+             FontFamily="Segoe UI">
+
+    <Grid Background="#F8FAFC">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="340" MinWidth="280" MaxWidth="420" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- ========================================================================= -->
+        <!-- 1. الشريط الجانبي (Sidebar: User Profile & Search & Contacts List)          -->
+        <!-- ========================================================================= -->
+        <Border Grid.Column="0" Background="#FFFFFF" BorderBrush="#E2E8F0" BorderThickness="0,0,1,0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <!-- أ. ترويسة المستخدم الحالي -->
+                <Border Grid.Row="0" Background="#F1F5F9" Padding="16,14" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- أفاتار المستخدم الحالي -->
+                        <Border Grid.Column="0" Width="44" Height="44" CornerRadius="22" Background="#2563EB" Margin="0,0,12,0">
+                            <TextBlock Text="{Binding UserInitial}" Foreground="White" FontSize="18" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </Border>
+
+                        <!-- بيانات المستخدم الحالي -->
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="{Binding CurrentDisplayName}" FontWeight="Bold" FontSize="14" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
+                            <TextBlock Text="{Binding CurrentUsername, StringFormat='{}@{0}'}" FontSize="12" Foreground="#64748B" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+
+                        <!-- زر تسجيل الخروج -->
+                        <Button Grid.Column="2" Content="خروج" Command="{Binding LogoutCommand}"
+                                Background="#FEE2E2" Foreground="#DC2626" BorderBrush="#FECDD3" BorderThickness="1"
+                                FontSize="11" FontWeight="SemiBold" Padding="8,4" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="6" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </Grid>
+                </Border>
+
+                <!-- ب. حقل البحث والإضافة باسم المستخدم (@username) -->
+                <Border Grid.Row="1" Padding="14,12" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                    <StackPanel>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <TextBox Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                                     Background="#F8FAFC" Foreground="#0F172A" BorderBrush="#CBD5E1" BorderThickness="1"
+                                     Padding="10,7" FontSize="12.5" VerticalAlignment="Center" Margin="0,0,8,0">
+                                <TextBox.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="8" />
+                                    </Style>
+                                </TextBox.Resources>
+                            </TextBox>
+
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <Button Content="بحث" Command="{Binding SearchContactCommand}"
+                                        Background="#EFF6FF" Foreground="#2563EB" BorderBrush="#BFDBFE" BorderThickness="1"
+                                        FontSize="11.5" FontWeight="Bold" Padding="10,6" Margin="0,0,4,0" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6" />
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                                <Button Content="إضافة +" Command="{Binding AddContactCommand}"
+                                        Background="#2563EB" Foreground="White" BorderThickness="0"
+                                        FontSize="11.5" FontWeight="Bold" Padding="10,6" Cursor="Hand">
+                                    <Button.Resources>
+                                        <Style TargetType="Border">
+                                            <Setter Property="CornerRadius" Value="6" />
+                                        </Style>
+                                    </Button.Resources>
+                                </Button>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- شريط نتائج البحث -->
+                        <Border Background="#F0FDF4" CornerRadius="6" BorderBrush="#BBF7D0" BorderThickness="1" Padding="8,4" Margin="0,8,0,0">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasSearchResult}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <TextBlock Text="{Binding SearchResultText}" Foreground="#15803D" FontSize="11" FontWeight="SemiBold" TextAlignment="Center" TextWrapping="Wrap" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+
+                <!-- ج. قائمة جهات الاتصال -->
+                <ListBox Grid.Row="2" ItemsSource="{Binding Contacts}" SelectedItem="{Binding SelectedContact}"
+                         Background="Transparent" BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="6,3" />
+                            <Setter Property="Cursor" Value="Hand" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ListBoxItem">
+                                        <Border x:Name="ItemBorder" Background="Transparent" CornerRadius="10" Padding="12,10">
+                                            <ContentPresenter />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter TargetName="ItemBorder" Property="Background" Value="#EFF6FF" />
+                                                <Setter TargetName="ItemBorder" Property="BorderBrush" Value="#BFDBFE" />
+                                                <Setter TargetName="ItemBorder" Property="BorderThickness" Value="1" />
+                                            </Trigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter TargetName="ItemBorder" Property="Background" Value="#F8FAFC" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <!-- أفاتار جهة الاتصال مع نقطة الحالة -->
+                                <Grid Grid.Column="0" Margin="0,0,10,0">
+                                    <Border Width="42" Height="42" CornerRadius="21" Background="{Binding AvatarBackground}">
+                                        <TextBlock Text="{Binding InitialChar}" Foreground="White" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                    </Border>
+                                    <!-- نقطة الحالة متصل / غير متصل -->
+                                    <Border Width="12" Height="12" CornerRadius="6" Background="{Binding StatusColor}" BorderBrush="White" BorderThickness="2"
+                                            HorizontalAlignment="Right" VerticalAlignment="Bottom" />
+                                </Grid>
+
+                                <!-- اسم جهة الاتصال وآخر رسالة -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <TextBlock Text="{Binding DisplayName}" FontWeight="Bold" FontSize="13" Foreground="#0F172A" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Text="{Binding LastMessage}" FontSize="11.5" Foreground="#64748B" TextTrimming="CharacterEllipsis" Margin="0,2,0,0" />
+                                </StackPanel>
+
+                                <!-- الوقت وعدد الرسائل غير المقروءة -->
+                                <StackPanel Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding FormattedTime}" FontSize="10.5" Foreground="#94A3B8" HorizontalAlignment="Right" />
+                                    <Border Background="#2563EB" CornerRadius="8" Padding="6,2" Margin="0,4,0,0" HorizontalAlignment="Right">
+                                        <Border.Style>
+                                            <Style TargetType="Border">
+                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding HasUnread}" Value="True">
+                                                        <Setter Property="Visibility" Value="Visible" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <TextBlock Text="{Binding UnreadCount}" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                    </Border>
+                                </StackPanel>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <!-- ========================================================================= -->
+        <!-- 2. منطقة المحادثة النشطة (Active Chat Area & Message Stream)                -->
+        <!-- ========================================================================= -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <!-- أ. ترويسة المحادثة النشطة مع أزرار الاتصال -->
+            <Border Grid.Row="0" Background="#FFFFFF" Padding="18,14" BorderBrush="#E2E8F0" BorderThickness="0,0,0,1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- بيانات جهة الاتصال النشطة -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding SelectedContactTitle}" FontSize="15" FontWeight="Bold" Foreground="#0F172A" />
+                        <TextBlock Text="{Binding SelectedContact.StatusText}" FontSize="11.5" Foreground="{Binding SelectedContact.StatusColor}" Margin="0,2,0,0" />
+                    </StackPanel>
+
+                    <!-- أزرار المكالمات الصوتية والمرئية -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel.Style>
+                            <Style TargetType="StackPanel">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasSelectedContact}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </StackPanel.Style>
+
+                        <!-- زر مكالمة صوتية -->
+                        <Button Content="📞 اتصال صوتي" Command="{Binding StartAudioCallCommand}"
+                                Background="#ECFDF5" Foreground="#059669" BorderBrush="#A7F3D0" BorderThickness="1"
+                                FontWeight="Bold" FontSize="12" Padding="12,7" Margin="0,0,8,0" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+
+                        <!-- زر مكالمة فيديو -->
+                        <Button Content="📹 مكالمة فيديو" Command="{Binding StartVideoCallCommand}"
+                                Background="#EFF6FF" Foreground="#2563EB" BorderBrush="#BFDBFE" BorderThickness="1"
+                                FontWeight="Bold" FontSize="12" Padding="12,7" Cursor="Hand">
+                            <Button.Resources>
+                                <Style TargetType="Border">
+                                    <Setter Property="CornerRadius" Value="8" />
+                                </Style>
+                            </Button.Resources>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- ب. شريط إعلانات النظام العامة (System Broadcast Alert Bar) -->
+            <Border Grid.Row="1" Background="#FEF3C7" BorderBrush="#FDE68A" BorderThickness="0,0,0,1" Padding="14,8">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Visibility" Value="Collapsed" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding HasSystemAnnouncement}" Value="True">
+                                <Setter Property="Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding SystemAnnouncement}" Foreground="#B45309" FontWeight="SemiBold" FontSize="12.5" VerticalAlignment="Center" />
+                    <Button Grid.Column="1" Content="✕" Command="{Binding DismissAnnouncementCommand}"
+                            Background="Transparent" Foreground="#B45309" FontWeight="Bold" FontSize="13" BorderThickness="0" Cursor="Hand" />
+                </Grid>
+            </Border>
+
+            <!-- ج. دفق الرسائل وفقاعات المحادثة (Message Bubbles) -->
+            <ScrollViewer Grid.Row="2" Background="#F8FAFC" Padding="18,14" VerticalScrollBarVisibility="Auto">
+                <ItemsControl ItemsSource="{Binding Messages}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0,4">
+                                <Border CornerRadius="12" Padding="14,10" MaxWidth="500"
+                                        Background="{Binding BubbleBackground}" BorderBrush="{Binding BubbleBorder}" BorderThickness="1"
+                                        HorizontalAlignment="{Binding Alignment}">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="8" Direction="270" ShadowDepth="2" Opacity="0.04" Color="#0F172A" />
+                                    </Border.Effect>
+
+                                    <StackPanel>
+                                        <!-- نص الرسالة -->
+                                        <TextBlock Text="{Binding Content}" Foreground="{Binding TextColor}" FontSize="13.5" TextWrapping="Wrap" LineHeight="20" />
+
+                                        <!-- الوقت وعلامات الصح ✓/✓✓ -->
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
+                                            <TextBlock Text="{Binding FormattedTime}" FontSize="10" Foreground="#64748B" Margin="0,0,6,0" VerticalAlignment="Center" />
+                                            <TextBlock Text="{Binding StatusIcon}" FontSize="11" FontWeight="Bold" Foreground="{Binding StatusColor}" VerticalAlignment="Center">
+                                                <TextBlock.Style>
+                                                    <Style TargetType="TextBlock">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding IsOutgoing}" Value="True">
+                                                                <Setter Property="Visibility" Value="Visible" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </TextBlock.Style>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </ScrollViewer>
+
+            <!-- د. شريط إدخال وإرسال الرسالة السفلي -->
+            <Border Grid.Row="3" Background="#FFFFFF" Padding="16,12" BorderBrush="#E2E8F0" BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <!-- صندوق كتابة الرسالة -->
+                    <TextBox Text="{Binding InputMessage, UpdateSourceTrigger=PropertyChanged}"
+                             Background="#F8FAFC" Foreground="#0F172A" BorderBrush="#CBD5E1" BorderThickness="1"
+                             Padding="12,10" FontSize="13.5" VerticalAlignment="Center" Margin="0,0,10,0">
+                        <TextBox.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="10" />
+                            </Style>
+                        </TextBox.Resources>
+                        <TextBox.InputBindings>
+                            <KeyBinding Key="Return" Command="{Binding SendMessageCommand}" />
+                        </TextBox.InputBindings>
+                    </TextBox>
+
+                    <!-- زر الإرسال الأزرق الملكي -->
+                    <Button Grid.Column="1" Content="إرسال ✈" Command="{Binding SendMessageCommand}"
+                            Height="42" Foreground="White" FontWeight="Bold" FontSize="13" Padding="20,0" Cursor="Hand" BorderThickness="0">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#2563EB" Offset="0" />
+                                <GradientStop Color="#0284C7" Offset="1" />
+                            </LinearGradientBrush>
+                        </Button.Background>
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="{TemplateBinding Background}" CornerRadius="10" Padding="{TemplateBinding Padding}">
+                                    <Border.Effect>
+                                        <DropShadowEffect BlurRadius="10" Direction="270" ShadowDepth="2" Opacity="0.2" Color="#2563EB" />
+                                    </Border.Effect>
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" />
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>
