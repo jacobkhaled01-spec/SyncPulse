@@ -23,24 +23,30 @@ namespace SyncPulse.Core.Discovery
     public class ServerDiscoveryBroadcaster : IDisposable
     {
         public const int DiscoveryPort = 8887;
-        private readonly UdpClient _udpClient;
+        private UdpClient? _udpClient;
         private CancellationTokenSource? _cts;
-
-        public ServerDiscoveryBroadcaster()
-        {
-            _udpClient = new UdpClient();
-            _udpClient.EnableBroadcast = true;
-        }
 
         public void StartBroadcasting(ServerAnnouncement announcement, int intervalMs = 2000)
         {
+            Stop();
+
+            try
+            {
+                _udpClient = new UdpClient();
+                _udpClient.EnableBroadcast = true;
+            }
+            catch
+            {
+                return;
+            }
+
             _cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
                 var broadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, DiscoveryPort);
                 byte[] messageBytes = SerializationUtils.SerializeToUtf8Bytes(announcement);
 
-                while (!_cts.Token.IsCancellationRequested)
+                while (!_cts.Token.IsCancellationRequested && _udpClient != null)
                 {
                     try
                     {
@@ -53,7 +59,7 @@ namespace SyncPulse.Core.Discovery
                     }
                     catch
                     {
-                        // Ignore transient network adapter glitches
+                        // Ignore transient glitches
                     }
                 }
             }, _cts.Token);
@@ -62,12 +68,13 @@ namespace SyncPulse.Core.Discovery
         public void Stop()
         {
             _cts?.Cancel();
+            _udpClient?.Dispose();
+            _udpClient = null;
         }
 
         public void Dispose()
         {
             Stop();
-            _udpClient.Dispose();
         }
     }
 
@@ -76,24 +83,30 @@ namespace SyncPulse.Core.Discovery
     /// </summary>
     public class ServerDiscoveryListener : IDisposable
     {
-        private readonly UdpClient _udpClient;
+        private UdpClient? _udpClient;
         private CancellationTokenSource? _cts;
 
         public event Action<ServerAnnouncement>? ServerDiscovered;
 
-        public ServerDiscoveryListener()
-        {
-            _udpClient = new UdpClient();
-            _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
-            _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, ServerDiscoveryBroadcaster.DiscoveryPort));
-        }
-
         public void StartListening()
         {
+            Stop();
+
+            try
+            {
+                _udpClient = new UdpClient();
+                _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, ServerDiscoveryBroadcaster.DiscoveryPort));
+            }
+            catch
+            {
+                return;
+            }
+
             _cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
-                while (!_cts.Token.IsCancellationRequested)
+                while (!_cts.Token.IsCancellationRequested && _udpClient != null)
                 {
                     try
                     {
@@ -102,7 +115,6 @@ namespace SyncPulse.Core.Discovery
 
                         if (announcement != null)
                         {
-                            // If ServerIP was not explicitly specified, use the sender IP
                             if (string.IsNullOrWhiteSpace(announcement.ServerIP) || announcement.ServerIP == "0.0.0.0")
                             {
                                 announcement.ServerIP = result.RemoteEndPoint.Address.ToString();
@@ -126,12 +138,13 @@ namespace SyncPulse.Core.Discovery
         public void Stop()
         {
             _cts?.Cancel();
+            _udpClient?.Dispose();
+            _udpClient = null;
         }
 
         public void Dispose()
         {
             Stop();
-            _udpClient.Dispose();
         }
     }
 }
