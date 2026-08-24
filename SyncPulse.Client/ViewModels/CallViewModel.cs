@@ -100,7 +100,8 @@ namespace SyncPulse.Client.ViewModels
             CallAction.Ringing => "يرن الآن...",
             CallAction.Accept => "متصل (جاري البث الحي)",
             CallAction.Reject => "تم رفض المكالمة",
-            CallAction.Busy => "الطرف الآخر مشغول حالياً",
+            CallAction.Busy => "الطرف الآخر مشغول في مكالمة أخرى",
+            CallAction.Offline => "الطرف الآخر غير متصل بالشبكة حالياً",
             CallAction.End => "تم إنهاء المكالمة",
             _ => "جاري المعالجة..."
         };
@@ -177,7 +178,7 @@ namespace SyncPulse.Client.ViewModels
                 _durationTimer.Start();
                 _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID);
             }
-            else if (signal.Action == CallAction.Reject || signal.Action == CallAction.End || signal.Action == CallAction.Busy)
+            else if (signal.Action == CallAction.Reject || signal.Action == CallAction.End || signal.Action == CallAction.Busy || signal.Action == CallAction.Offline)
             {
                 _durationTimer.Stop();
                 _media.Stop();

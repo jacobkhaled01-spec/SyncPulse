@@ -71,9 +71,10 @@ namespace SyncPulse.Server.Services
             if (!_sessionManager.TryGetSession(signal.ReceiverID, out var receiverSession))
             {
                 // الطرف الآخر غير متصل
-                signal.Action = CallAction.Busy;
+                signal.Action = CallAction.Offline;
                 await callerSession.SendPacketAsync(SyncPacket.Create(PacketType.CallBusy, signal));
-                await _callRepo.LogCallStartAsync(signal.CallerID, signal.ReceiverID, signal.Type);
+                int offlineCallId = await _callRepo.LogCallStartAsync(signal.CallerID, signal.ReceiverID, signal.Type);
+                await _callRepo.EndCallAsync(offlineCallId, 0, "Missed/Offline");
                 return;
             }
 
