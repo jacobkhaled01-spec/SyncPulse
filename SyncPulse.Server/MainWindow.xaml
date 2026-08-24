@@ -360,9 +360,13 @@
                             </Grid.RowDefinitions>
 
                             <Grid Margin="0,0,0,10">
-                                <TextBlock Text="📡 سجل تدفق الحزم (Live Stream)" FontSize="14" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center" />
-                                <Button Content="مسح السجل" Command="{Binding ClearLogsCommand}" HorizontalAlignment="Left"
-                                        Background="#F1F5F9" Foreground="#64748B" BorderBrush="#CBD5E1" BorderThickness="1" FontSize="11" Padding="10,4" Cursor="Hand">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Text="📡 سجل تدفق الحزم (Live Stream)" FontSize="13.5" FontWeight="Bold" Foreground="#1E293B" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" />
+                                <Button Grid.Column="1" Content="مسح السجل" Command="{Binding ClearLogsCommand}"
+                                        Background="#F1F5F9" Foreground="#64748B" BorderBrush="#CBD5E1" BorderThickness="1" FontSize="11" Padding="10,4" Margin="8,0,0,0" Cursor="Hand">
                                     <Button.Resources>
                                         <Style TargetType="Border">
                                             <Setter Property="CornerRadius" Value="6" />
