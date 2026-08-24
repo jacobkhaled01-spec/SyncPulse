@@ -498,14 +498,65 @@
                                       Background="Transparent" BorderThickness="0" GridLinesVisibility="Horizontal"
                                       HorizontalGridLinesBrush="#F1F5F9" RowBackground="#FFFFFF" AlternatingRowBackground="#F8FAFC"
                                       Foreground="#1E293B" HeadersVisibility="Column" CanUserAddRows="False" SelectionMode="Single"
-                                      RowHeight="38" FontSize="12">
+                                      MinRowHeight="38" FontSize="12">
                                 <DataGrid.Columns>
-                                    <DataGridTextColumn Header="المعرف" Binding="{Binding LogID}" Width="75" />
-                                    <DataGridTextColumn Header="المستوى" Binding="{Binding LogLevel}" Width="95" />
-                                    <DataGridTextColumn Header="المصدر" Binding="{Binding Source}" Width="110" />
-                                    <DataGridTextColumn Header="نص الرسالة والحدث" Binding="{Binding Message}" Width="*" MinWidth="250" />
-                                    <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="130" />
-                                    <DataGridTextColumn Header="التاريخ والوقت" Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="160" />
+                                    <DataGridTextColumn Header="المعرف" Binding="{Binding LogID}" Width="65" />
+                                    
+                                    <!-- مستوى الحدث بشارة ملونة متناسقة -->
+                                    <DataGridTemplateColumn Header="المستوى" Width="95">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Border CornerRadius="6" Padding="6,2" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                    <Border.Style>
+                                                        <Style TargetType="Border">
+                                                            <Setter Property="Background" Value="#EFF6FF" />
+                                                            <Setter Property="BorderBrush" Value="#BFDBFE" />
+                                                            <Setter Property="BorderThickness" Value="1" />
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding LogLevel}" Value="Warning">
+                                                                    <Setter Property="Background" Value="#FEF3C7" />
+                                                                    <Setter Property="BorderBrush" Value="#FDE68A" />
+                                                                </DataTrigger>
+                                                                <DataTrigger Binding="{Binding LogLevel}" Value="Error">
+                                                                    <Setter Property="Background" Value="#FEE2E2" />
+                                                                    <Setter Property="BorderBrush" Value="#FECDD3" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </Border.Style>
+                                                    <TextBlock Text="{Binding LogLevel}" FontWeight="Bold" FontSize="11">
+                                                        <TextBlock.Style>
+                                                            <Style TargetType="TextBlock">
+                                                                <Setter Property="Foreground" Value="#1D4ED8" />
+                                                                <Style.Triggers>
+                                                                    <DataTrigger Binding="{Binding LogLevel}" Value="Warning">
+                                                                        <Setter Property="Foreground" Value="#B45309" />
+                                                                    </DataTrigger>
+                                                                    <DataTrigger Binding="{Binding LogLevel}" Value="Error">
+                                                                        <Setter Property="Foreground" Value="#DC2626" />
+                                                                    </DataTrigger>
+                                                                </Style.Triggers>
+                                                            </Style>
+                                                        </TextBlock.Style>
+                                                    </TextBlock>
+                                                </Border>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="المصدر" Binding="{Binding Source}" Width="105" />
+                                    
+                                    <!-- نص الرسالة والحدث مع التفاف النص التلقائي والتجاوب الكامل مع حجم المحتوى -->
+                                    <DataGridTemplateColumn Header="نص الرسالة والحدث والتدقيق" Width="*" MinWidth="260">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="8,6" VerticalAlignment="Center" LineHeight="18" Foreground="#0F172A" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                    </DataGridTemplateColumn>
+
+                                    <DataGridTextColumn Header="عنوان IP" Binding="{Binding ClientIP}" Width="125" />
+                                    <DataGridTextColumn Header="التاريخ والوقت" Binding="{Binding CreatedAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}'}" Width="155" />
                                 </DataGrid.Columns>
                             </DataGrid>
                         </ScrollViewer>
