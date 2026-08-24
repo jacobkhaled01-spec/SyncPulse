@@ -25,15 +25,18 @@ dotnet run --project SyncPulse.Tests/SyncPulse.Tests.csproj
 ## 2. توزيع المهام والفروع
 
 * **المطور (أ) - مهندس الخادم:**
+
   ```bash
   git checkout feature/dev-A-server
   ```
-  *يعمل فقط في مشروع `SyncPulse.Server`.*
 
+  *يعمل فقط في مشروع `SyncPulse.Server`.*
 * **المطور (ب) - مهندس العميل:**
+
   ```bash
   git checkout feature/dev-B-client
   ```
+
   *يعمل فقط في مشروع `SyncPulse.Client`.*
 
 ---
