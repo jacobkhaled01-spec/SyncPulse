@@ -99,5 +99,13 @@ namespace SyncPulse.Server.Data
 
             return list;
         }
+
+        public async Task<int> GetTotalCallsCountAsync()
+        {
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM CALL_RECORDS";
+            return Convert.ToInt32(await cmd.ExecuteScalarAsync() ?? 0);
+        }
     }
 }

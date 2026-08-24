@@ -87,6 +87,22 @@ namespace SyncPulse.Server.Services
             return _activeSessions.Values.ToList();
         }
 
+        public async Task BroadcastSystemNotificationAsync(string announcementText)
+        {
+            var packet = SyncPacket.Create(PacketType.DirectChatMessage, new ChatMessagePacket
+            {
+                MessageID = 0,
+                SenderID = 0,
+                SenderUsername = "📢 SYSTEM BROADCAST",
+                Content = announcementText,
+                Timestamp = DateTime.UtcNow,
+                Status = MessageStatus.Delivered
+            });
+
+            var tasks = _activeSessions.Values.Select(s => s.SendPacketAsync(packet));
+            await Task.WhenAll(tasks);
+        }
+
         public void KickUser(int userId)
         {
             if (_activeSessions.TryGetValue(userId, out var session))

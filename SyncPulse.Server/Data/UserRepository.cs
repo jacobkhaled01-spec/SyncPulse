@@ -125,7 +125,55 @@ namespace SyncPulse.Server.Data
             await cmd.ExecuteNonQueryAsync();
         }
 
-        public async Task<List<UserContactItem>> GetAllUsersAsync()
+        public async Task<bool> SetUserActiveStatusAsync(int userId, bool isActive)
+        {
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "UPDATE USERS SET IsActive = @act WHERE UserID = @id";
+            cmd.Parameters.AddWithValue("@act", isActive ? 1 : 0);
+            cmd.Parameters.AddWithValue("@id", userId);
+            return await cmd.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<bool> ResetUserPasswordAsync(int userId, string newPassword)
+        {
+            string salt = CryptoEngine.GenerateSalt();
+            string hash = CryptoEngine.HashPassword(newPassword, salt);
+
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "UPDATE USERS SET PasswordHash = @h, Salt = @s WHERE UserID = @id";
+            cmd.Parameters.AddWithValue("@h", hash);
+            cmd.Parameters.AddWithValue("@s", salt);
+            cmd.Parameters.AddWithValue("@id", userId);
+            return await cmd.ExecuteNonQueryAsync() > 0;
+        }
+
+        public async Task<int> GetTotalUsersCountAsync()
+        {
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM USERS";
+            return Convert.ToInt32(await cmd.ExecuteScalarAsync() ?? 0);
+        }
+
+        public async Task<int> GetTotalMessagesCountAsync()
+        {
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM MESSAGES";
+            return Convert.ToInt32(await cmd.ExecuteScalarAsync() ?? 0);
+        }
+
+        public async Task<int> GetTotalCallsCountAsync()
+        {
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM CALL_RECORDS";
+            return Convert.ToInt32(await cmd.ExecuteScalarAsync() ?? 0);
+        }
+
+        public async Task<List<UserContactItem>> GetAllUsersWithStatusAsync()
         {
             var list = new List<UserContactItem>();
             using var conn = await _db.CreateConnectionAsync();
@@ -141,7 +189,8 @@ namespace SyncPulse.Server.Data
                     Username = reader.GetString(1),
                     DisplayName = reader.GetString(2),
                     AvatarPath = reader.IsDBNull(3) ? null : reader.GetString(3),
-                    LastSeenAt = reader.IsDBNull(4) ? null : DateTime.Parse(reader.GetString(4))
+                    LastSeenAt = reader.IsDBNull(4) ? null : DateTime.Parse(reader.GetString(4)),
+                    IsOnline = reader.GetInt32(5) == 1 // 1: Active, 0: Banned
                 });
             }
 
