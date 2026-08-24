@@ -27,6 +27,8 @@ namespace SyncPulse.Core.Enums
         SyncHistoryRequest = 0x0204,
         SyncHistoryResponse = 0x0205,
         TypingIndicator = 0x0206,
+        ClearChatHistoryRequest = 0x0207,
+        ClearChatHistoryResponse = 0x0208,
 
         // 0x0300 - 0x03FF: حزم جهات الاتصال والبحث (Contacts & Discovery)
         SearchUserRequest = 0x0301,

@@ -65,4 +65,13 @@ namespace SyncPulse.Core.Packets
         public int ReceiverID { get; set; }
         public bool IsTyping { get; set; }
     }
+
+    /// <summary>
+    /// حزمة طلب مسح سجل المحادثة الفردية نهائياً من قاعدة البيانات
+    /// </summary>
+    public class ClearChatHistoryPacket
+    {
+        public int UserID { get; set; }
+        public int TargetUserID { get; set; }
+    }
 }

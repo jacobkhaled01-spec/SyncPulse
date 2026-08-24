@@ -214,6 +214,16 @@ namespace SyncPulse.Server.Data
             return history;
         }
 
+        public async Task ClearConversationMessagesAsync(int user1, int user2)
+        {
+            int convId = await GetOrCreateConversationAsync(user1, user2);
+            using var conn = await _db.CreateConnectionAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = "DELETE FROM MESSAGES WHERE ConversationID = @cid";
+            cmd.Parameters.AddWithValue("@cid", convId);
+            await cmd.ExecuteNonQueryAsync();
+        }
+
         public async Task<int> GetTotalMessagesCountAsync()
         {
             using var conn = await _db.CreateConnectionAsync();

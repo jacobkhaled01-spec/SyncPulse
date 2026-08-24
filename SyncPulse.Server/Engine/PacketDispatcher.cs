@@ -105,6 +105,10 @@ namespace SyncPulse.Server.Engine
                 case PacketType.GetCallHistoryRequest:
                     await HandleGetCallHistoryAsync(session, packet);
                     break;
+
+                case PacketType.ClearChatHistoryRequest:
+                    await HandleClearChatHistoryAsync(session, packet);
+                    break;
             }
         }
 
@@ -226,6 +230,18 @@ namespace SyncPulse.Server.Engine
             {
                 // المستلم متصل -> تمرير الرسالة فوراً
                 await receiverSession.SendPacketAsync(SyncPacket.Create(PacketType.DirectChatMessage, msg));
+
+                // إشعار فوري للمرسل بأنها استُلمت في جهاز الطرف الآخر (✓✓)
+                await session.SendPacketAsync(SyncPacket.Create(PacketType.MessageDeliveryAck, new MessageAckPacket
+                {
+                    MessageID = msgId,
+                    ConversationID = convId,
+                    SenderID = msg.SenderID,
+                    ReceiverID = msg.ReceiverID,
+                    NewStatus = MessageStatus.Delivered,
+                    AcknowledgedAt = DateTime.UtcNow
+                }));
+                await _messageRepo.UpdateMessageStatusAsync(msgId, MessageStatus.Delivered);
             }
             // في حال عدم اتصال المستلم: تبقى الرسالة في قاعدة البيانات وتُدفع تلقائياً عند اتصاله
         }
@@ -238,11 +254,20 @@ namespace SyncPulse.Server.Engine
             // تحديث الحالة في قاعدة البيانات
             await _messageRepo.UpdateMessageStatusAsync(ack.MessageID, ack.NewStatus);
 
-            // تمرير إشعار التحديث للطرف الآخر
-            if (_sessionManager.TryGetSession(ack.SenderID, out var senderSession))
+            // تمرير إشعار التحديث للطرف الآخر (المرسل الأصلي أو المستلم)
+            int targetUserId = (session.UserID == ack.SenderID) ? ack.ReceiverID : ack.SenderID;
+            if (_sessionManager.TryGetSession(targetUserId, out var targetSession))
             {
-                await senderSession.SendPacketAsync(packet);
+                await targetSession.SendPacketAsync(packet);
             }
+        }
+
+        private async Task HandleClearChatHistoryAsync(ClientSession session, SyncPacket packet)
+        {
+            var req = packet.GetPayload<ClearChatHistoryPacket>();
+            if (req == null || !session.IsAuthenticated) return;
+
+            await _messageRepo.ClearConversationMessagesAsync(session.UserID, req.TargetUserID);
         }
 
         private async Task HandleSyncHistoryAsync(ClientSession session, SyncPacket packet)

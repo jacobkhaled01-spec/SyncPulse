@@ -153,7 +153,7 @@ namespace SyncPulse.Client.ViewModels
             SaveFileCommand = new RelayCommand<MessageItem>(ExecuteSaveFile);
             ToggleCallHistoryCommand = new RelayCommand(async () => await ToggleCallHistoryAsync());
             CallFromHistoryCommand = new RelayCommand<CallHistoryItem>(ExecuteCallFromHistory);
-            ClearChatHistoryCommand = new RelayCommand(ExecuteClearChatHistory);
+            ClearChatHistoryCommand = new RelayCommand(async () => await ExecuteClearChatHistoryAsync());
             DeleteContactCommand = new RelayCommand<ContactItem>(ExecuteDeleteContact);
             StartAudioCallCommand = new RelayCommand(() => InitiateCall(CallType.Audio));
             StartVideoCallCommand = new RelayCommand(() => InitiateCall(CallType.Video));
@@ -404,8 +404,18 @@ namespace SyncPulse.Client.ViewModels
             }
         }
 
-        private void ExecuteClearChatHistory()
+        private async Task ExecuteClearChatHistoryAsync()
         {
+            if (SelectedContact == null) return;
+
+            var clearPacket = new ClearChatHistoryPacket
+            {
+                UserID = _network.Session.UserID,
+                TargetUserID = SelectedContact.ContactUserID
+            };
+
+            await _network.SendPacketAsync(SyncPacket.Create(PacketType.ClearChatHistoryRequest, clearPacket));
+
             App.Current?.Dispatcher.Invoke(() =>
             {
                 Messages.Clear();
@@ -690,6 +700,12 @@ namespace SyncPulse.Client.ViewModels
             App.Current?.Dispatcher.Invoke(() =>
             {
                 var msg = Messages.FirstOrDefault(m => m.MessageID == ack.MessageID);
+                if (msg == null && ack.MessageID > 0)
+                {
+                    msg = Messages.LastOrDefault(m => m.IsOutgoing && (m.MessageID == 0 || m.MessageID == ack.MessageID));
+                    if (msg != null) msg.MessageID = ack.MessageID;
+                }
+
                 if (msg != null)
                 {
                     msg.Status = ack.NewStatus;
