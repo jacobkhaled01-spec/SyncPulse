@@ -327,35 +327,34 @@ code, .code-inline {
    -------------------------------------------------------------------------- */
 .presentation-viewport {
     flex: 1;
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 16px 24px;
     position: relative;
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 /* 16:9 Bento Slide Canvas */
 .slide {
-    position: absolute;
+    display: none;
     width: 100%;
-    max-width: 1360px;
-    height: 100%;
-    max-height: 750px;
+    max-width: 1320px;
+    height: calc(100vh - 128px);
+    max-height: 740px;
     background: #FFFFFF;
     border: 1px solid var(--blueprint-border);
     border-radius: var(--radius-lg);
     box-shadow: var(--bento-shadow);
-    padding: 24px 36px 16px;
-    display: flex;
+    padding: 24px 32px 16px;
     flex-direction: column;
     justify-content: space-between;
-    opacity: 0;
-    transform: scale(0.985);
-    pointer-events: none;
-    transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
     overflow-y: auto;
     position: relative;
+    margin: 0 auto;
 }
 
 .slide::before {
@@ -370,10 +369,19 @@ code, .code-inline {
 }
 
 .slide.active {
-    opacity: 1;
-    transform: scale(1);
-    pointer-events: all;
-    z-index: 10;
+    display: flex;
+    animation: slideActiveIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes slideActiveIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px) scale(0.99);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 /* Slide Header Technical Ribbon */
@@ -660,13 +668,33 @@ code, .code-inline {
     font-weight: 800;
 }
 
-.hero-metric-cell .metric-val {
-    font-size: 0.76rem;
-    color: var(--blueprint-cyan);
-    font-family: var(--font-mono);
+.hero-speakers-strip {
+    background: var(--bento-card-subtle);
+    border: 1px solid var(--blueprint-border);
+    border-radius: var(--radius-sm);
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 0.78rem;
+    flex-wrap: wrap;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.hero-speakers-strip strong {
+    color: var(--blueprint-navy-main);
+    font-weight: 800;
+}
+
+.speaker-pill-inline {
+    background: #FFFFFF;
+    border: 1px solid var(--blueprint-border);
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.74rem;
     font-weight: 700;
-    margin-top: 2px;
-    display: block;
+    color: var(--text-primary);
 }
 
 /* --------------------------------------------------------------------------
