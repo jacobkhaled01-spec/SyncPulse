@@ -1,482 +1,276 @@
 /**
- * SyncPulse Interactive Presentation Engine - Executive Edition
- * Controls Slide Navigation, Speaker Notes, Stopwatch Timer, Virtual Laser Pointer, and Interactive Simulators.
+ * ==============================================================================
+ * SyncPulse Interactive Tech Cockpit Engine
+ * Presentation Controller & Simulator System
+ * ==============================================================================
  */
 
-// Global Presentation State
-const presentationState = {
-    currentSlide: 0,
-    totalSlides: 13,
-    isNotesOpen: false,
-    isMenuOpen: false,
-    isGridOpen: false,
-    isLaserActive: false,
-    
-    // Stopwatch Timer
-    timerSeconds: 0,
-    timerInterval: null,
-    isTimerRunning: false,
-    
-    // Ring buffer animation
-    ringBufferIndex: 0,
-    ringBufferInterval: null
-};
-
-// Speaker Notes for the 4-Speaker Team
-const speakerNotes = [
+// Module & Slide Metadata
+const cockpitModules = [
     {
-        slide: 1,
-        speaker: "المتحدث الأول (مهندس المعمارية والشبكات)",
-        notes: `
-            <strong>نقاط الشرح الافتتاحي:</strong>
-            <ul>
-                <li>الترحيب بأستاذ المقرر ولجنة الإشراف الكريمة.</li>
-                <li>تقديم اسم المشروع: SyncPulse (SecureTalk) كنظام اتصالات محلي آمن مصمم خصيصاً لمقرر برمجة خادم وعميل.</li>
-                <li>التأكيد على أن المشروع مبني من الصفر على المقابس الخام (Raw TCP/UDP Sockets) دون الاعتماد على مكتبات جاهزة مثل SignalR أو WebRTC.</li>
-                <li>توضيح هيكل الفريق المكون من 4 مهندسين متكاملين في مجالات المعمارية، الأمان، السيرفر، والميديا.</li>
-            </ul>
-        `
+        num: "01",
+        tag: "MODULE 01 // TOPOLOGY",
+        title: "المخطط الطوبولوجي العام لنظام SyncPulse (SecureTalk)",
+        desc: "نظام اتصالات ومراسلة محلي فائق السرعة مبني بالكامل على المقابس الخام (Raw Sockets)",
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        badge: "TOPOLOGY"
     },
     {
-        slide: 2,
-        speaker: "المتحدث الأول (مهندس المعمارية والشبكات)",
-        notes: `
-            <strong>المشكلة والأهداف:</strong>
-            <ul>
-                <li>شرح مشكلة انقطاع الإنترنت السحابي في المؤسسات والمنشآت المعزولة.</li>
-                <li>توضيح خطر تسريب البيانات الحساسة للمزودين الخارجيين وفقدان السيادة الرقمية.</li>
-                <li>توضيح حل SyncPulse: نظام On-Premise 100% يعمل باستقلالية تامة داخل الشبكة المحلية LAN/WLAN بأقل زمن تأخير (&lt;10ms).</li>
-            </ul>
-        `
+        num: "02",
+        tag: "MODULE 02 // DIAGNOSTIC",
+        title: "المشكلة والدوافع الهندسية لبناء نظام SyncPulse",
+        desc: "معالجة مخاطر الاعتماد على السحابة الخارجية في الشبكات المعزولة",
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        badge: "DIAGNOSTIC"
     },
     {
-        slide: 3,
-        speaker: "المتحدث الأول (مهندس المعمارية والشبكات)",
-        notes: `
-            <strong>المعمارية وتقسيم الطبقات:</strong>
-            <ul>
-                <li>شرح تقسيم المشاريع وفق Clean Architecture: النواة المشتركة SyncPulse.Core، الخادم المركزي SyncPulse.Server، والعميل SyncPulse.Client.</li>
-                <li>توضيح أن Core هو Class Library يحتوي على عقد البروتوكول الموحد وDTOs لمنع التكرار.</li>
-                <li>ذكر المنافذ المعتمدة: TCP 8888 للتحكم والرسائل، UDP 8889 لمكرر الوسائط، و UDP 8887 لاكتشاف الواي فاي.</li>
-            </ul>
-        `
+        num: "03",
+        tag: "MODULE 03 // CLEAN ARCH",
+        title: "معمارية النظام النظيفة (3-Tier Layered Stack)",
+        desc: "فصل فيزيائي تام للمسؤوليات لمنع التكرار وتسهيل التوسع",
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        badge: "CLEAN ARCH"
     },
     {
-        slide: 4,
-        speaker: "المتحدث الأول (مهندس المعمارية والشبكات)",
-        notes: `
-            <strong>بروتوكول التأطير الثنائي 12-Byte FrameHeader:</strong>
-            <ul>
-                <li>شرح معضلة دمج الحزم (Merging) وتجزئة الحزم (Fragmentation) في دفق بايتات TCP.</li>
-                <li>استعراض حقول الترويسة: Magic (0x53), Version (0x01), PacketType (16-bit), PayloadLength (32-bit), SeqNumber (32-bit).</li>
-                <li>شرح أهمية ترتيب الشبكة القياسي Big-Endian في توحيد قراءة الأرقام بين معالجات x86 و ARM.</li>
-                <li>شرح آلة الحالة FrameStreamParser في اقتطاع الحزم بدقة دون تداخل.</li>
-            </ul>
-        `
+        num: "04",
+        tag: "MODULE 04 // FRAMING",
+        title: "مقابس TCP وبروتوكول التأطير الثنائي (12-Byte FrameHeader)",
+        desc: "حل معضلة دمج وتجزئة دفق TCP بترتيب Big-Endian الشبكي الموحد",
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        badge: "FRAMING"
     },
     {
-        slide: 5,
-        speaker: "المتحدث الأول (مهندس المعمارية والشبكات)",
-        notes: `
-            <strong>الاكتشاف التلقائي على الواي فاي (UDP Port 8887):</strong>
-            <ul>
-                <li>شرح استخدام UDP Broadcast على عنوان 255.255.255.255.</li>
-                <li>الخادم يرسل إعلاناً دورياً، والعميل يستمع ويلتقط IP الخادم ذاتياً.</li>
-                <li>فائدة الميزة: عدم إلزام المستخدم بكتابة عنوان IP السيرفر يدوياً، والتوافق مع DHCP الديناميكي.</li>
-            </ul>
-        `
+        num: "05",
+        tag: "MODULE 05 // DISCOVERY",
+        title: "الاكتشاف التلقائي لشبكات الواي فاي (UDP Port 8887)",
+        desc: "ربط العملاء بالخادم ذاتياً وفورياً بنمط Zero-Configuration دون ضبط IP يدوي",
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        badge: "DISCOVERY"
     },
     {
-        slide: 6,
-        speaker: "المتحدث الثاني (مهندس الأمن والمصادقة)",
-        notes: `
-            <strong>الأمن السيبراني والمصادقة وجلسات JWT:</strong>
-            <ul>
-                <li>شرح خوارزمية PBKDF2/SHA-256 مع 100,000 دورة تكرار ومولّد ملح عشوائي 128-bit Salt لكل مستخدم.</li>
-                <li>توضيح الحماية من هجمات التوقيت عبر دالة FixedTimeEquals.</li>
-                <li>شرح توكنات JWT الموقعة بـ HMAC-SHA256 للتحقق الرياضي الفوري دون استعلام قاعدة البيانات في كل حزمة.</li>
-                <li>شرح حماية قاعدة البيانات عبر Parameterized Queries ومنع هجمات DoS بسقف 10MB للحزمة.</li>
-            </ul>
-        `
+        num: "06",
+        tag: "MODULE 06 // SECURITY",
+        title: "الأمن السيبراني والمصادقة المشفرة (PBKDF2 & JWT RFC 7519)",
+        desc: "تجزئة كلمات المرور بـ 128-bit Salt وتوكنات الجلسات المشفرة مع سجلات ISO 27001",
+        speaker: "المتحدث 2: مهندس الأمن والمصادقة",
+        badge: "SECURITY"
     },
     {
-        slide: 7,
-        speaker: "المتحدث الثالث (مهندس الخادم وقواعد البيانات)",
-        notes: `
-            <strong>الخادم والتزامن و SQLite WAL Mode:</strong>
-            <ul>
-                <li>شرح برمجة المقابس غير الحاجبة عبر I/O Completion Ports (IOCP) واستدعاءات async/await.</li>
-                <li>مقارنة نموذج IOCP مع نموذج خيط لكل عميل (Thread-per-Client) وتجنب اختناق الخيوط.</li>
-                <li>شرح نمط الحواجز المقسمة Bulkhead Pattern لعزل استثناءات العملاء ومنع انهيار الخادم.</li>
-                <li>شرح وضع WAL Mode في SQLite الذي يسمح بعدة قراءات متزامنة أثناء الكتابة بدون أقفال.</li>
-            </ul>
-        `
+        num: "07",
+        tag: "MODULE 07 // CONCURRENCY",
+        title: "معمارية تزامن الخادم IOCP ووضع SQLite WAL Mode",
+        desc: "خدمة مئات المتصلين دون اختناق الخيوط مع مناعة تامة ضد الانهيار (Bulkhead)",
+        speaker: "المتحدث 3: مهندس الخادم وقواعد البيانات",
+        badge: "IOCP / WAL"
     },
     {
-        slide: 8,
-        speaker: "المتحدث الثالث (مهندس الخادم وقواعد البيانات)",
-        notes: `
-            <strong>طابور الرسائل المعلقة والمزامنة التلغرامية:</strong>
-            <ul>
-                <li>شرح دورة حياة حالات الرسائل: Sent (✓) ➔ Delivered (✓✓) ➔ Read (✓✓ زرقاء).</li>
-                <li>شرح آلية طابور الانتظار (Offline Queue): حفظ الرسائل للمستخدمين غير المتصلين ودفعها فورياً عند دخولهم.</li>
-                <li>شرح كشف المقابس المعلقة (Half-Open Sockets) بفحص القراءة الصفرية ونبضات القلب Heartbeat.</li>
-            </ul>
-        `
+        num: "08",
+        tag: "MODULE 08 // SYNC",
+        title: "دورة حياة الرسائل وطابور الرسائل المعلقة (Offline Queue)",
+        desc: "مزامنة تلغرامية متكاملة لضمان وصول الرسائل بمؤشرات التسليم (✓ / ✓✓ / ✓✓)",
+        speaker: "المتحدث 3: مهندس الخادم وقواعد البيانات",
+        badge: "SYNC ✓✓"
     },
     {
-        slide: 9,
-        speaker: "المتحدث الرابع (مهندس الميديا والوسائط)",
-        notes: `
-            <strong>محرك الصوت 16kHz HD والمخازن الدائرية:</strong>
-            <ul>
-                <li>شرح معيار الصوت 16000 Hz, 16-bit Mono (1280 بايت لكل إطار 40ms).</li>
-                <li>شرح السبب الجذري لخطأ الذاكرة 0xc0000005 الناتج عن تحرير الـ WAVEHDR أثناء قراءة بطاقة الصوت.</li>
-                <li>شرح الحل المبتكر: نظام المخازن الدائرية الثابتة Zero-Allocation Pre-Pinned Ring Buffers المثبتة بـ Pinned GCHandle.</li>
-            </ul>
-        `
+        num: "09",
+        tag: "MODULE 09 // AUDIO",
+        title: "محرك الصوت منخفض المستوى 16kHz والمخازن الدائرية الثابتة",
+        desc: "القضاء التام على خطأ الذاكرة 0xc0000005 بحجز 8 مخازن مثبتة بـ GCHandle Pinned",
+        speaker: "المتحدث 4: مهندس الميديا والوسائط",
+        badge: "16kHz RING"
     },
     {
-        slide: 10,
-        speaker: "المتحدث الرابع (مهندس الميديا والوسائط)",
-        notes: `
-            <strong>الفيديو والبث الهجين وإطفاء ضوء الكاميرا:</strong>
-            <ul>
-                <li>شرح استخدام مكتبة AForge DirectShow والتحكم بمقبض الكاميرا في نظام التشغيل.</li>
-                <li>توضيح انطفاء ضوء الكاميرا الحقيقي (LED) على اللابتوب عند الكتم لحماية خصوصية المستخدم.</li>
-                <li>شرح خوارزمية البث الهجين (UDP+TCP) مع إلغاء التكرار اللحظي عبر مفتاح ثنائي 64-بت.</li>
-                <li>عرض وسائط تليجرام المباشرة (Inline Images & Audio Players).</li>
-            </ul>
-        `
+        num: "10",
+        tag: "MODULE 10 // VIDEO",
+        title: "محرك الفيديو المباشر AForge وإطفاء ضوء الكاميرا الحقيقي (LED)",
+        desc: "تحكم فيزيائي بالكاميرا في طبقة النواة مع بث هجين متوازي وإلغاء تكرار الإطارات",
+        speaker: "المتحدث 4: مهندس الميديا والوسائط",
+        badge: "AFORGE VIDEO"
     },
     {
-        slide: 11,
-        speaker: "جميع المتحدثين",
-        notes: `
-            <strong>مصفوفة المتحدثين الـ 4:</strong>
-            <ul>
-                <li>تأكيد جاهزية كل متحدث لمحوره الأكاديمي والعملي.</li>
-                <li>المتحدث 1 للشبكات والمقابس والتأطير، المتحدث 2 للأمن والمصادقة، المتحدث 3 للخادم وقواعد البيانات، والمتحدث 4 للميديا والذاكرة.</li>
-            </ul>
-        `
+        num: "11",
+        tag: "MODULE 11 // SPEAKERS",
+        title: "مصفوفة توزيع المهام على المتحدثين الأربعة (4 Speakers)",
+        desc: "تكامل هندسي وتوزيع دقيق يغطي كافة جوانب مقرر برمجة خادم وعميل",
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        badge: "4 SPEAKERS"
     },
     {
-        slide: 12,
-        speaker: "جميع المتحدثين",
-        notes: `
-            <strong>التحقق الآلي والاختبارات الشاملة (62/62):</strong>
-            <ul>
-                <li>استعراض نتائج اختبارات مشروع SyncPulse.Tests الآلية الـ 62 بدون أي فشل (Zero Failures).</li>
-                <li>التأكيد على اختبار كل وحدة بمفردها واختبار التدفق الكامل End-to-End.</li>
-            </ul>
-        `
+        num: "12",
+        tag: "MODULE 12 // QA",
+        title: "نتائج حزمة الاختبارات والتحقق الآلي الشاملة (62/62 Tests)",
+        desc: "اجتياز 62 اختباراً آلياً بنسبة نجاح 100% (0 Failures) في مشروع SyncPulse.Tests",
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        badge: "QA PASSED"
     },
     {
-        slide: 13,
-        speaker: "جميع المتحدثين",
-        notes: `
-            <strong>الخاتمة والانتقال للعرض العملي الحي:</strong>
-            <ul>
-                <li>شكر أستاذ المقرر ولجنة الإشراف على اهتمامهم ودعمهم.</li>
-                <li>الإعلان عن بدء العرض العملي الحي للأجهزة الثلاثة عبر مركز العرض المباشر (SyncPulse Live Web Hub).</li>
-            </ul>
-        `
+        num: "13",
+        tag: "MODULE 13 // DEMO",
+        title: "منصة إطلاق العرض العملي الحي للأجهزة الثلاثة (Live Demo)",
+        desc: "تشغيل الخادم على الجهاز 1 والعملاء على الجهازين 2 و 3 والمراقبة عبر Web Hub",
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        badge: "LIVE DEMO"
     }
 ];
 
-// Document Ready Initialization
+// Comprehensive Speaker Notes
+const speakerNotes = [
+    {
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> استعراض الهوية الهندسية للنظام وتوضيح أن المشروع مبني بالكامل على مقابس خام C# Sockets أصلية دون أي مكتبات سحابية وسيطة مثل SignalR أو Firebase.</p>"
+    },
+    {
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> توضيح المقارنة بين الاعتمادية السحابية والسيادة المحلية (100% On-Premise LAN) مع إبراز سرعة الاستجابة بأقل من 10ms في الشبكة المحلية.</p>"
+    },
+    {
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح فصل المشاريع الثلاثة في حل .NET وفق مبادئ Clean Architecture لمنع تداخل الأكواد وتسهيل التوسع والصيانة.</p>"
+    },
+    {
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح كيفية حل مشكلة TCP Stream Fragmentation ببروتوكول التأطير 12-Byte Header واستخدام Big-Endian لتوحيد الترتيب بين المعالجات.</p>"
+    },
+    {
+        speaker: "المتحدث 1: مهندس المعمارية والشبكات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح الاكتشاف التلقائي عبر UDP Broadcast على المنفذ 8887 وحل مشكلة العناوين المتغيرة في شبكات الواي فاي.</p>"
+    },
+    {
+        speaker: "المتحدث 2: مهندس الأمن والمصادقة",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح محرك التشفير PBKDF2/SHA-256 مع الـ Salt العشوائي وتوكنات JWT المطابقة لمعيار RFC 7519 وسجلات التدقيق ISO 27001.</p>"
+    },
+    {
+        speaker: "المتحدث 3: مهندس الخادم وقواعد البيانات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> توضيح معمارية التزامن بخادم IOCP Async ونمط Bulkhead لعزل الجلسات، وتشغيل SQLite بوضع WAL Mode لمنع الاختناق أثناء الكتابة.</p>"
+    },
+    {
+        speaker: "المتحدث 3: مهندس الخادم وقواعد البيانات",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح طابور الرسائل المعلقة Offline Queue ومؤشرات التسليم الثلاثية (✓ Sent ➔ ✓✓ Delivered ➔ ✓✓ Read).</p>"
+    },
+    {
+        speaker: "المتحدث 4: مهندس الميديا والوسائط",
+        notes: "<p><strong>الهدف من الشريحة:</strong> شرح حل معضلة انهيار الذاكرة 0xc0000005 عبر نظام المخازن الدائرية الثابتة 8 Pre-Pinned Buffers وضمان Zero-Allocation.</p>"
+    },
+    {
+        speaker: "المتحدث 4: مهندس الميديا والوسائط",
+        notes: "<p><strong>الهدف من الشريحة:</strong> توضيح إغلاق مقبض الكاميرا الفيزيائي SignalToStop() لإطفاء ضوء LED الحقيقي، والبث الهجين UDP+TCP مع إلغاء تكرار الإطارات.</p>"
+    },
+    {
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        notes: "<p><strong>الهدف من الشريحة:</strong> استعراض تكامل أدوار المتحدثين الأربعة وتغطيتهم الشاملة لجميع محاور مقرر برمجة خادم وعميل.</p>"
+    },
+    {
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        notes: "<p><strong>الهدف من الشريحة:</strong> إثبات استقرار وموثوقية النظام باجتياز 62 اختباراً آلياً بنسبة نجاح 100% في مشروع SyncPulse.Tests.</p>"
+    },
+    {
+        speaker: "فريق العمل الهندسي (4 متحدثين)",
+        notes: "<p><strong>الهدف من الشريحة:</strong> إعلان الجاهزية لبدء العرض العملي الحي وربط الأجهزة الثلاثة عبر مركز المراقبة المباشر SyncPulse.Web.</p>"
+    }
+];
+
+// Cockpit State
+let currentModuleIndex = 0;
+let isNotesOpen = false;
+const themes = ["dark", "light", "matrix"];
+let currentThemeIndex = 0;
+
+/**
+ * Initialize Cockpit
+ */
 document.addEventListener('DOMContentLoaded', () => {
-    initPresentation();
-    setupKeyboardShortcuts();
-    buildSlideMenu();
-    buildGridOverview();
-    initLaserPointer();
-    initSimulators();
+    selectModule(0);
+    setupKeyboardNavigation();
 });
 
 /**
- * Initialize Slides, Indicators, and Progress Bar
+ * Select and Activate a Module
  */
-function initPresentation() {
-    const slides = document.querySelectorAll('.slide');
-    presentationState.totalSlides = slides.length;
-    document.getElementById('total-slides-num').innerText = presentationState.totalSlides.toString().padStart(2, '0');
-    goToSlide(0);
-}
+function selectModule(index) {
+    if (index < 0 || index >= cockpitModules.length) return;
+    currentModuleIndex = index;
 
-/**
- * Navigate to a specific slide index
- */
-function goToSlide(index) {
-    const slides = document.querySelectorAll('.slide');
-    if (index < 0 || index >= slides.length) return;
+    const moduleData = cockpitModules[index];
 
-    slides.forEach((slide, i) => {
+    // 1. Update Left Sidebar active item
+    document.querySelectorAll('.nav-module-item').forEach((item, i) => {
         if (i === index) {
-            slide.classList.add('active');
+            item.classList.add('active');
+            item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         } else {
-            slide.classList.remove('active');
+            item.classList.remove('active');
         }
     });
 
-    presentationState.currentSlide = index;
+    // 2. Update Header & Stage Titles
+    document.getElementById('module-counter-badge').innerText = `${(index + 1).toString().padStart(2, '0')} / 13`;
+    document.getElementById('stage-module-tag').innerText = moduleData.tag;
+    document.getElementById('stage-module-title').innerText = moduleData.title;
+    document.getElementById('stage-module-desc').innerText = moduleData.desc;
+    document.getElementById('stage-speaker-tag').innerText = moduleData.speaker;
+    document.getElementById('active-speaker-name').innerText = moduleData.speaker;
 
-    // Update Header Indicators
-    const currentNumStr = (index + 1).toString().padStart(2, '0');
-    document.getElementById('current-slide-num').innerText = currentNumStr;
+    // 3. Switch Stage Content Panel
+    document.querySelectorAll('.module-content-panel').forEach((panel, i) => {
+        if (i === index) {
+            panel.classList.add('active');
+        } else {
+            panel.classList.remove('active');
+        }
+    });
 
-    // Update Progress Bar
-    const progressPercent = ((index + 1) / presentationState.totalSlides) * 100;
-    document.getElementById('slide-progress-bar').style.width = `${progressPercent}%`;
-
-    // Update Speaker Cue in Footer
-    const activeSlide = slides[index];
-    const speakerName = activeSlide.getAttribute('data-speaker') || 'فريق العمل الهندسي';
-    const cueElem = document.getElementById('speaker-cue-label');
-    if (cueElem) {
-        cueElem.innerHTML = `المتحدث الحالي: <strong>${speakerName}</strong>`;
-    }
-
-    // Update Speaker Notes Content
-    updateSpeakerNotes(index);
-
-    // Update Active states in Menu & Grid
-    updateActiveMenuAndGrid(index);
-
-    // Slide-specific triggers
-    handleSlideSpecialTriggers(index);
+    // 4. Update Teleprompter Notes
+    updateNotesContent(index);
 }
 
-function nextSlide() {
-    if (presentationState.currentSlide < presentationState.totalSlides - 1) {
-        goToSlide(presentationState.currentSlide + 1);
+function nextModule() {
+    if (currentModuleIndex < cockpitModules.length - 1) {
+        selectModule(currentModuleIndex + 1);
     }
 }
 
-function prevSlide() {
-    if (presentationState.currentSlide > 0) {
-        goToSlide(presentationState.currentSlide - 1);
+function prevModule() {
+    if (currentModuleIndex > 0) {
+        selectModule(currentModuleIndex - 1);
     }
 }
 
 /**
- * Update Speaker Notes Drawer Content
+ * Teleprompter Notes Drawer
  */
-function updateSpeakerNotes(slideIndex) {
-    const notesContainer = document.getElementById('notes-content') || document.getElementById('speaker-notes-content');
-    if (!notesContainer) return;
+function updateNotesContent(index) {
+    const notesBody = document.getElementById('cockpit-notes-body');
+    if (!notesBody) return;
 
-    const currentNote = speakerNotes[slideIndex];
-    if (currentNote) {
-        notesContainer.innerHTML = `
-            <div style="margin-bottom: 8px; color: #1E3A8A; font-weight: 800; font-size: 0.86rem;">
-                🎙️ ${currentNote.speaker}
+    const note = speakerNotes[index];
+    if (note) {
+        notesBody.innerHTML = `
+            <div style="margin-bottom: 8px; color: var(--brand-primary); font-weight: 800; font-size: 0.86rem;">
+                🎙️ ${note.speaker}
             </div>
-            ${currentNote.notes}
+            ${note.notes}
         `;
-    } else {
-        notesContainer.innerHTML = `<p style="color: #64748B;">لا توجد ملاحظات إضافية لهذه الشريحة.</p>`;
     }
 }
 
-/**
- * Toggle Speaker Notes Drawer
- */
 function toggleNotes() {
-    const drawer = document.getElementById('notes-drawer') || document.getElementById('speaker-notes-drawer');
-    const btn = document.getElementById('btn-notes');
+    const drawer = document.getElementById('cockpit-notes-drawer');
     if (!drawer) return;
-
-    presentationState.isNotesOpen = !presentationState.isNotesOpen;
-
-    if (presentationState.isNotesOpen) {
+    isNotesOpen = !isNotesOpen;
+    if (isNotesOpen) {
         drawer.classList.add('active');
-        if (btn) btn.classList.add('active');
     } else {
         drawer.classList.remove('active');
-        if (btn) btn.classList.remove('active');
     }
 }
 
 /**
- * Build Visual Grid Light-Table (Overview Mode)
+ * Theme Engine Cycle
  */
-function buildGridOverview() {
-    const container = document.getElementById('grid-thumbs-container') || document.getElementById('grid-thumbnails-container');
-    if (!container) return;
-
-    container.innerHTML = '';
-    const slides = document.querySelectorAll('.slide');
-
-    slides.forEach((slide, index) => {
-        const title = slide.getAttribute('data-title') || `الشريحة ${index + 1}`;
-        const speaker = slide.getAttribute('data-speaker') || '';
-
-        const card = document.createElement('div');
-        card.className = 'thumb-box';
-        card.id = `thumb-card-${index}`;
-        card.innerHTML = `
-            <div>
-                <span class="num">SLIDE ${(index + 1).toString().padStart(2, '0')}</span>
-                <h4 class="title">${title}</h4>
-            </div>
-            <span class="spk">${speaker}</span>
-        `;
-        card.onclick = () => {
-            goToSlide(index);
-            toggleGrid();
-        };
-        container.appendChild(card);
-    });
-}
-
-function toggleGrid() {
-    const modal = document.getElementById('grid-modal') || document.getElementById('slide-grid-modal');
-    if (!modal) return;
-    presentationState.isGridOpen = !presentationState.isGridOpen;
-    if (presentationState.isGridOpen) {
-        modal.classList.add('active');
-    } else {
-        modal.classList.remove('active');
-    }
-}
-
-function updateActiveMenuAndGrid(activeIndex) {
-    document.querySelectorAll('.menu-item-btn').forEach((btn, i) => {
-        if (i === activeIndex) btn.classList.add('active');
-        else btn.classList.remove('active');
-    });
-
-    document.querySelectorAll('.thumb-card').forEach((card, i) => {
-        if (i === activeIndex) card.classList.add('active');
-        else card.classList.remove('active');
-    });
-}
-
-/**
- * Defense Presentation Stopwatch Timer
- */
-function toggleTimer() {
-    const btn = document.getElementById('timer-toggle-btn');
-    if (presentationState.isTimerRunning) {
-        clearInterval(presentationState.timerInterval);
-        presentationState.isTimerRunning = false;
-        if (btn) btn.innerText = '▶';
-    } else {
-        presentationState.timerInterval = setInterval(() => {
-            presentationState.timerSeconds++;
-            const mins = Math.floor(presentationState.timerSeconds / 60).toString().padStart(2, '0');
-            const secs = (presentationState.timerSeconds % 60).toString().padStart(2, '0');
-            const disp = document.getElementById('timer-display');
-            if (disp) disp.innerText = `${mins}:${secs}`;
-        }, 1000);
-        presentationState.isTimerRunning = true;
-        if (btn) btn.innerText = '⏸';
-    }
-}
-
-function resetTimer() {
-    clearInterval(presentationState.timerInterval);
-    presentationState.isTimerRunning = false;
-    presentationState.timerSeconds = 0;
-    const disp = document.getElementById('timer-display');
-    const btn = document.getElementById('timer-toggle-btn');
-    if (disp) disp.innerText = '00:00';
-    if (btn) btn.innerText = '▶';
-}
-
-/**
- * Virtual Laser Pointer Tool
- */
-function initLaserPointer() {
-    const laserDot = document.getElementById('laser-dot');
-    if (!laserDot) return;
-
-    window.addEventListener('mousemove', (e) => {
-        if (presentationState.isLaserActive) {
-            laserDot.style.left = `${e.clientX}px`;
-            laserDot.style.top = `${e.clientY}px`;
-        }
-    });
-}
-
-function toggleLaser() {
-    const laserDot = document.getElementById('laser-dot');
-    const btn = document.getElementById('btn-laser');
-    presentationState.isLaserActive = !presentationState.isLaserActive;
-
-    if (presentationState.isLaserActive) {
-        if (laserDot) laserDot.classList.add('active');
-        if (btn) btn.classList.add('active');
-    } else {
-        if (laserDot) laserDot.classList.remove('active');
-        if (btn) btn.classList.remove('active');
-    }
-}
-
-/**
- * Interactive Slide Simulators
- */
-function initSimulators() {
-    // 1. Binary Inspector on Slide 4
-    document.querySelectorAll('.binary-cell').forEach(cell => {
-        cell.addEventListener('click', () => {
-            document.querySelectorAll('.binary-cell').forEach(c => c.classList.remove('selected'));
-            cell.classList.add('selected');
-        });
-    });
-
-    // 2. Interactive Ring Buffer on Slide 9
-    startRingBufferSimulation();
-}
-
-function startRingBufferSimulation() {
-    if (presentationState.ringBufferInterval) clearInterval(presentationState.ringBufferInterval);
-    presentationState.ringBufferInterval = setInterval(() => {
-        const slots = document.querySelectorAll('.ring-slot');
-        if (!slots || slots.length === 0) return;
-
-        slots.forEach((s, idx) => {
-            if (idx === presentationState.ringBufferIndex) {
-                s.classList.add('active-slot');
-                s.querySelector('.slot-state').innerText = 'IN USE';
-            } else {
-                s.classList.remove('active-slot');
-                s.querySelector('.slot-state').innerText = 'READY';
-            }
-        });
-
-        presentationState.ringBufferIndex = (presentationState.ringBufferIndex + 1) % slots.length;
-    }, 600);
-}
-
-function handleSlideSpecialTriggers(slideIndex) {
-    if (slideIndex === 8) {
-        // Slide 9: Audio Ring buffer
-        startRingBufferSimulation();
-    }
-}
-
-/**
- * Multi-Theme Engine Switcher
- */
-function setTheme(themeName) {
-    document.documentElement.setAttribute('data-theme', themeName);
-    localStorage.setItem('syncpulse_theme', themeName);
-
-    // Update active button state
-    document.querySelectorAll('.theme-pill-btn').forEach(btn => {
-        const title = btn.getAttribute('title') || '';
-        if (themeName === 'dark' && title.includes('دارك')) {
-            btn.classList.add('active');
-        } else if (themeName === 'light' && title.includes('فاتح')) {
-            btn.classList.add('active');
-        } else if (themeName === 'matrix' && title.includes('ماتركس')) {
-            btn.classList.add('active');
-        } else {
-            btn.classList.remove('active');
-        }
-    });
+function cycleTheme() {
+    currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+    const selectedTheme = themes[currentThemeIndex];
+    document.documentElement.setAttribute('data-theme', selectedTheme);
 }
 
 /**
@@ -485,7 +279,7 @@ function setTheme(themeName) {
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
-            console.error(`Error entering fullscreen: ${err.message}`);
+            console.error(`Fullscreen error: ${err.message}`);
         });
     } else {
         if (document.exitFullscreen) {
@@ -497,35 +291,34 @@ function toggleFullscreen() {
 /**
  * Keyboard Shortcuts
  */
-function setupKeyboardShortcuts() {
+function setupKeyboardNavigation() {
     document.addEventListener('keydown', (e) => {
-        // Don't trigger if user is typing
         if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
         switch (e.key) {
+            case 'ArrowDown':
             case 'ArrowLeft':
             case ' ':
             case 'PageDown':
-            case 'Enter':
                 e.preventDefault();
-                nextSlide();
+                nextModule();
                 break;
 
+            case 'ArrowUp':
             case 'ArrowRight':
             case 'PageUp':
-            case 'Backspace':
                 e.preventDefault();
-                prevSlide();
+                prevModule();
                 break;
 
             case 'Home':
                 e.preventDefault();
-                goToSlide(0);
+                selectModule(0);
                 break;
 
             case 'End':
                 e.preventDefault();
-                goToSlide(presentationState.totalSlides - 1);
+                selectModule(cockpitModules.length - 1);
                 break;
 
             case 'n':
@@ -534,35 +327,16 @@ function setupKeyboardShortcuts() {
                 toggleNotes();
                 break;
 
-            case 'm':
-            case 'M':
-            case 'ة':
-                toggleMenu();
-                break;
-
-            case 'g':
-            case 'G':
-            case 'ل':
-                toggleGrid();
-                break;
-
-            case 'l':
-            case 'L':
-            case 'م':
-                toggleLaser();
-                break;
-
             case 'f':
             case 'F':
             case 'ب':
                 toggleFullscreen();
                 break;
 
-            case 'Escape':
-                if (presentationState.isNotesOpen) toggleNotes();
-                if (presentationState.isMenuOpen) toggleMenu();
-                if (presentationState.isGridOpen) toggleGrid();
-                if (presentationState.isLaserActive) toggleLaser();
+            case 't':
+            case 'T':
+            case 'ف':
+                cycleTheme();
                 break;
         }
     });
