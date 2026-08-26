@@ -1,27 +1,29 @@
 /* ==========================================================================
-   SyncPulse Interactive Next-Gen Web Showcase & Keynote Experience
-   Modern Apple / Stripe / Vercel Showcase Aesthetics with Multi-Theme Engine
+   SyncPulse Interactive Showcase & Architectural Diagram System
+   Visual Diagrams, SVG Topologies, Sequence Charts, and Multi-Theme Engine
    ========================================================================== */
 
 :root {
-    /* 🌌 Theme 1: Default "Cyber Aurora" (Deep Space, Sapphire & Cyan Glow) */
+    /* 🌌 Theme 1: Default "Cyber Aurora" (Deep Space & Sapphire) */
     --bg-main: #090D16;
-    --bg-surface: rgba(15, 23, 42, 0.75);
-    --bg-card: rgba(30, 41, 59, 0.7);
-    --bg-card-hover: rgba(51, 65, 85, 0.85);
-    --bg-pill: rgba(30, 41, 59, 0.8);
+    --bg-surface: rgba(15, 23, 42, 0.85);
+    --bg-card: rgba(30, 41, 59, 0.75);
+    --bg-card-hover: rgba(51, 65, 85, 0.9);
+    --bg-pill: rgba(30, 41, 59, 0.85);
+    --bg-diagram: #0D1527;
     
     --brand-primary: #3B82F6;
     --brand-accent: #06B6D4;
     --brand-gradient: linear-gradient(135deg, #60A5FA 0%, #38BDF8 50%, #818CF8 100%);
-    --brand-glow: rgba(59, 130, 246, 0.25);
+    --brand-glow: rgba(59, 130, 246, 0.3);
     
     --text-primary: #F8FAFC;
     --text-secondary: #CBD5E1;
     --text-muted: #94A3B8;
     
-    --border-glass: rgba(255, 255, 255, 0.1);
-    --border-glass-hover: rgba(59, 130, 246, 0.5);
+    --border-glass: rgba(255, 255, 255, 0.12);
+    --border-glass-hover: rgba(59, 130, 246, 0.6);
+    --border-diagram: #1E293B;
     
     --status-emerald: #10B981;
     --status-emerald-bg: rgba(16, 185, 129, 0.15);
@@ -35,18 +37,19 @@
     --font-en: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
     
-    --dock-bg: rgba(15, 23, 42, 0.85);
-    --dock-border: rgba(255, 255, 255, 0.15);
+    --dock-bg: rgba(15, 23, 42, 0.9);
+    --dock-border: rgba(255, 255, 255, 0.18);
     --dock-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
 /* 💎 Theme 2: "Titanium Ceramic" (Light Luxury SaaS / Stripe Mode) */
 [data-theme="light"] {
     --bg-main: #F1F5F9;
-    --bg-surface: rgba(255, 255, 255, 0.9);
+    --bg-surface: rgba(255, 255, 255, 0.95);
     --bg-card: #FFFFFF;
     --bg-card-hover: #F8FAFC;
     --bg-pill: #EFF6FF;
+    --bg-diagram: #F8FAFC;
     
     --brand-primary: #2563EB;
     --brand-accent: #0284C7;
@@ -59,6 +62,7 @@
     
     --border-glass: #E2E8F0;
     --border-glass-hover: #3B82F6;
+    --border-diagram: #CBD5E1;
     
     --status-emerald: #059669;
     --status-emerald-bg: #ECFDF5;
@@ -68,18 +72,19 @@
     --status-rose-bg: #FFF1F2;
     --status-rose-border: #FECDD3;
     
-    --dock-bg: rgba(255, 255, 255, 0.92);
-    --dock-border: rgba(226, 232, 240, 0.9);
+    --dock-bg: rgba(255, 255, 255, 0.95);
+    --dock-border: rgba(226, 232, 240, 0.95);
     --dock-shadow: 0 20px 50px rgba(15, 23, 42, 0.12);
 }
 
 /* 🌿 Theme 3: "Emerald Matrix" (Cyber Green High-Tech) */
 [data-theme="matrix"] {
     --bg-main: #04100D;
-    --bg-surface: rgba(6, 28, 23, 0.8);
-    --bg-card: rgba(10, 42, 35, 0.75);
-    --bg-card-hover: rgba(16, 61, 51, 0.9);
+    --bg-surface: rgba(6, 28, 23, 0.88);
+    --bg-card: rgba(10, 42, 35, 0.8);
+    --bg-card-hover: rgba(16, 61, 51, 0.95);
     --bg-pill: rgba(16, 185, 129, 0.15);
+    --bg-diagram: #062019;
     
     --brand-primary: #10B981;
     --brand-accent: #34D399;
@@ -92,9 +97,10 @@
     
     --border-glass: rgba(16, 185, 129, 0.2);
     --border-glass-hover: #10B981;
+    --border-diagram: rgba(16, 185, 129, 0.3);
     
-    --dock-bg: rgba(6, 28, 23, 0.92);
-    --dock-border: rgba(16, 185, 129, 0.3);
+    --dock-bg: rgba(6, 28, 23, 0.95);
+    --dock-border: rgba(16, 185, 129, 0.35);
     --dock-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
 }
 
@@ -143,7 +149,7 @@ code, .code-inline {
 }
 
 /* --------------------------------------------------------------------------
-   App Viewport Structure (Dynamic Fluid Full-Screen Stage)
+   App Viewport Structure
    -------------------------------------------------------------------------- */
 .showcase-viewport {
     width: 100vw;
@@ -303,7 +309,7 @@ code, .code-inline {
 }
 
 /* --------------------------------------------------------------------------
-   Interactive Slide Presentation Canvas (Fluid, Full Bleed)
+   Interactive Slide Presentation Canvas
    -------------------------------------------------------------------------- */
 .presentation-canvas-frame {
     flex: 1;
@@ -326,7 +332,7 @@ code, .code-inline {
     -webkit-backdrop-filter: blur(28px);
     border: 1px solid var(--border-glass);
     border-radius: 24px;
-    padding: 32px 48px 24px;
+    padding: 28px 44px 20px;
     flex-direction: column;
     justify-content: space-between;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px var(--border-glass);
@@ -357,8 +363,8 @@ code, .code-inline {
     justify-content: space-between;
     align-items: flex-start;
     border-bottom: 1px solid var(--border-glass);
-    padding-bottom: 14px;
-    margin-bottom: 18px;
+    padding-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .ribbon-tag {
@@ -372,22 +378,22 @@ code, .code-inline {
     font-weight: 800;
     padding: 3px 12px;
     border-radius: 9999px;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
     font-family: var(--font-en);
 }
 
 .slide-ribbon h2 {
-    font-size: 1.65rem;
+    font-size: 1.55rem;
     font-weight: 900;
     color: var(--text-primary);
     line-height: 1.25;
 }
 
 .slide-ribbon p {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
     font-weight: 600;
-    margin-top: 3px;
+    margin-top: 2px;
 }
 
 .slide-counter-chip {
@@ -403,7 +409,7 @@ code, .code-inline {
 }
 
 /* --------------------------------------------------------------------------
-   Modern Bento Card Components
+   Bento Cards & Visual Diagram Layouts
    -------------------------------------------------------------------------- */
 .slide-body {
     flex: 1;
@@ -421,21 +427,28 @@ code, .code-inline {
 .grid-3-col {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 16px;
 }
 
 .grid-4-col {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 14px;
+}
+
+.grid-diagram-split {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 20px;
+    align-items: stretch;
 }
 
 /* Interactive Bento Glass Card */
 .glass-card {
     background: var(--bg-card);
     border: 1px solid var(--border-glass);
-    border-radius: 18px;
-    padding: 20px 24px;
+    border-radius: 16px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
@@ -456,7 +469,7 @@ code, .code-inline {
 }
 
 .glass-card:hover {
-    transform: translateY(-4px);
+    transform: translateY(-3px);
     border-color: var(--border-glass-hover);
     box-shadow: 0 16px 36px -10px var(--brand-glow);
 }
@@ -465,13 +478,13 @@ code, .code-inline {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 10px;
     border-bottom: 1px solid var(--border-glass);
-    padding-bottom: 8px;
+    padding-bottom: 6px;
 }
 
 .card-title-row h3 {
-    font-size: 1.08rem;
+    font-size: 1.05rem;
     font-weight: 800;
     color: var(--text-primary);
     display: flex;
@@ -481,7 +494,7 @@ code, .code-inline {
 
 .card-badge-pill {
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 800;
     padding: 2px 8px;
     border-radius: 6px;
@@ -510,28 +523,28 @@ code, .code-inline {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
 }
 
 .card-bullet-list li {
-    font-size: 0.9rem;
+    font-size: 0.88rem;
     color: var(--text-secondary);
-    line-height: 1.55;
+    line-height: 1.5;
     position: relative;
-    padding-right: 20px;
+    padding-right: 18px;
 }
 
 .card-bullet-list li::before {
     content: "■";
     color: var(--brand-primary);
-    font-size: 0.68rem;
+    font-size: 0.65rem;
     position: absolute;
     right: 0;
     top: 3px;
 }
 
-.glass-card.problem .card-bullet-list li::before { content: "✕"; color: var(--status-rose); font-size: 0.8rem; }
-.glass-card.solution .card-bullet-list li::before { content: "✓"; color: var(--status-emerald); font-size: 0.85rem; }
+.glass-card.problem .card-bullet-list li::before { content: "✕"; color: var(--status-rose); font-size: 0.75rem; }
+.glass-card.solution .card-bullet-list li::before { content: "✓"; color: var(--status-emerald); font-size: 0.8rem; }
 
 .card-bullet-list strong {
     color: var(--text-primary);
@@ -539,184 +552,195 @@ code, .code-inline {
 }
 
 /* --------------------------------------------------------------------------
-   Hero Slide 1 Showcase
+   Architectural Diagrams & SVG Topologies
    -------------------------------------------------------------------------- */
-.hero-stage-layout {
-    text-align: center;
+.diagram-canvas-box {
+    background: var(--bg-diagram);
+    border: 1px solid var(--border-diagram);
+    border-radius: 16px;
+    padding: 16px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
-    height: 100%;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
 }
 
-.hero-luxury-tag {
-    background: var(--bg-pill);
-    border: 1px solid var(--border-glass);
-    color: var(--brand-primary);
-    font-size: 0.85rem;
-    font-weight: 800;
-    padding: 6px 20px;
-    border-radius: 9999px;
-    margin-bottom: 14px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
-
-.hero-stage-layout h1 {
-    font-size: 2.45rem;
-    font-weight: 900;
-    color: var(--text-primary);
-    line-height: 1.25;
-    margin-bottom: 12px;
-}
-
-.hero-stage-layout h1 .brand-highlight {
-    background: var(--brand-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: var(--font-en);
-}
-
-.hero-lead-desc {
-    font-size: 1.02rem;
-    color: var(--text-secondary);
-    max-width: 920px;
-    line-height: 1.65;
-    margin-bottom: 22px;
-}
-
-.hero-pillars-matrix {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+/* 3-Tier Layered Stack Diagram (Slide 3) */
+.layer-stack-diagram {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     width: 100%;
-    max-width: 1100px;
-    margin-bottom: 20px;
 }
 
-.hero-pillar-box {
+.layer-stack-item {
     background: var(--bg-card);
     border: 1px solid var(--border-glass);
-    border-radius: 14px;
-    padding: 14px 16px;
-    text-align: right;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     transition: transform 0.2s ease;
 }
 
-.hero-pillar-box:hover {
-    transform: translateY(-3px);
+.layer-stack-item:hover {
+    transform: translateX(-4px);
     border-color: var(--brand-primary);
 }
 
-.hero-pillar-box strong {
-    display: block;
-    font-size: 0.9rem;
+.layer-stack-item.core { border-right: 4px solid #818CF8; }
+.layer-stack-item.server { border-right: 4px solid var(--brand-primary); }
+.layer-stack-item.client { border-right: 4px solid var(--brand-accent); }
+
+.layer-info h4 {
+    font-size: 0.95rem;
     color: var(--text-primary);
     font-weight: 800;
-    margin-bottom: 2px;
 }
 
-.hero-pillar-box small {
-    font-size: 0.76rem;
-    color: var(--brand-accent);
-    font-family: var(--font-mono);
-    font-weight: 700;
-}
-
-.hero-speakers-strip {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    border-radius: 9999px;
-    padding: 8px 24px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    font-size: 0.84rem;
-}
-
-.hero-speakers-strip strong {
-    color: var(--brand-primary);
-}
-
-.speaker-bubble {
-    background: var(--bg-pill);
-    border: 1px solid var(--border-glass);
-    padding: 4px 12px;
-    border-radius: 9999px;
+.layer-info p {
     font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--text-primary);
+    color: var(--text-muted);
 }
 
-/* --------------------------------------------------------------------------
-   Slide 4: Interactive FrameHeader Table
-   -------------------------------------------------------------------------- */
-.frame-table-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1.2fr 1.8fr 2.2fr 2.2fr;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
-.frame-cell-box {
-    background: var(--bg-card);
-    border: 1px solid var(--border-glass);
-    padding: 10px 6px;
-    text-align: center;
-    border-radius: 10px;
-    transition: 0.2s ease;
-}
-
-.frame-cell-box:hover {
-    border-color: var(--brand-primary);
-    transform: translateY(-2px);
-}
-
-.frame-cell-box .name {
+.layer-badge {
+    font-family: var(--font-mono);
     font-size: 0.74rem;
     font-weight: 800;
-    font-family: var(--font-en);
-    color: var(--text-muted);
-    display: block;
-}
-
-.frame-cell-box .val {
-    font-size: 0.8rem;
-    font-family: var(--font-mono);
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--bg-pill);
     color: var(--brand-primary);
-    font-weight: 800;
-    margin-top: 2px;
+}
+
+/* Network Topology Visualizer (Slide 1 & 13) */
+.network-topology-diagram {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding: 10px 0;
+}
+
+.topo-node {
+    background: var(--bg-card);
+    border: 2px solid var(--border-glass);
+    border-radius: 14px;
+    padding: 14px 18px;
+    text-align: center;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease;
+}
+
+.topo-node:hover {
+    transform: scale(1.05);
+    border-color: var(--brand-primary);
+}
+
+.topo-node.server-node {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 20px var(--brand-glow);
+}
+
+.topo-node .icon {
+    font-size: 24px;
+    margin-bottom: 4px;
     display: block;
 }
 
-.terminal-code-box {
-    background: #090D16;
+.topo-node strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+    display: block;
+}
+
+.topo-node small {
+    font-size: 0.72rem;
+    color: var(--brand-accent);
+    font-family: var(--font-mono);
+    display: block;
+}
+
+.topo-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+}
+
+.topo-connector .conn-line {
+    width: 60px;
+    height: 2px;
+    background: var(--brand-gradient);
+    position: relative;
+}
+
+.topo-connector .conn-label {
+    font-size: 0.65rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+}
+
+/* Sequence Chart Container (Slide 5 & 8) */
+.sequence-chart-grid {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+}
+
+.seq-step-card {
+    flex: 1;
+    background: var(--bg-card);
     border: 1px solid var(--border-glass);
     border-radius: 12px;
-    overflow: hidden;
-    margin-top: 8px;
+    padding: 14px 12px;
+    text-align: center;
+    position: relative;
+    transition: transform 0.2s ease;
 }
 
-.terminal-top {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px 14px;
+.seq-step-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--brand-primary);
+}
+
+.seq-step-card .seq-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--brand-primary);
+    color: white;
     font-size: 0.72rem;
-    font-family: var(--font-mono);
-    color: var(--text-muted);
-    border-bottom: 1px solid var(--border-glass);
-    direction: ltr;
-    text-align: left;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 6px;
+    font-family: var(--font-en);
 }
 
-.terminal-code-box pre {
-    padding: 12px 16px;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    line-height: 1.5;
-    color: #E2E8F0;
-    direction: ltr;
-    text-align: left;
-    overflow-x: auto;
+.seq-step-card strong {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.seq-step-card p {
+    font-size: 0.76rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+}
+
+.seq-arrow {
+    font-size: 18px;
+    color: var(--brand-primary);
+    font-weight: 900;
 }
 
 /* --------------------------------------------------------------------------
@@ -724,7 +748,7 @@ code, .code-inline {
    -------------------------------------------------------------------------- */
 .floating-master-dock {
     position: fixed;
-    bottom: 24px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     background: var(--dock-bg);
@@ -798,12 +822,12 @@ code, .code-inline {
 /* Slide Footer Meta */
 .slide-footer-meta {
     border-top: 1px solid var(--border-glass);
-    padding-top: 10px;
-    margin-top: 12px;
+    padding-top: 8px;
+    margin-top: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
 }
 
