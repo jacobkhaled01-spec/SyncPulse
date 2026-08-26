@@ -12,15 +12,35 @@ using AForge.Video.DirectShow;
 namespace SyncPulse.Client.Services
 {
     /// <summary>
-    /// محرك الفيديو المباشر عالي السرعة لالتقاط وبث إطارات كاميرا الويب الحقيقية عبر AForge.NET DirectShow (Hardware Webcam Engine)
+    /// محرك الفيديو المباشر عالي السرعة لالتقاط وبث إطارات كاميرا الويب الحقيقية مع التحكم الكامل في الإيقاف والتشغيل
     /// </summary>
     public class VideoEngine : IDisposable
     {
         private VideoCaptureDevice? _videoSource;
         private CancellationTokenSource? _cts;
         private bool _isCapturing;
+        private bool _isCameraOff;
+        private string? _deviceMoniker;
 
-        public bool IsCameraOff { get; set; }
+        public bool IsCameraOff
+        {
+            get => _isCameraOff;
+            set
+            {
+                if (_isCameraOff == value) return;
+                _isCameraOff = value;
+
+                if (_isCameraOff)
+                {
+                    PauseCamera();
+                }
+                else
+                {
+                    ResumeCamera();
+                }
+            }
+        }
+
         public int FrameWidth { get; set; } = 240;
         public int FrameHeight { get; set; } = 180;
 
@@ -64,6 +84,7 @@ namespace SyncPulse.Client.Services
             Stop();
 
             _isCapturing = true;
+            _isCameraOff = false;
             _cts = new CancellationTokenSource();
 
             try
@@ -73,14 +94,14 @@ namespace SyncPulse.Client.Services
 
                 if (videoDevices.Count > 0)
                 {
-                    // تشغيل كاميرا الويب الأولى (Default Webcam)
-                    _videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+                    _deviceMoniker = videoDevices[0].MonikerString;
+                    _videoSource = new VideoCaptureDevice(_deviceMoniker);
                     _videoSource.NewFrame += OnWebcamNewFrame;
                     _videoSource.Start();
                 }
                 else
                 {
-                    // في حال عدم وجود كاميرا ويب فيزيائية: تشغيل مسار المحاكاة البديل
+                    _deviceMoniker = null;
                     StartFallbackCaptureLoop(_cts.Token);
                 }
             }
@@ -90,9 +111,46 @@ namespace SyncPulse.Client.Services
             }
         }
 
+        private void PauseCamera()
+        {
+            try
+            {
+                if (_videoSource != null && _videoSource.IsRunning)
+                {
+                    _videoSource.SignalToStop();
+                    _videoSource.Stop();
+                }
+            }
+            catch { }
+
+            // إرسال إطار تفريغ فارغ للطرف الآخر لإخفاء الصورة فورياً
+            VideoFrameCaptured?.Invoke(new byte[1]);
+        }
+
+        private void ResumeCamera()
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(_deviceMoniker))
+                {
+                    if (_videoSource == null)
+                    {
+                        _videoSource = new VideoCaptureDevice(_deviceMoniker);
+                        _videoSource.NewFrame += OnWebcamNewFrame;
+                    }
+
+                    if (!_videoSource.IsRunning)
+                    {
+                        _videoSource.Start();
+                    }
+                }
+            }
+            catch { }
+        }
+
         private void OnWebcamNewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            if (!_isCapturing || IsCameraOff || eventArgs.Frame == null) return;
+            if (!_isCapturing || _isCameraOff || eventArgs.Frame == null) return;
 
             try
             {
@@ -130,7 +188,7 @@ namespace SyncPulse.Client.Services
                 {
                     try
                     {
-                        if (!IsCameraOff)
+                        if (!_isCameraOff)
                         {
                             byte[]? frameData = CaptureGdiFrame();
                             if (frameData != null && frameData.Length > 0)
@@ -182,7 +240,7 @@ namespace SyncPulse.Client.Services
 
         public static BitmapSource? DecodeFrame(byte[] jpegBytes)
         {
-            if (jpegBytes == null || jpegBytes.Length == 0) return null;
+            if (jpegBytes == null || jpegBytes.Length <= 16) return null;
 
             try
             {

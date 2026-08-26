@@ -145,12 +145,19 @@ namespace SyncPulse.Client.Services
                                 Audio.PlayAudioChunk(mediaFrame.FrameData);
                             }
                             // معالجة الفيديو: فك ضغط الإطار وعرضه فورياً على الشاشة
-                            else if (mediaFrame.FrameType == CallType.Video && mediaFrame.FrameData.Length > 16)
+                            else if (mediaFrame.FrameType == CallType.Video)
                             {
-                                var bmp = VideoEngine.DecodeFrame(mediaFrame.FrameData);
-                                if (bmp != null)
+                                if (mediaFrame.FrameData.Length <= 16)
                                 {
-                                    VideoFrameDecoded?.Invoke(bmp);
+                                    VideoFrameDecoded?.Invoke(null!);
+                                }
+                                else
+                                {
+                                    var bmp = VideoEngine.DecodeFrame(mediaFrame.FrameData);
+                                    if (bmp != null)
+                                    {
+                                        VideoFrameDecoded?.Invoke(bmp);
+                                    }
                                 }
                             }
                         }
