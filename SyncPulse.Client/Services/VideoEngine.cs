@@ -21,8 +21,8 @@ namespace SyncPulse.Client.Services
         private bool _isCapturing;
 
         public bool IsCameraOff { get; set; }
-        public int FrameWidth { get; set; } = 320;
-        public int FrameHeight { get; set; } = 240;
+        public int FrameWidth { get; set; } = 240;
+        public int FrameHeight { get; set; } = 180;
 
         public event Action<byte[]>? VideoFrameCaptured;
 
@@ -101,7 +101,7 @@ namespace SyncPulse.Client.Services
                 using var ms = new MemoryStream();
 
                 var encoderParameters = new EncoderParameters(1);
-                encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+                encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 35L);
 
                 ImageCodecInfo? jpegCodec = GetJpegEncoder();
                 if (jpegCodec != null)
