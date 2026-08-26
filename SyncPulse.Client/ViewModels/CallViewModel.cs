@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using SyncPulse.Client.Services;
 using SyncPulse.Client.Utils;
@@ -29,6 +30,7 @@ namespace SyncPulse.Client.ViewModels
         private bool _isMuted;
         private bool _isCameraOff;
         private int _secondsElapsed;
+        private BitmapSource? _remoteVideoFrame;
 
         public int CallID
         {
@@ -58,8 +60,29 @@ namespace SyncPulse.Client.ViewModels
         public CallType CallType
         {
             get => _callType;
-            set { _callType = value; OnPropertyChanged(); OnPropertyChanged(nameof(CallTypeTitle)); }
+            set
+            {
+                _callType = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CallTypeTitle));
+                OnPropertyChanged(nameof(IsVideoCall));
+            }
         }
+
+        public bool IsVideoCall => CallType == CallType.Video;
+
+        public BitmapSource? RemoteVideoFrame
+        {
+            get => _remoteVideoFrame;
+            set
+            {
+                _remoteVideoFrame = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasVideoFrame));
+            }
+        }
+
+        public bool HasVideoFrame => _remoteVideoFrame != null && IsConnected && IsVideoCall;
 
         public CallAction CallState
         {
@@ -71,6 +94,7 @@ namespace SyncPulse.Client.ViewModels
                 OnPropertyChanged(nameof(StateText));
                 OnPropertyChanged(nameof(IsRinging));
                 OnPropertyChanged(nameof(IsConnected));
+                OnPropertyChanged(nameof(HasVideoFrame));
             }
         }
 
@@ -83,13 +107,25 @@ namespace SyncPulse.Client.ViewModels
         public bool IsMuted
         {
             get => _isMuted;
-            set { _isMuted = value; OnPropertyChanged(); OnPropertyChanged(nameof(MuteButtonText)); }
+            set
+            {
+                _isMuted = value;
+                _media.Audio.IsMuted = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(MuteButtonText));
+            }
         }
 
         public bool IsCameraOff
         {
             get => _isCameraOff;
-            set { _isCameraOff = value; OnPropertyChanged(); OnPropertyChanged(nameof(CameraButtonText)); }
+            set
+            {
+                _isCameraOff = value;
+                _media.Video.IsCameraOff = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(CameraButtonText));
+            }
         }
 
         public string DurationText
@@ -101,13 +137,13 @@ namespace SyncPulse.Client.ViewModels
             }
         }
 
-        public string CallTypeTitle => CallType == CallType.Video ? "مكالمة فيديو مرئية" : "مكالمة صوتية مباشرة";
+        public string CallTypeTitle => CallType == CallType.Video ? "مكالمة فيديو مرئية حية" : "مكالمة صوتية مباشرة";
 
         public string StateText => CallState switch
         {
             CallAction.Offer => IsIncoming ? "مكالمة واردة..." : "جاري الاتصال...",
             CallAction.Ringing => "يرن الآن...",
-            CallAction.Accept => "متصل (جاري البث الحي)",
+            CallAction.Accept => "متصل (جاري البث الحي 🟢)",
             CallAction.Reject => "تم رفض المكالمة",
             CallAction.Busy => "الطرف الآخر مشغول في مكالمة أخرى",
             CallAction.Offline => "الطرف الآخر غير متصل بالشبكة حالياً",
@@ -143,6 +179,15 @@ namespace SyncPulse.Client.ViewModels
                 OnPropertyChanged(nameof(DurationText));
             };
 
+            // ربط استقبال وتحديث إطارات الفيديو المباشرة
+            _media.VideoFrameDecoded += bmp =>
+            {
+                App.Current?.Dispatcher.Invoke(() =>
+                {
+                    RemoteVideoFrame = bmp;
+                });
+            };
+
             AcceptCommand = new RelayCommand(async () => await AcceptCallAsync());
             RejectCommand = new RelayCommand(async () => await RejectCallAsync());
             EndCallCommand = new RelayCommand(async () => await EndCallAsync());
@@ -159,6 +204,7 @@ namespace SyncPulse.Client.ViewModels
             IsIncoming = false;
             CallState = CallAction.Offer;
             _secondsElapsed = 0;
+            RemoteVideoFrame = null;
 
             _ = SendCallSignalAsync(CallAction.Offer);
         }
@@ -173,6 +219,7 @@ namespace SyncPulse.Client.ViewModels
             IsIncoming = true;
             CallState = CallAction.Offer;
             _secondsElapsed = 0;
+            RemoteVideoFrame = null;
 
             _ = SendCallSignalAsync(CallAction.Ringing);
         }
@@ -187,7 +234,7 @@ namespace SyncPulse.Client.ViewModels
                 {
                     CallID = signal.CallID;
                     _durationTimer.Start();
-                    _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID);
+                    _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID, CallType);
                 }
                 else if (signal.Action == CallAction.Reject || signal.Action == CallAction.End || signal.Action == CallAction.Busy || signal.Action == CallAction.Offline)
                 {
@@ -202,7 +249,7 @@ namespace SyncPulse.Client.ViewModels
         {
             CallState = CallAction.Accept;
             _durationTimer.Start();
-            _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID);
+            _media.Start(_network.Session.ServerIP, _network.Session.UdpPort, CallID, _network.Session.UserID, CallType);
             await SendCallSignalAsync(CallAction.Accept);
         }
 

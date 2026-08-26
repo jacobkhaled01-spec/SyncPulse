@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 using SyncPulse.Core.Enums;
 using SyncPulse.Core.Packets;
 using SyncPulse.Core.Protocol;
@@ -18,17 +19,44 @@ namespace SyncPulse.Client.Services
         private bool _isStreaming;
         private uint _frameSeq = 1;
 
+        public AudioEngine Audio { get; } = new();
+        public VideoEngine Video { get; } = new();
+
         public int CurrentCallID { get; private set; }
         public int LocalUserID { get; private set; }
+        public CallType ActiveCallType { get; private set; }
 
         public event Action<MediaFramePacket>? MediaFrameReceived;
+        public event Action<BitmapSource>? VideoFrameDecoded;
 
-        public void Start(string serverIp, int serverUdpPort, int callId, int userId)
+        public MediaStreamService()
+        {
+            // ربط التقاط الصوت بالبث عبر UDP
+            Audio.AudioDataCaptured += pcmData =>
+            {
+                if (_isStreaming)
+                {
+                    SendMediaFrame(CallType.Audio, pcmData);
+                }
+            };
+
+            // ربط التقاط الفيديو بالبث عبر UDP
+            Video.VideoFrameCaptured += jpegData =>
+            {
+                if (_isStreaming && ActiveCallType == CallType.Video)
+                {
+                    SendMediaFrame(CallType.Video, jpegData);
+                }
+            };
+        }
+
+        public void Start(string serverIp, int serverUdpPort, int callId, int userId, CallType callType)
         {
             Stop();
 
             CurrentCallID = callId;
             LocalUserID = userId;
+            ActiveCallType = callType;
             _serverMediaEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverUdpPort);
 
             _udpClient = new UdpClient(0);
@@ -37,13 +65,22 @@ namespace SyncPulse.Client.Services
 
             _receiveTask = Task.Run(() => ReceiveLoopAsync(_cts.Token));
 
-            // Send initial ping frame to register with UDP Relay
+            // 1. تشغيل التقاط وتشغيل الصوت الحقيقي
+            Audio.Start();
+
+            // 2. تشغيل بث الفيديو المباشر في حال كانت المكالمة مرئية
+            if (callType == CallType.Video)
+            {
+                Video.Start();
+            }
+
+            // إرسال حزمة تهيئة أولية لمكرر UDP Relay
             SendMediaFrame(CallType.Audio, new byte[16]);
         }
 
         public async Task SendMediaFrameAsync(CallType mediaType, byte[] payloadData)
         {
-            if (!_isStreaming || _udpClient == null || _serverMediaEndpoint == null) return;
+            if (!_isStreaming || _udpClient == null || _serverMediaEndpoint == null || payloadData == null || payloadData.Length == 0) return;
 
             var frame = new MediaFramePacket
             {
@@ -91,6 +128,21 @@ namespace SyncPulse.Client.Services
                         if (mediaFrame != null && mediaFrame.SenderID != LocalUserID)
                         {
                             MediaFrameReceived?.Invoke(mediaFrame);
+
+                            // معالجة الصوت: تشغيل فوري عبر السماعات
+                            if (mediaFrame.FrameType == CallType.Audio && mediaFrame.FrameData.Length > 16)
+                            {
+                                Audio.PlayAudioChunk(mediaFrame.FrameData);
+                            }
+                            // معالجة الفيديو: فك ضغط الإطار وعرضه فورياً على الشاشة
+                            else if (mediaFrame.FrameType == CallType.Video && mediaFrame.FrameData.Length > 16)
+                            {
+                                var bmp = VideoEngine.DecodeFrame(mediaFrame.FrameData);
+                                if (bmp != null)
+                                {
+                                    VideoFrameDecoded?.Invoke(bmp);
+                                }
+                            }
                         }
                     }
                 }
@@ -103,6 +155,9 @@ namespace SyncPulse.Client.Services
             _isStreaming = false;
             _cts?.Cancel();
 
+            Audio.Stop();
+            Video.Stop();
+
             try { _udpClient?.Close(); } catch { }
             _udpClient = null;
 
@@ -114,6 +169,8 @@ namespace SyncPulse.Client.Services
         {
             Stop();
             _cts?.Dispose();
+            Audio.Dispose();
+            Video.Dispose();
         }
     }
 }
