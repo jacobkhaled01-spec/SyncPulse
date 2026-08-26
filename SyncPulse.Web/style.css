@@ -1,0 +1,913 @@
+/* ==========================================================================
+   SyncPulse Multi-Device Live Presentation Hub - Style System
+   Theme: Deep Space Obsidian, Royal Blue & Emerald (SaaS Dark Mode)
+   Fonts: Cairo & Outfit & JetBrains Mono
+   ========================================================================== */
+
+:root {
+    --bg-main: #070B14;
+    --bg-card: rgba(15, 23, 42, 0.85);
+    --bg-header: rgba(11, 17, 32, 0.92);
+    --border-card: rgba(51, 65, 85, 0.6);
+    --border-glow: rgba(56, 189, 248, 0.4);
+    
+    --primary-blue: #2563EB;
+    --primary-glow: #38BDF8;
+    --emerald-green: #10B981;
+    --amber-warning: #F59E0B;
+    --rose-danger: #EF4444;
+    --purple-accent: #8B5CF6;
+    
+    --text-main: #F8FAFC;
+    --text-muted: #94A3B8;
+    --text-dim: #64748B;
+    
+    --font-ar: 'Cairo', system-ui, -apple-system, sans-serif;
+    --font-en: 'Outfit', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+    
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 20px;
+    --radius-full: 9999px;
+    
+    --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-smooth: 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Base Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-main);
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.12) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.08) 0px, transparent 50%),
+        radial-gradient(at 50% 50%, rgba(139, 92, 246, 0.06) 0px, transparent 60%);
+    color: var(--text-main);
+    font-family: var(--font-ar);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------------------
+   1. Top Navigation Bar
+   -------------------------------------------------------------------------- */
+.top-nav {
+    background: var(--bg-header);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-card);
+    padding: 12px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+}
+
+.brand-container {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.brand-logo {
+    position: relative;
+    width: 44px;
+    height: 44px;
+    background: linear-gradient(135deg, #1E3A8A, #2563EB);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 16px rgba(37, 99, 235, 0.5);
+}
+
+.brand-logo .logo-icon {
+    font-size: 20px;
+}
+
+.pulse-ring {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-md);
+    border: 2px solid var(--primary-glow);
+    animation: ring-pulse 2.2s infinite ease-out;
+}
+
+@keyframes ring-pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.4); opacity: 0; }
+}
+
+.brand-text h1 {
+    font-family: var(--font-en);
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+.brand-text h1 span {
+    background: linear-gradient(90deg, #38BDF8, #818CF8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.brand-text p {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+/* Nav Controls */
+.nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.view-switchers {
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-full);
+    padding: 4px;
+    display: flex;
+    gap: 4px;
+}
+
+.view-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-ar);
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 7px 16px;
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition-fast);
+}
+
+.view-btn:hover {
+    color: var(--text-main);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.view-btn.active {
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    color: white;
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.4);
+}
+
+.view-btn .badge {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-full);
+    font-size: 0.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-family: var(--font-en);
+}
+
+.server-badge { background: #6366F1; color: white; }
+.client1-badge { background: #0284C7; color: white; }
+.client2-badge { background: #059669; color: white; }
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.tool-btn {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-card);
+    color: var(--text-main);
+    font-family: var(--font-ar);
+    font-size: 0.82rem;
+    font-weight: 700;
+    padding: 8px 14px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition-fast);
+}
+
+.tool-btn:hover {
+    background: rgba(51, 65, 85, 0.9);
+    border-color: var(--primary-glow);
+}
+
+.tool-btn.highlight {
+    background: rgba(37, 99, 235, 0.2);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #38BDF8;
+}
+
+/* --------------------------------------------------------------------------
+   2. Main Screens Viewport & Grid Layouts
+   -------------------------------------------------------------------------- */
+.screens-viewport {
+    flex: 1;
+    padding: 20px 24px;
+    display: grid;
+    gap: 20px;
+    transition: var(--transition-smooth);
+}
+
+/* Layout 1: Grid View (Default: 3 Screens Side-by-Side) */
+.screens-viewport.mode-grid {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+/* Layout 2: Split View (Comparing Client 1 and Client 2 side-by-side, Server minimized/top) */
+.screens-viewport.mode-split {
+    grid-template-columns: 1fr 1fr;
+}
+.screens-viewport.mode-split #card-server {
+    display: none;
+}
+
+/* Layout 3: Focused Single Device View (Server, Client 1 or Client 2) */
+.screens-viewport.mode-focus-server {
+    grid-template-columns: 1fr;
+}
+.screens-viewport.mode-focus-server #card-client1,
+.screens-viewport.mode-focus-server #card-client2 {
+    display: none;
+}
+
+.screens-viewport.mode-focus-client1 {
+    grid-template-columns: 1fr;
+}
+.screens-viewport.mode-focus-client1 #card-server,
+.screens-viewport.mode-focus-client1 #card-client2 {
+    display: none;
+}
+
+.screens-viewport.mode-focus-client2 {
+    grid-template-columns: 1fr;
+}
+.screens-viewport.mode-focus-client2 #card-server,
+.screens-viewport.mode-focus-client2 #card-client1 {
+    display: none;
+}
+
+/* --------------------------------------------------------------------------
+   3. Device Screen Cards
+   -------------------------------------------------------------------------- */
+.device-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: var(--transition-smooth);
+}
+
+.device-card:hover {
+    border-color: var(--border-glow);
+    box-shadow: 0 12px 40px rgba(37, 99, 235, 0.15);
+}
+
+/* Specific Card Accent Borders */
+.server-card { border-top: 3px solid #6366F1; }
+.client-a { border-top: 3px solid #0284C7; }
+.client-b { border-top: 3px solid #10B981; }
+
+.card-header {
+    background: rgba(15, 23, 42, 0.95);
+    padding: 12px 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.4);
+}
+
+.device-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.device-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: var(--radius-full);
+}
+
+.device-indicator.online {
+    background: var(--emerald-green);
+    box-shadow: 0 0 10px var(--emerald-green);
+}
+
+.device-title h2 {
+    font-size: 0.96rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.device-title .tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    background: rgba(56, 189, 248, 0.15);
+    color: #38BDF8;
+    font-weight: 600;
+    font-family: var(--font-en);
+}
+
+.device-ip {
+    font-size: 0.74rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    display: block;
+    margin-top: 2px;
+}
+
+.card-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.capture-btn {
+    background: linear-gradient(135deg, #2563EB, #1D4ED8);
+    border: none;
+    color: white;
+    font-family: var(--font-ar);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: var(--transition-fast);
+}
+
+.capture-btn:hover {
+    box-shadow: 0 0 14px rgba(37, 99, 235, 0.6);
+    transform: translateY(-1px);
+}
+
+.capture-btn.active {
+    background: linear-gradient(135deg, #059669, #10B981);
+}
+
+.expand-btn {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-card);
+    color: var(--text-muted);
+    font-size: 1rem;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.expand-btn:hover {
+    color: var(--text-main);
+    background: rgba(51, 65, 85, 0.8);
+}
+
+/* --------------------------------------------------------------------------
+   4. Screen Display Box (Video Stream & Mockup Overlay)
+   -------------------------------------------------------------------------- */
+.screen-box {
+    flex: 1;
+    min-height: 480px;
+    background: #030712;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.screen-video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+}
+
+.screen-video.active {
+    display: block;
+}
+
+.placeholder-overlay {
+    width: 100%;
+    height: 100%;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+}
+
+.placeholder-content {
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+}
+
+.placeholder-content h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.placeholder-content p {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* Radar Animation for Server */
+.server-radar {
+    width: 72px;
+    height: 72px;
+    border-radius: var(--radius-full);
+    border: 2px dashed rgba(99, 102, 241, 0.4);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.radar-sweep {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: var(--radius-full);
+    border-top: 2px solid #818CF8;
+    animation: spin 3s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.center-node {
+    font-size: 28px;
+}
+
+.server-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    width: 100%;
+    margin-top: 6px;
+}
+
+.stat-pill {
+    background: rgba(15, 23, 42, 0.8);
+    border: 1px solid var(--border-card);
+    padding: 8px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.stat-pill .lbl {
+    font-size: 0.68rem;
+    color: var(--text-dim);
+}
+
+.stat-pill .val {
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.stat-pill .val.green { color: var(--emerald-green); }
+.stat-pill .val.blue { color: var(--primary-glow); }
+.stat-pill .val.purple { color: var(--purple-accent); }
+
+/* Client Chat Mockups */
+.chat-mockup-avatar {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-full);
+    color: white;
+    font-size: 22px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.avatar-blue { background: linear-gradient(135deg, #2563EB, #0284C7); }
+.avatar-emerald { background: linear-gradient(135deg, #059669, #10B981); }
+
+.chat-preview-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    text-align: right;
+}
+
+.preview-bubble {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.preview-bubble.outgoing {
+    background: rgba(37, 99, 235, 0.15);
+    border-color: rgba(37, 99, 235, 0.4);
+    align-self: flex-start;
+}
+
+.preview-bubble.incoming {
+    background: rgba(16, 185, 129, 0.12);
+    border-color: rgba(16, 185, 129, 0.35);
+    align-self: flex-end;
+}
+
+.preview-bubble .ticks {
+    font-size: 0.7rem;
+    color: var(--text-dim);
+    align-self: flex-end;
+}
+
+.preview-bubble .ticks.blue { color: #38BDF8; font-weight: 700; }
+
+.preview-bubble.media {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    background: #0F172A;
+}
+
+.preview-bubble.audio-card {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    background: #0F172A;
+}
+
+.play-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-full);
+    background: var(--primary-blue);
+    color: white;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* --------------------------------------------------------------------------
+   5. Card Footer & Control Bar
+   -------------------------------------------------------------------------- */
+.card-footer {
+    background: rgba(11, 17, 32, 0.95);
+    padding: 10px 16px;
+    border-top: 1px solid rgba(51, 65, 85, 0.4);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-stream {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--primary-glow);
+    box-shadow: 0 0 6px var(--primary-glow);
+}
+
+.stream-text {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.btn-group {
+    display: flex;
+    gap: 6px;
+}
+
+.action-mini-btn, .test-pulse-btn {
+    background: rgba(30, 41, 59, 0.8);
+    border: 1px solid var(--border-card);
+    color: var(--text-main);
+    font-family: var(--font-ar);
+    font-size: 0.74rem;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.action-mini-btn:hover, .test-pulse-btn:hover {
+    background: rgba(51, 65, 85, 0.9);
+    border-color: var(--primary-glow);
+}
+
+.action-mini-btn.call {
+    background: rgba(16, 185, 129, 0.2);
+    border-color: rgba(16, 185, 129, 0.4);
+    color: #34D399;
+}
+
+/* --------------------------------------------------------------------------
+   6. Bottom Protocol Inspector & Packet Flow
+   -------------------------------------------------------------------------- */
+.packet-inspector {
+    background: rgba(11, 17, 32, 0.98);
+    border-top: 2px solid var(--primary-blue);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    max-height: 280px;
+    z-index: 90;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -8px 32px rgba(0, 0, 0, 0.5);
+    transform: translateY(100%);
+    transition: transform var(--transition-smooth);
+}
+
+.packet-inspector.active {
+    transform: translateY(0);
+}
+
+.inspector-header {
+    background: #0B1120;
+    padding: 10px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-card);
+}
+
+.inspector-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: #38BDF8;
+    box-shadow: 0 0 10px #38BDF8;
+    animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0.3; }
+}
+
+.inspector-title h3 {
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.inspector-stats {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.stat-tag {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
+.stat-tag strong {
+    color: var(--primary-glow);
+}
+
+.close-inspector-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-family: var(--font-ar);
+    font-size: 0.8rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+}
+
+.close-inspector-btn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.inspector-body {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 16px;
+    padding: 14px 24px;
+    overflow: hidden;
+    height: 220px;
+}
+
+/* Flow Diagram */
+.flow-diagram-container {
+    background: #060913;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flow-node {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.flow-node .node-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-full);
+    background: #1E293B;
+    border: 1px solid #334155;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.flow-node.server-node .node-icon {
+    background: #1E1B4B;
+    border-color: #6366F1;
+}
+
+.flow-node .node-name {
+    font-size: 0.72rem;
+    font-weight: 700;
+}
+
+.flow-node .node-addr {
+    font-size: 0.65rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+}
+
+.flow-pipe {
+    flex: 1;
+    height: 3px;
+    background: #1E293B;
+    position: relative;
+    margin: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.packet-particle {
+    width: 8px;
+    height: 8px;
+    border-radius: var(--radius-full);
+    background: var(--primary-glow);
+    box-shadow: 0 0 8px var(--primary-glow);
+    position: absolute;
+    display: none;
+}
+
+.packet-particle.animating {
+    display: block;
+    animation: flow-move 1.2s infinite linear;
+}
+
+@keyframes flow-move {
+    0% { left: 0%; }
+    100% { left: 100%; }
+}
+
+.pipe-label {
+    position: absolute;
+    top: 6px;
+    font-size: 0.62rem;
+    color: var(--text-dim);
+    font-family: var(--font-mono);
+    white-space: nowrap;
+}
+
+/* Protocol Log Table */
+.protocol-log-table-box {
+    background: #060913;
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    overflow-y: auto;
+}
+
+.protocol-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.76rem;
+    text-align: right;
+    font-family: var(--font-mono);
+}
+
+.protocol-table th {
+    background: #0F172A;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border-card);
+    position: sticky;
+    top: 0;
+    font-weight: 600;
+}
+
+.protocol-table td {
+    padding: 6px 12px;
+    border-bottom: 1px solid rgba(51, 65, 85, 0.25);
+    color: var(--text-main);
+}
+
+.protocol-table tr:hover {
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.tag-packet {
+    background: rgba(37, 99, 235, 0.2);
+    color: #60A5FA;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.tag-hex {
+    color: #F59E0B;
+}
+
+.tag-ok {
+    color: #10B981;
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   7. Responsive Design
+   -------------------------------------------------------------------------- */
+@media (max-width: 1200px) {
+    .screens-viewport.mode-grid {
+        grid-template-columns: 1fr;
+    }
+    .screens-viewport.mode-split {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SyncPulse Live Hub | مركز العرض والمناقشة المباشر للأجهزة الثلاثة</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation & Control Bar -->
+    <header class="top-nav" id="top-nav">
+        <div class="brand-container">
+            <div class="brand-logo">
+                <span class="pulse-ring"></span>
+                <span class="logo-icon">⚡</span>
+            </div>
+            <div class="brand-text">
+                <h1>SyncPulse <span>Live Hub</span></h1>
+                <p>مركز العرض المباشر والمناقشة للأجهزة الثلاثة (خادم + 2 عميل)</p>
+            </div>
+        </div>
+
+        <!-- Mode & Layout Selector -->
+        <div class="nav-controls">
+            <div class="view-switchers" role="tablist">
+                <button class="view-btn active" id="btn-grid-view" onclick="switchView('grid')">
+                    <span class="icon">⊞</span> عرض الأجهزة الثلاثة (Grid)
+                </button>
+                <button class="view-btn" id="btn-split-view" onclick="switchView('split')">
+                    <span class="icon">◫</span> مقارنة العميلين (Split)
+                </button>
+                <button class="view-btn" id="btn-focus-server" onclick="switchView('server')">
+                    <span class="badge server-badge">1</span> الخادم (Server)
+                </button>
+                <button class="view-btn" id="btn-focus-client1" onclick="switchView('client1')">
+                    <span class="badge client1-badge">2</span> العميل (أ)
+                </button>
+                <button class="view-btn" id="btn-focus-client2" onclick="switchView('client2')">
+                    <span class="badge client2-badge">3</span> العميل (ب)
+                </button>
+            </div>
+
+            <!-- Quick Action Buttons -->
+            <div class="action-buttons">
+                <button class="tool-btn" id="btn-fullscreen" onclick="toggleFullScreen()" title="ملء الشاشة للعرض أمام اللجنة">
+                    <span class="icon">⛶</span> ملء الشاشة
+                </button>
+                <button class="tool-btn highlight" id="btn-toggle-inspector" onclick="toggleInspector()" title="فاحص بروتوكول وحزم الشبكة اللحظي">
+                    <span class="icon">📡</span> مسار الحزم
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Screens Container -->
+    <main class="screens-viewport" id="screens-viewport">
+        
+        <!-- Screen 1: Server Device -->
+        <section class="device-card server-card" id="card-server">
+            <div class="card-header">
+                <div class="device-info">
+                    <span class="device-indicator online"></span>
+                    <div class="device-title">
+                        <h2>الجهاز (1) - الخادم المركزي <span class="tag">SyncPulse.Server</span></h2>
+                        <span class="device-ip" id="server-ip-label">TCP 8888 | UDP 8889 | Discovery 8887</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="capture-btn" id="btn-capture-server" onclick="startScreenCapture('server')">
+                        <span class="icon">🎥</span> بث الشاشة الحية
+                    </button>
+                    <button class="expand-btn" onclick="focusDevice('server')" title="تكبير شاشة الخادم">⤢</button>
+                </div>
+            </div>
+
+            <!-- Screen Viewport & Display Area -->
+            <div class="screen-box" id="screen-box-server">
+                <video class="screen-video" id="video-server" autoplay playsinline muted></video>
+                <div class="placeholder-overlay" id="placeholder-server">
+                    <div class="placeholder-content">
+                        <div class="server-radar">
+                            <div class="radar-sweep"></div>
+                            <span class="center-node">🖥️</span>
+                        </div>
+                        <h3>شاشة خادم SyncPulse المركزي</h3>
+                        <p>انقر على زر <strong>"🎥 بث الشاشة الحية"</strong> لبث شاشة اللابتوب الأول مباشرة، أو استخدم المحاكي التفاعلي.</p>
+                        <div class="server-stats-grid">
+                            <div class="stat-pill">
+                                <span class="lbl">حالة الخادم</span>
+                                <span class="val green">نشط (Listening)</span>
+                            </div>
+                            <div class="stat-pill">
+                                <span class="lbl">المقابس النشطة</span>
+                                <span class="val blue" id="active-sockets-count">2 متصلين</span>
+                            </div>
+                            <div class="stat-pill">
+                                <span class="lbl">قاعدة البيانات</span>
+                                <span class="val purple">SQLite (WAL Mode)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Status & Activity Bar -->
+            <div class="card-footer">
+                <div class="status-stream">
+                    <span class="badge-dot"></span>
+                    <span class="stream-text" id="server-status-text">خادم TCP يستمع على 0.0.0.0:8888 | مكرر UDP Relay جاهز على 8889</span>
+                </div>
+                <button class="test-pulse-btn" onclick="triggerServerEvent('broadcast')">📢 إرسال إعلان</button>
+            </div>
+        </section>
+
+        <!-- Screen 2: Client 1 (User A) -->
+        <section class="device-card client-card client-a" id="card-client1">
+            <div class="card-header">
+                <div class="device-info">
+                    <span class="device-indicator online"></span>
+                    <div class="device-title">
+                        <h2>الجهاز (2) - العميل الأول (أ) <span class="tag">المتصل: سليمان (@suliman)</span></h2>
+                        <span class="device-ip">متصل عبر Wi-Fi | TCP Socket #1</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="capture-btn" id="btn-capture-client1" onclick="startScreenCapture('client1')">
+                        <span class="icon">🎥</span> بث الشاشة الحية
+                    </button>
+                    <button class="expand-btn" onclick="focusDevice('client1')" title="تكبير شاشة العميل (أ)">⤢</button>
+                </div>
+            </div>
+
+            <!-- Screen Viewport & Display Area -->
+            <div class="screen-box" id="screen-box-client1">
+                <video class="screen-video" id="video-client1" autoplay playsinline muted></video>
+                <div class="placeholder-overlay" id="placeholder-client1">
+                    <div class="placeholder-content">
+                        <div class="chat-mockup-avatar avatar-blue">س</div>
+                        <h3>شاشة تطبيق العميل (أ) - سليمان</h3>
+                        <p>انقر على <strong>"🎥 بث الشاشة الحية"</strong> لربط لابتوب المتصل الأول، أو جرب إرسال رسالة تفاعلية.</p>
+                        <div class="chat-preview-card">
+                            <div class="preview-bubble outgoing">
+                                <span class="text">مرحباً يعقوب! كيف جودة مكالمة الـ HD صوت وصورة؟</span>
+                                <span class="ticks blue">✓✓ 20:30</span>
+                            </div>
+                            <div class="preview-bubble media">
+                                <span class="media-icon">🖼️</span>
+                                <span class="text">صورة مرفقة بنمط تليجرام المباشر</span>
+                                <span class="ticks blue">✓✓ 20:31</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Status & Activity Bar -->
+            <div class="card-footer">
+                <div class="status-stream">
+                    <span class="badge-dot"></span>
+                    <span class="stream-text" id="client1-status-text">المصادقة: JWT Active | محرك الصوت: 16kHz HD Ready</span>
+                </div>
+                <div class="btn-group">
+                    <button class="action-mini-btn" onclick="simulateSendMsg('client1')">✉️ إرسال رسالة</button>
+                    <button class="action-mini-btn call" onclick="simulateCall('client1')">📞 مكالمة</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Screen 3: Client 2 (User B) -->
+        <section class="device-card client-card client-b" id="card-client2">
+            <div class="card-header">
+                <div class="device-info">
+                    <span class="device-indicator online"></span>
+                    <div class="device-title">
+                        <h2>الجهاز (3) - العميل الثاني (ب) <span class="tag">المستقبل: يعقوب (@yacoub)</span></h2>
+                        <span class="device-ip">متصل عبر Wi-Fi | TCP Socket #2</span>
+                    </div>
+                </div>
+                <div class="card-actions">
+                    <button class="capture-btn" id="btn-capture-client2" onclick="startScreenCapture('client2')">
+                        <span class="icon">🎥</span> بث الشاشة الحية
+                    </button>
+                    <button class="expand-btn" onclick="focusDevice('client2')" title="تكبير شاشة العميل (ب)">⤢</button>
+                </div>
+            </div>
+
+            <!-- Screen Viewport & Display Area -->
+            <div class="screen-box" id="screen-box-client2">
+                <video class="screen-video" id="video-client2" autoplay playsinline muted></video>
+                <div class="placeholder-overlay" id="placeholder-client2">
+                    <div class="placeholder-content">
+                        <div class="chat-mockup-avatar avatar-emerald">ي</div>
+                        <h3>شاشة تطبيق العميل (ب) - يعقوب</h3>
+                        <p>انقر على <strong>"🎥 بث الشاشة الحية"</strong> لربط لابتوب المتصل الثاني، ومراقبة التفاعل اللحظي.</p>
+                        <div class="chat-preview-card">
+                            <div class="preview-bubble incoming">
+                                <span class="text">أهلاً سليمان! الصوت نقي جداً وبدون أي تشويش، والفيديو واضح مع الـ PiP!</span>
+                                <span class="time">20:31</span>
+                            </div>
+                            <div class="preview-bubble audio-card">
+                                <span class="play-icon">▶</span>
+                                <span class="audio-title">مقطع صوتي HD (16 kHz Voice)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Status & Activity Bar -->
+            <div class="card-footer">
+                <div class="status-stream">
+                    <span class="badge-dot"></span>
+                    <span class="stream-text" id="client2-status-text">الكاميرا: AForge DirectShow Ready | الـ LED Mute Active</span>
+                </div>
+                <div class="btn-group">
+                    <button class="action-mini-btn" onclick="simulateSendMsg('client2')">✉️ إرسال رد</button>
+                    <button class="action-mini-btn call" onclick="simulateCall('client2')">📹 فيديو</button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Bottom Protocol & Packet Flow Inspector (Collapsible Drawer) -->
+    <aside class="packet-inspector" id="packet-inspector">
+        <div class="inspector-header">
+            <div class="inspector-title">
+                <span class="pulse-dot"></span>
+                <h3>فاحص حزم البروتوكول ومسار البيانات اللحظي (Packet Inspector - 12-Byte FrameHeader)</h3>
+            </div>
+            <div class="inspector-stats">
+                <span class="stat-tag">TCP Port: <strong>8888</strong></span>
+                <span class="stat-tag">UDP Relay: <strong>8889</strong></span>
+                <span class="stat-tag">Endianness: <strong>Big-Endian</strong></span>
+                <button class="close-inspector-btn" onclick="toggleInspector()">✕ إغلاق</button>
+            </div>
+        </div>
+
+        <div class="inspector-body">
+            <!-- Animated Flow Diagram -->
+            <div class="flow-diagram-container">
+                <div class="flow-node" id="node-client1">
+                    <div class="node-icon">💻</div>
+                    <span class="node-name">العميل (أ)</span>
+                    <span class="node-addr">Client #1</span>
+                </div>
+                <div class="flow-pipe" id="pipe-c1-server">
+                    <div class="packet-particle" id="particle-c1-s"></div>
+                    <span class="pipe-label">TCP 8888 / UDP 8889</span>
+                </div>
+                <div class="flow-node server-node" id="node-server">
+                    <div class="node-icon">🖥️</div>
+                    <span class="node-name">الخادم المركزي</span>
+                    <span class="node-addr">Dispatcher & Relay</span>
+                </div>
+                <div class="flow-pipe" id="pipe-server-c2">
+                    <div class="packet-particle" id="particle-s-c2"></div>
+                    <span class="pipe-label">TCP 8888 / UDP 8889</span>
+                </div>
+                <div class="flow-node" id="node-client2">
+                    <div class="node-icon">💻</div>
+                    <span class="node-name">العميل (ب)</span>
+                    <span class="node-addr">Client #2</span>
+                </div>
+            </div>
+
+            <!-- Live Hex/Protocol Log Table -->
+            <div class="protocol-log-table-box">
+                <table class="protocol-table">
+                    <thead>
+                        <tr>
+                            <th>الوقت</th>
+                            <th>المصدر ➔ الوجهة</th>
+                            <th>نوع الحزمة (PacketType)</th>
+                            <th>الترويسة (Header Hex)</th>
+                            <th>طول الحمولة</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody id="protocol-log-rows">
+                        <!-- Dynamic Rows Injected by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </aside>
+
+    <script src="app.js"></script>
+</body>
+</html>
