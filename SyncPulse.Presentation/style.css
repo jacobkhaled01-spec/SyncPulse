@@ -1,59 +1,63 @@
 /* ==========================================================================
-   SyncPulse Interactive Tech Cockpit - CSS Architecture
-   Master Dual-Pane Technical Control Center for Client-Server Oral Defense
+   SyncPulse Technical Product Showcase & Smooth Landing Experience
+   Linear / Apple Keynote Aesthetic with Ambient Glass, Glowing Gradients & Smooth Scroll
    ========================================================================== */
 
 :root {
-    /* 🌌 Theme 1: Cyber Cockpit (Default) */
-    --cp-bg: #070B14;
-    --cp-surface: #0E1626;
-    --cp-card: #131E33;
-    --cp-card-hover: #1A2942;
-    --cp-panel: #0A0F1D;
+    /* 🌌 Theme 1: Deep Cyber / Linear Space (Default) */
+    --bg-page: #060913;
+    --bg-surface: rgba(14, 21, 37, 0.85);
+    --bg-card: rgba(22, 33, 58, 0.7);
+    --bg-card-hover: rgba(30, 45, 78, 0.9);
+    --bg-code: #090D18;
+    --bg-pill: rgba(59, 130, 246, 0.15);
     
     --brand-primary: #3B82F6;
     --brand-accent: #06B6D4;
-    --brand-gradient: linear-gradient(135deg, #3B82F6 0%, #06B6D4 100%);
+    --brand-gradient: linear-gradient(135deg, #60A5FA 0%, #38BDF8 50%, #818CF8 100%);
     --brand-glow: rgba(59, 130, 246, 0.25);
     
-    --text-primary: #F8FAFC;
-    --text-secondary: #CBD5E1;
+    --text-hero: #FFFFFF;
+    --text-primary: #F1F5F9;
+    --text-secondary: #94A3B8;
     --text-muted: #64748B;
     
-    --border-light: rgba(255, 255, 255, 0.08);
-    --border-active: rgba(59, 130, 246, 0.6);
-    --border-card: #1E293B;
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --border-hover: rgba(59, 130, 246, 0.5);
     
     --status-emerald: #10B981;
-    --status-emerald-bg: rgba(16, 185, 129, 0.12);
+    --status-emerald-bg: rgba(16, 185, 129, 0.15);
     --status-rose: #F43F5E;
-    --status-rose-bg: rgba(244, 63, 94, 0.12);
+    --status-rose-bg: rgba(244, 63, 94, 0.15);
 
     --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-en: 'Outfit', sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
+    
+    --nav-height: 64px;
 }
 
-/* 💎 Theme 2: Titanium Light Cockpit */
+/* 💎 Theme 2: Titanium Light / Stripe Mode */
 [data-theme="light"] {
-    --cp-bg: #F1F5F9;
-    --cp-surface: #FFFFFF;
-    --cp-card: #F8FAFC;
-    --cp-card-hover: #FFFFFF;
-    --cp-panel: #FFFFFF;
+    --bg-page: #F8FAFC;
+    --bg-surface: rgba(255, 255, 255, 0.9);
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #F1F5F9;
+    --bg-code: #0F172A;
+    --bg-pill: #EFF6FF;
     
     --brand-primary: #2563EB;
     --brand-accent: #0284C7;
     --brand-gradient: linear-gradient(135deg, #1E3A8A 0%, #2563EB 50%, #0284C7 100%);
-    --brand-glow: rgba(37, 99, 235, 0.15);
+    --brand-glow: rgba(37, 99, 235, 0.12);
     
-    --text-primary: #0F172A;
-    --text-secondary: #334155;
-    --text-muted: #64748B;
+    --text-hero: #0F172A;
+    --text-primary: #1E293B;
+    --text-secondary: #475569;
+    --text-muted: #94A3B8;
     
-    --border-light: #E2E8F0;
-    --border-active: #2563EB;
-    --border-card: #E2E8F0;
+    --border-glass: #E2E8F0;
+    --border-hover: #3B82F6;
     
     --status-emerald: #059669;
     --status-emerald-bg: #ECFDF5;
@@ -61,26 +65,32 @@
     --status-rose-bg: #FFF1F2;
 }
 
-/* 🌿 Theme 3: Matrix Green Cockpit */
+/* 🌿 Theme 3: Matrix Green */
 [data-theme="matrix"] {
-    --cp-bg: #030D0A;
-    --cp-surface: #061A14;
-    --cp-card: #0A261D;
-    --cp-card-hover: #0E3327;
-    --cp-panel: #04120D;
+    --bg-page: #030C09;
+    --bg-surface: rgba(6, 26, 20, 0.88);
+    --bg-card: rgba(10, 38, 30, 0.75);
+    --bg-card-hover: rgba(16, 56, 44, 0.9);
+    --bg-code: #020806;
+    --bg-pill: rgba(16, 185, 129, 0.15);
     
     --brand-primary: #10B981;
     --brand-accent: #34D399;
-    --brand-gradient: linear-gradient(135deg, #059669 0%, #10B981 100%);
+    --brand-gradient: linear-gradient(135deg, #059669 0%, #10B981 50%, #6EE7B7 100%);
     --brand-glow: rgba(16, 185, 129, 0.25);
     
-    --text-primary: #ECFDF5;
-    --text-secondary: #A7F3D0;
-    --text-muted: #6EE7B7;
+    --text-hero: #ECFDF5;
+    --text-primary: #D1FAE5;
+    --text-secondary: #6EE7B7;
+    --text-muted: #34D399;
     
-    --border-light: rgba(16, 185, 129, 0.15);
-    --border-active: #10B981;
-    --border-card: rgba(16, 185, 129, 0.25);
+    --border-glass: rgba(16, 185, 129, 0.2);
+    --border-hover: #10B981;
+    
+    --status-emerald: #10B981;
+    --status-emerald-bg: rgba(16, 185, 129, 0.2);
+    --status-rose: #F43F5E;
+    --status-rose-bg: rgba(244, 63, 94, 0.2);
 }
 
 * {
@@ -89,20 +99,26 @@
     box-sizing: border-box;
 }
 
-html, body {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    background-color: var(--cp-bg);
-    color: var(--text-secondary);
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: calc(var(--nav-height) + 24px);
+}
+
+body {
+    width: 100%;
+    min-height: 100vh;
+    background-color: var(--bg-page);
+    color: var(--text-primary);
     font-family: var(--font-ar);
     direction: rtl;
     text-align: right;
-    user-select: none;
+    overflow-x: hidden;
+    line-height: 1.6;
+    transition: background-color 0.4s ease, color 0.4s ease;
     -webkit-font-smoothing: antialiased;
 }
 
-/* Terms & Code */
+/* LTR Terms & Code */
 .en-term, .code-inline, code, pre, .badge-en {
     direction: ltr;
     display: inline-block;
@@ -112,400 +128,329 @@ html, body {
 
 code, .code-inline {
     font-family: var(--font-mono);
-    font-size: 0.82em;
-    padding: 2px 7px;
+    font-size: 0.84em;
+    padding: 2px 8px;
     background: rgba(255, 255, 255, 0.08);
     color: var(--brand-primary);
     border-radius: 6px;
     font-weight: 700;
-    border: 1px solid var(--border-light);
+    border: 1px solid var(--border-glass);
 }
-
 [data-theme="light"] code {
     background: #E2E8F0;
     color: #1E3A8A;
 }
 
 /* --------------------------------------------------------------------------
-   Cockpit Master Shell Layout
+   Ambient Radial Background Glows
    -------------------------------------------------------------------------- */
-.cockpit-shell {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
+.ambient-glow-top {
+    position: fixed;
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 900px;
+    height: 600px;
+    background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+    filter: blur(120px);
+    pointer-events: none;
+    z-index: 0;
 }
 
-/* Top Cockpit Header Bar */
-.cockpit-top-bar {
-    height: 54px;
-    background: var(--cp-surface);
-    border-bottom: 1px solid var(--border-light);
+.ambient-glow-bottom {
+    position: fixed;
+    bottom: -200px;
+    right: 10%;
+    width: 700px;
+    height: 500px;
+    background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+    filter: blur(140px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Sticky Blur Navigation Header
+   -------------------------------------------------------------------------- */
+.site-nav-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--nav-height);
+    background: var(--bg-surface);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-glass);
+    z-index: 1000;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 20px;
-    z-index: 50;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 0 32px;
+    transition: all 0.3s ease;
 }
 
-.top-bar-left {
+.nav-brand-box {
     display: flex;
     align-items: center;
-    gap: 14px;
+    gap: 12px;
+    text-decoration: none;
 }
 
-.brand-badge {
+.brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
     background: var(--brand-gradient);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: white;
-    font-size: 0.82rem;
+    font-size: 18px;
     font-weight: 900;
-    padding: 4px 10px;
-    border-radius: 8px;
-    font-family: var(--font-en);
-    box-shadow: 0 2px 8px var(--brand-glow);
+    box-shadow: 0 4px 14px var(--brand-glow);
 }
 
-.cockpit-title {
-    font-size: 0.92rem;
+.brand-title {
+    font-size: 1.05rem;
     font-weight: 800;
-    color: var(--text-primary);
+    color: var(--text-hero);
 }
 
-.top-bar-center {
+.brand-title span {
+    color: var(--brand-primary);
+    font-family: var(--font-en);
+}
+
+/* Navigation Links */
+.nav-links-list {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 6px;
+    list-style: none;
 }
 
-.speaker-live-pill {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    border-radius: 9999px;
-    padding: 4px 14px;
-    font-size: 0.8rem;
+.nav-link-anchor {
+    color: var(--text-secondary);
+    text-decoration: none;
+    font-size: 0.84rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.nav-link-anchor:hover, .nav-link-anchor.active {
+    color: var(--text-hero);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-link-anchor.active {
+    color: var(--brand-primary);
+}
+
+/* Nav Actions */
+.nav-actions-group {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
 }
 
-.speaker-live-pill .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--status-emerald);
-    border-radius: 50%;
-    box-shadow: 0 0 8px var(--status-emerald);
-    animation: pulseDot 2s infinite;
-}
-
-@keyframes pulseDot {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.4; transform: scale(0.85); }
-}
-
-.top-bar-right {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.cockpit-btn {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
+.theme-switch-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
     color: var(--text-primary);
     font-family: var(--font-ar);
     font-size: 0.8rem;
     font-weight: 700;
-    padding: 5px 12px;
+    padding: 6px 12px;
     border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
     transition: all 0.2s ease;
-    text-decoration: none;
 }
 
-.cockpit-btn:hover {
+.theme-switch-btn:hover {
     border-color: var(--brand-primary);
     color: var(--brand-primary);
-    transform: translateY(-1px);
 }
 
-.cockpit-btn.live-hub {
+.cta-live-btn {
     background: var(--brand-gradient);
     color: white;
-    border: none;
-    box-shadow: 0 2px 10px var(--brand-glow);
-}
-.cockpit-btn.live-hub:hover {
-    filter: brightness(1.1);
-    color: white;
-}
-
-/* --------------------------------------------------------------------------
-   Cockpit Dual-Pane Body
-   -------------------------------------------------------------------------- */
-.cockpit-body {
-    flex: 1;
-    display: grid;
-    grid-template-columns: 320px 1fr;
-    height: calc(100vh - 54px);
-    overflow: hidden;
-}
-
-/* --------------------------------------------------------------------------
-   Left Pane: Interactive System Tree & Navigation
-   -------------------------------------------------------------------------- */
-.cockpit-sidebar {
-    background: var(--cp-panel);
-    border-left: 1px solid var(--border-light);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    overflow: hidden;
-}
-
-.sidebar-header {
-    padding: 14px 16px;
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.sidebar-header h3 {
-    font-size: 0.86rem;
+    font-family: var(--font-ar);
+    font-size: 0.85rem;
     font-weight: 800;
-    color: var(--text-primary);
-}
-
-.sidebar-nav-list {
-    flex: 1;
-    overflow-y: auto;
-    padding: 8px 10px;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.nav-module-item {
-    background: transparent;
-    border: 1px solid transparent;
+    padding: 8px 18px;
     border-radius: 10px;
-    padding: 9px 12px;
+    text-decoration: none;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: right;
-}
-
-.nav-module-item:hover {
-    background: var(--cp-card);
-    border-color: var(--border-light);
-}
-
-.nav-module-item.active {
-    background: var(--cp-card);
-    border-color: var(--brand-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.nav-module-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.nav-module-info .num {
-    font-size: 0.74rem;
-    font-family: var(--font-en);
-    font-weight: 800;
-    color: var(--brand-primary);
-    width: 20px;
-}
-
-.nav-module-info .title {
-    font-size: 0.84rem;
-    font-weight: 700;
-    color: var(--text-primary);
-}
-
-.nav-module-badge {
-    font-size: 0.68rem;
-    font-weight: 700;
-    padding: 2px 6px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text-muted);
-}
-
-.nav-module-item.active .nav-module-badge {
-    background: var(--brand-primary);
-    color: white;
-}
-
-/* Sidebar Footer (Teleprompter Notes Trigger) */
-.sidebar-footer {
-    padding: 12px 16px;
-    border-top: 1px solid var(--border-light);
-    background: var(--cp-surface);
-}
-
-.notes-trigger-card {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: var(--text-secondary);
+    gap: 8px;
+    box-shadow: 0 4px 14px var(--brand-glow);
     transition: all 0.2s ease;
 }
 
-.notes-trigger-card:hover {
-    border-color: var(--brand-primary);
-    color: var(--brand-primary);
+.cta-live-btn:hover {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
 }
 
 /* --------------------------------------------------------------------------
-   Right Pane: Interactive Live Stage & Simulator Viewport
+   Container & Section Standards
    -------------------------------------------------------------------------- */
-.cockpit-stage {
-    background: var(--cp-bg);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-    overflow-y: auto;
-    padding: 20px 28px 20px;
+.landing-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+    position: relative;
+    z-index: 10;
+}
+
+.showcase-section {
+    padding: 90px 0;
+    border-bottom: 1px solid var(--border-glass);
     position: relative;
 }
 
-/* Stage Header */
-.stage-module-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 12px;
-    margin-bottom: 16px;
+.section-header-block {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 50px;
 }
 
-.stage-module-tag {
+.section-badge-pill {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
+    gap: 8px;
+    background: var(--bg-pill);
     color: var(--brand-primary);
-    font-size: 0.76rem;
+    border: 1px solid var(--border-glass);
+    font-size: 0.8rem;
     font-weight: 800;
-    padding: 3px 10px;
+    padding: 4px 14px;
     border-radius: 9999px;
-    margin-bottom: 4px;
+    margin-bottom: 12px;
     font-family: var(--font-en);
 }
 
-.stage-module-header h2 {
-    font-size: 1.55rem;
+.section-header-block h2 {
+    font-size: 2.2rem;
     font-weight: 900;
-    color: var(--text-primary);
-    line-height: 1.25;
+    color: var(--text-hero);
+    line-height: 1.3;
+    margin-bottom: 10px;
 }
 
-.stage-module-header p {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    font-weight: 600;
-    margin-top: 2px;
-}
-
-.stage-meta-box {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.stage-speaker-tag {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 800;
-    color: var(--brand-primary);
-}
-
-/* Module Content Panels */
-.module-content-panel {
-    display: none;
-    flex: 1;
-    flex-direction: column;
-    justify-content: center;
-    animation: fadeInStage 0.25s ease forwards;
-}
-
-.module-content-panel.active {
-    display: flex;
-}
-
-@keyframes fadeInStage {
-    from { opacity: 0; transform: translateY(6px); }
-    to { opacity: 1; transform: translateY(0); }
+.section-header-block p {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
 }
 
 /* --------------------------------------------------------------------------
-   Bento Grid & Diagram Components in Cockpit
+   Hero Showcase Section
    -------------------------------------------------------------------------- */
-.cockpit-grid-split {
-    display: grid;
-    grid-template-columns: 1.15fr 0.85fr;
-    gap: 18px;
-    align-items: stretch;
+.hero-showcase-section {
+    padding: 130px 0 90px;
+    text-align: center;
 }
 
-.cockpit-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 18px;
+.hero-pill-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-pill);
+    border: 1px solid var(--border-glass);
+    color: var(--brand-primary);
+    font-size: 0.88rem;
+    font-weight: 800;
+    padding: 6px 20px;
+    border-radius: 9999px;
+    margin-bottom: 20px;
 }
 
-.cockpit-grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
+.hero-main-title {
+    font-size: 3.4rem;
+    font-weight: 900;
+    color: var(--text-hero);
+    line-height: 1.2;
+    margin-bottom: 18px;
+    letter-spacing: -0.5px;
 }
 
-.cockpit-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
+.hero-main-title .gradient-text {
+    background: var(--brand-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-family: var(--font-en);
 }
 
-/* Cockpit Glass Card */
-.cockpit-card {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    border-radius: 14px;
-    padding: 16px 18px;
+.hero-subtitle-desc {
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+    max-width: 860px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+}
+
+.hero-actions-row {
     display: flex;
-    flex-direction: column;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 50px;
+}
+
+.hero-cta-btn {
+    font-size: 1.05rem;
+    font-weight: 800;
+    padding: 12px 32px;
+    border-radius: 12px;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.hero-cta-btn.primary {
+    background: var(--brand-gradient);
+    color: white;
+    box-shadow: 0 8px 24px var(--brand-glow);
+}
+.hero-cta-btn.primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px var(--brand-glow);
+}
+
+.hero-cta-btn.secondary {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    color: var(--text-hero);
+}
+.hero-cta-btn.secondary:hover {
+    border-color: var(--brand-primary);
+    transform: translateY(-2px);
+}
+
+/* Hero Network Topology Visual Board */
+.hero-topology-board {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 36px 48px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
     position: relative;
     overflow: hidden;
-    transition: transform 0.2s ease, border-color 0.2s ease;
 }
 
-.cockpit-card::before {
+.hero-topology-board::before {
     content: "";
     position: absolute;
     top: 0;
@@ -513,353 +458,336 @@ code, .code-inline {
     right: 0;
     height: 3px;
     background: var(--brand-gradient);
-    opacity: 0.8;
 }
 
-.cockpit-card:hover {
-    transform: translateY(-2px);
-    border-color: var(--border-active);
+.hero-node-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 20px 24px;
+    text-align: center;
+    min-width: 170px;
+    transition: transform 0.3s ease, border-color 0.3s ease;
 }
 
-.cockpit-card.problem {
+.hero-node-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--brand-primary);
+}
+
+.hero-node-card.server-hub {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 30px var(--brand-glow);
+}
+
+.hero-node-card .icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.hero-node-card strong {
+    font-size: 1rem;
+    color: var(--text-hero);
+    display: block;
+    margin-bottom: 2px;
+}
+
+.hero-node-card small {
+    font-size: 0.78rem;
+    color: var(--brand-accent);
+    font-family: var(--font-mono);
+    display: block;
+}
+
+.hero-connector-tube {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.hero-connector-tube .tube-line {
+    width: 90px;
+    height: 3px;
+    background: var(--brand-gradient);
+    border-radius: 2px;
+}
+
+.hero-connector-tube .tube-label {
+    font-size: 0.72rem;
+    font-family: var(--font-mono);
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   Bento Cards Grid System
+   -------------------------------------------------------------------------- */
+.bento-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.bento-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.bento-grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+/* Product Bento Card */
+.bento-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 20px;
+    padding: 28px 32px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.bento-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--brand-gradient);
+    opacity: 0.7;
+}
+
+.bento-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-hover);
+    box-shadow: 0 16px 40px -10px var(--brand-glow);
+}
+
+.bento-card.problem {
     background: var(--status-rose-bg);
     border-color: rgba(244, 63, 94, 0.25);
 }
-.cockpit-card.problem::before { background: var(--status-rose); }
-.cockpit-card.problem h3 { color: var(--status-rose); }
+.bento-card.problem::before { background: var(--status-rose); }
+.bento-card.problem h3 { color: var(--status-rose); }
 
-.cockpit-card.solution {
+.bento-card.solution {
     background: var(--status-emerald-bg);
     border-color: rgba(16, 185, 129, 0.25);
 }
-.cockpit-card.solution::before { background: var(--status-emerald); }
-.cockpit-card.solution h3 { color: var(--status-emerald); }
+.bento-card.solution::before { background: var(--status-emerald); }
+.bento-card.solution h3 { color: var(--status-emerald); }
 
-.cockpit-card-title {
+.bento-card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-light);
-    padding-bottom: 6px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border-glass);
+    padding-bottom: 10px;
 }
 
-.cockpit-card-title h3 {
-    font-size: 1.02rem;
+.bento-card-header h3 {
+    font-size: 1.25rem;
     font-weight: 800;
-    color: var(--text-primary);
+    color: var(--text-hero);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
 }
 
-.cockpit-card-badge {
+.bento-badge-tag {
     font-family: var(--font-mono);
-    font-size: 0.68rem;
+    font-size: 0.74rem;
     font-weight: 800;
-    padding: 2px 7px;
-    border-radius: 4px;
-    background: rgba(255, 255, 255, 0.08);
+    padding: 3px 10px;
+    border-radius: 6px;
+    background: var(--bg-pill);
     color: var(--brand-primary);
+    border: 1px solid var(--border-glass);
 }
 
-/* Bullet Lists */
-.cockpit-bullet-list {
+.bento-bullet-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 12px;
 }
 
-.cockpit-bullet-list li {
-    font-size: 0.86rem;
+.bento-bullet-list li {
+    font-size: 0.95rem;
     color: var(--text-secondary);
-    line-height: 1.5;
+    line-height: 1.6;
     position: relative;
-    padding-right: 16px;
+    padding-right: 22px;
 }
 
-.cockpit-bullet-list li::before {
+.bento-bullet-list li::before {
     content: "■";
     color: var(--brand-primary);
-    font-size: 0.62rem;
+    font-size: 0.7rem;
     position: absolute;
     right: 0;
-    top: 3px;
+    top: 4px;
 }
 
-.cockpit-card.problem .cockpit-bullet-list li::before { content: "✕"; color: var(--status-rose); }
-.cockpit-card.solution .cockpit-bullet-list li::before { content: "✓"; color: var(--status-emerald); }
+.bento-card.problem .bento-bullet-list li::before { content: "✕"; color: var(--status-rose); font-size: 0.85rem; }
+.bento-card.solution .bento-bullet-list li::before { content: "✓"; color: var(--status-emerald); font-size: 0.9rem; }
 
-.cockpit-bullet-list strong {
-    color: var(--text-primary);
+.bento-bullet-list strong {
+    color: var(--text-hero);
     font-weight: 800;
 }
 
 /* --------------------------------------------------------------------------
-   Diagrams & Simulator Canvas in Cockpit
+   Interactive Protocol Table & Sequence Steps
    -------------------------------------------------------------------------- */
-.cockpit-diagram-viewport {
-    background: var(--cp-surface);
-    border: 1px solid var(--border-card);
-    border-radius: 14px;
-    padding: 16px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+.protocol-table-box {
+    display: grid;
+    grid-template-columns: 1.2fr 1.2fr 1.8fr 2.4fr 2.4fr;
+    gap: 10px;
+    margin-bottom: 18px;
 }
 
-/* Topology Diagram */
-.topo-flow {
-    display: flex;
-    align-items: center;
-    justify-content: space-around;
-    width: 100%;
-    padding: 10px 0;
-}
-
-.topo-node-box {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
+.proto-cell {
+    background: var(--bg-card);
+    border: 1px solid var(--border-glass);
     border-radius: 12px;
-    padding: 12px 16px;
+    padding: 14px 10px;
     text-align: center;
     transition: transform 0.2s ease;
 }
 
-.topo-node-box:hover {
-    transform: scale(1.05);
+.proto-cell:hover {
     border-color: var(--brand-primary);
+    transform: translateY(-2px);
 }
 
-.topo-node-box.center-server {
-    border-color: var(--brand-primary);
-    box-shadow: 0 0 16px var(--brand-glow);
-}
-
-.topo-link {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.topo-link-line {
-    width: 50px;
-    height: 2px;
-    background: var(--brand-gradient);
-}
-
-.topo-link-text {
-    font-size: 0.65rem;
-    font-family: var(--font-mono);
-    color: var(--text-muted);
-}
-
-/* Frame Table */
-.frame-table-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1.6fr 2.2fr 2.2fr;
-    gap: 6px;
-    margin-bottom: 10px;
-}
-
-.frame-cell-box {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    padding: 8px 4px;
-    text-align: center;
-    border-radius: 8px;
-}
-
-.frame-cell-box .name {
-    font-size: 0.7rem;
+.proto-cell .name {
+    font-size: 0.78rem;
     font-weight: 800;
     font-family: var(--font-en);
     color: var(--text-muted);
     display: block;
+    margin-bottom: 4px;
 }
 
-.frame-cell-box .val {
-    font-size: 0.78rem;
+.proto-cell .val {
+    font-size: 0.92rem;
     font-family: var(--font-mono);
     color: var(--brand-primary);
     font-weight: 800;
-    margin-top: 2px;
     display: block;
 }
 
-.code-box-dark {
-    background: #060911;
-    border: 1px solid var(--border-card);
-    border-radius: 10px;
+.code-viewer-frame {
+    background: var(--bg-code);
+    border: 1px solid var(--border-glass);
+    border-radius: 14px;
     overflow: hidden;
-    margin-top: 8px;
 }
 
-.code-box-dark-header {
+.code-viewer-bar {
     background: rgba(255, 255, 255, 0.05);
-    padding: 4px 12px;
-    font-size: 0.7rem;
+    padding: 8px 16px;
+    font-size: 0.76rem;
     font-family: var(--font-mono);
     color: var(--text-muted);
-    border-bottom: 1px solid var(--border-card);
+    border-bottom: 1px solid var(--border-glass);
     direction: ltr;
     text-align: left;
 }
 
-.code-box-dark pre {
-    padding: 10px 14px;
+.code-viewer-frame pre {
+    padding: 16px 20px;
     font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1.45;
-    color: #F8FAFC;
+    font-size: 0.84rem;
+    line-height: 1.6;
+    color: #E2E8F0;
     direction: ltr;
     text-align: left;
     overflow-x: auto;
 }
 
-/* Sequence Chart */
-.seq-pipeline {
+/* Step Sequence Timeline */
+.step-timeline-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 6px;
+    gap: 12px;
     width: 100%;
 }
 
-.seq-item {
+.timeline-step-card {
     flex: 1;
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    border-radius: 10px;
-    padding: 12px 10px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-glass);
+    border-radius: 16px;
+    padding: 22px 18px;
     text-align: center;
+    transition: transform 0.2s ease;
 }
 
-.seq-item .num {
-    width: 22px;
-    height: 22px;
+.timeline-step-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--brand-primary);
+}
+
+.timeline-step-card .num-badge {
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     background: var(--brand-primary);
     color: white;
-    font-size: 0.7rem;
-    font-weight: 800;
+    font-size: 0.85rem;
+    font-weight: 900;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 4px;
+    margin: 0 auto 10px;
     font-family: var(--font-en);
+    box-shadow: 0 4px 12px var(--brand-glow);
 }
 
-.seq-item strong {
+.timeline-step-card strong {
+    font-size: 1.02rem;
+    color: var(--text-hero);
     display: block;
-    font-size: 0.82rem;
-    color: var(--text-primary);
-    margin-bottom: 2px;
+    margin-bottom: 6px;
 }
 
-.seq-item p {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    line-height: 1.35;
-}
-
-/* --------------------------------------------------------------------------
-   Stage Bottom Navigation & Quick Controls
-   -------------------------------------------------------------------------- */
-.stage-bottom-bar {
-    height: 48px;
-    border-top: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 14px;
-    padding-top: 10px;
-}
-
-.stage-nav-btns {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.stage-nav-btn {
-    background: var(--cp-card);
-    border: 1px solid var(--border-light);
-    color: var(--text-primary);
-    font-family: var(--font-ar);
-    font-size: 0.82rem;
-    font-weight: 800;
-    padding: 6px 14px;
-    border-radius: 8px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-}
-
-.stage-nav-btn:hover {
-    border-color: var(--brand-primary);
-    color: var(--brand-primary);
-}
-
-.stage-nav-btn.primary {
-    background: var(--brand-primary);
-    color: white;
-    border-color: var(--brand-primary);
-}
-.stage-nav-btn.primary:hover {
-    background: var(--brand-accent);
-    color: white;
-}
-
-.stage-shortcut-hints {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* --------------------------------------------------------------------------
-   Speaker Notes Drawer (Teleprompter)
-   -------------------------------------------------------------------------- */
-.cockpit-notes-drawer {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: 440px;
-    max-height: 380px;
-    background: var(--cp-surface);
-    border: 1px solid var(--border-card);
-    border-radius: 16px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
-    display: flex;
-    flex-direction: column;
-    z-index: 200;
-    transform: translateY(130%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.cockpit-notes-drawer.active {
-    transform: translateY(0);
-}
-
-.notes-drawer-header {
-    background: rgba(255, 255, 255, 0.04);
-    padding: 10px 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--border-light);
-    border-radius: 16px 16px 0 0;
-}
-
-.notes-drawer-body {
-    padding: 16px;
-    overflow-y: auto;
-    font-size: 0.84rem;
+.timeline-step-card p {
+    font-size: 0.86rem;
     color: var(--text-secondary);
-    line-height: 1.65;
-    text-align: right;
+    line-height: 1.5;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.site-footer {
+    padding: 50px 0 40px;
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border-glass);
+    text-align: center;
+}
+
+.footer-meta-brand {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--text-hero);
+    margin-bottom: 8px;
+}
+
+.footer-copy-text {
+    font-size: 0.88rem;
+    color: var(--text-muted);
 }
