@@ -1,17 +1,22 @@
 using System;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using AForge.Video;
+using AForge.Video.DirectShow;
 
 namespace SyncPulse.Client.Services
 {
     /// <summary>
-    /// محرك الفيديو المباشر عالي السرعة لالتقاط وبث الإطارات المرئية (Live Video Streaming Engine)
+    /// محرك الفيديو المباشر عالي السرعة لالتقاط وبث إطارات كاميرا الويب الحقيقية عبر AForge.NET DirectShow (Hardware Webcam Engine)
     /// </summary>
     public class VideoEngine : IDisposable
     {
+        private VideoCaptureDevice? _videoSource;
         private CancellationTokenSource? _cts;
         private bool _isCapturing;
 
@@ -21,7 +26,7 @@ namespace SyncPulse.Client.Services
 
         public event Action<byte[]>? VideoFrameCaptured;
 
-        #region GDI Screen/Webcam Frame Capture P/Invoke
+        #region GDI Fallback for devices without physical webcam
 
         [DllImport("user32.dll")]
         private static extern IntPtr GetDesktopWindow();
@@ -58,26 +63,83 @@ namespace SyncPulse.Client.Services
         {
             Stop();
 
-            _cts = new CancellationTokenSource();
             _isCapturing = true;
+            _cts = new CancellationTokenSource();
 
+            try
+            {
+                // 1. البحث عن كاميرات الويب الحقيقية المتصلة بالجهاز
+                var videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+
+                if (videoDevices.Count > 0)
+                {
+                    // تشغيل كاميرا الويب الأولى (Default Webcam)
+                    _videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+                    _videoSource.NewFrame += OnWebcamNewFrame;
+                    _videoSource.Start();
+                }
+                else
+                {
+                    // في حال عدم وجود كاميرا ويب فيزيائية: تشغيل مسار المحاكاة البديل
+                    StartFallbackCaptureLoop(_cts.Token);
+                }
+            }
+            catch
+            {
+                StartFallbackCaptureLoop(_cts.Token);
+            }
+        }
+
+        private void OnWebcamNewFrame(object sender, NewFrameEventArgs eventArgs)
+        {
+            if (!_isCapturing || IsCameraOff || eventArgs.Frame == null) return;
+
+            try
+            {
+                using var clone = (Bitmap)eventArgs.Frame.Clone();
+                using var resized = new Bitmap(clone, new Size(FrameWidth, FrameHeight));
+                using var ms = new MemoryStream();
+
+                var encoderParameters = new EncoderParameters(1);
+                encoderParameters.Param[0] = new EncoderParameter(Encoder.Quality, 50L);
+
+                ImageCodecInfo? jpegCodec = GetJpegEncoder();
+                if (jpegCodec != null)
+                {
+                    resized.Save(ms, jpegCodec, encoderParameters);
+                }
+                else
+                {
+                    resized.Save(ms, ImageFormat.Jpeg);
+                }
+
+                byte[] jpegBytes = ms.ToArray();
+                if (jpegBytes.Length > 0)
+                {
+                    VideoFrameCaptured?.Invoke(jpegBytes);
+                }
+            }
+            catch { }
+        }
+
+        private void StartFallbackCaptureLoop(CancellationToken ct)
+        {
             Task.Run(async () =>
             {
-                while (!_cts.Token.IsCancellationRequested && _isCapturing)
+                while (!ct.IsCancellationRequested && _isCapturing)
                 {
                     try
                     {
                         if (!IsCameraOff)
                         {
-                            byte[]? frameData = CaptureCurrentFrame();
+                            byte[]? frameData = CaptureGdiFrame();
                             if (frameData != null && frameData.Length > 0)
                             {
                                 VideoFrameCaptured?.Invoke(frameData);
                             }
                         }
 
-                        // 15 إطار في الثانية (كل 66 مللي ثانية) للبث السلس عبر الشبكة
-                        await Task.Delay(66, _cts.Token);
+                        await Task.Delay(66, ct);
                     }
                     catch (OperationCanceledException)
                     {
@@ -85,10 +147,10 @@ namespace SyncPulse.Client.Services
                     }
                     catch { }
                 }
-            }, _cts.Token);
+            }, ct);
         }
 
-        private byte[]? CaptureCurrentFrame()
+        private byte[]? CaptureGdiFrame()
         {
             IntPtr hDesk = GetDesktopWindow();
             IntPtr hSrcDC = GetDC(hDesk);
@@ -101,19 +163,9 @@ namespace SyncPulse.Client.Services
                 BitBlt(hDestDC, 0, 0, FrameWidth, FrameHeight, hSrcDC, 0, 0, SRCCOPY);
                 SelectObject(hDestDC, hOldBmp);
 
-                var bmpSource = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                    hBmp,
-                    IntPtr.Zero,
-                    System.Windows.Int32Rect.Empty,
-                    BitmapSizeOptions.FromEmptyOptions());
-
-                bmpSource.Freeze();
-
-                var encoder = new JpegBitmapEncoder { QualityLevel = 50 };
-                encoder.Frames.Add(BitmapFrame.Create(bmpSource));
-
+                using var bmp = Image.FromHbitmap(hBmp);
                 using var ms = new MemoryStream();
-                encoder.Save(ms);
+                bmp.Save(ms, ImageFormat.Jpeg);
                 return ms.ToArray();
             }
             catch
@@ -149,10 +201,34 @@ namespace SyncPulse.Client.Services
             }
         }
 
+        private static ImageCodecInfo? GetJpegEncoder()
+        {
+            foreach (var codec in ImageCodecInfo.GetImageDecoders())
+            {
+                if (codec.FormatID == ImageFormat.Jpeg.Guid)
+                {
+                    return codec;
+                }
+            }
+            return null;
+        }
+
         public void Stop()
         {
             _isCapturing = false;
             _cts?.Cancel();
+
+            try
+            {
+                if (_videoSource != null && _videoSource.IsRunning)
+                {
+                    _videoSource.SignalToStop();
+                    _videoSource.WaitForStop();
+                    _videoSource.NewFrame -= OnWebcamNewFrame;
+                    _videoSource = null;
+                }
+            }
+            catch { }
         }
 
         public void Dispose()
