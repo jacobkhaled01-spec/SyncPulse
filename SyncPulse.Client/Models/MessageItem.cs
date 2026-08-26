@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
+using System.Windows.Media.Imaging;
 using SyncPulse.Core.Enums;
 
 namespace SyncPulse.Client.Models
@@ -13,6 +14,8 @@ namespace SyncPulse.Client.Models
         private string? _attachmentFileName;
         private byte[]? _attachmentData;
         private long _attachmentSize;
+        private BitmapSource? _imagePreviewSource;
+        private bool _imageLoaded;
 
         public int MessageID { get; set; }
         public int ConversationID { get; set; }
@@ -21,16 +24,24 @@ namespace SyncPulse.Client.Models
         public int ReceiverID { get; set; }
         public string Content { get; set; } = string.Empty;
 
+        public bool HasTextContent => !string.IsNullOrWhiteSpace(Content) && Content != DisplayFileName;
+
         public string? AttachmentPath
         {
             get => _attachmentPath;
             set
             {
                 _attachmentPath = value;
+                _imageLoaded = false;
+                _imagePreviewSource = null;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasAttachment));
                 OnPropertyChanged(nameof(DisplayFileName));
                 OnPropertyChanged(nameof(IsImageAttachment));
+                OnPropertyChanged(nameof(IsAudioAttachment));
+                OnPropertyChanged(nameof(IsGeneralFile));
+                OnPropertyChanged(nameof(FileIcon));
+                OnPropertyChanged(nameof(ImagePreviewSource));
             }
         }
 
@@ -42,6 +53,10 @@ namespace SyncPulse.Client.Models
                 _attachmentFileName = value;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(DisplayFileName));
+                OnPropertyChanged(nameof(IsImageAttachment));
+                OnPropertyChanged(nameof(IsAudioAttachment));
+                OnPropertyChanged(nameof(IsGeneralFile));
+                OnPropertyChanged(nameof(FileIcon));
             }
         }
 
@@ -51,8 +66,11 @@ namespace SyncPulse.Client.Models
             set
             {
                 _attachmentData = value;
+                _imageLoaded = false;
+                _imagePreviewSource = null;
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(HasAttachment));
+                OnPropertyChanged(nameof(ImagePreviewSource));
             }
         }
 
@@ -100,9 +118,79 @@ namespace SyncPulse.Client.Models
         {
             get
             {
+                if (!HasAttachment) return false;
                 string fn = DisplayFileName.ToLowerInvariant();
-                return fn.EndsWith(".png") || fn.EndsWith(".jpg") || fn.EndsWith(".jpeg") || fn.EndsWith(".bmp") || fn.EndsWith(".gif");
+                return fn.EndsWith(".png") || fn.EndsWith(".jpg") || fn.EndsWith(".jpeg") || fn.EndsWith(".bmp") || fn.EndsWith(".gif") || fn.EndsWith(".webp");
             }
+        }
+
+        public bool IsAudioAttachment
+        {
+            get
+            {
+                if (!HasAttachment) return false;
+                string fn = DisplayFileName.ToLowerInvariant();
+                return fn.EndsWith(".mp3") || fn.EndsWith(".wav") || fn.EndsWith(".m4a") || fn.EndsWith(".aac") || fn.EndsWith(".ogg") || fn.EndsWith(".wma");
+            }
+        }
+
+        public bool IsGeneralFile => HasAttachment && !IsImageAttachment && !IsAudioAttachment;
+
+        public string FileIcon => DisplayFileName.ToLowerInvariant() switch
+        {
+            var s when s.EndsWith(".pdf") => "📕",
+            var s when s.EndsWith(".zip") || s.EndsWith(".rar") || s.EndsWith(".7z") => "📦",
+            var s when s.EndsWith(".doc") || s.EndsWith(".docx") || s.EndsWith(".txt") => "📄",
+            var s when s.EndsWith(".xls") || s.EndsWith(".xlsx") => "📊",
+            var s when s.EndsWith(".mp4") || s.EndsWith(".mkv") || s.EndsWith(".avi") => "🎬",
+            _ => "📁"
+        };
+
+        public BitmapSource? ImagePreviewSource
+        {
+            get
+            {
+                if (!_imageLoaded)
+                {
+                    _imageLoaded = true;
+                    _imagePreviewSource = LoadImagePreview();
+                }
+                return _imagePreviewSource;
+            }
+        }
+
+        private BitmapSource? LoadImagePreview()
+        {
+            if (!IsImageAttachment) return null;
+
+            try
+            {
+                if (AttachmentData != null && AttachmentData.Length > 0)
+                {
+                    using var ms = new MemoryStream(AttachmentData);
+                    var bi = new BitmapImage();
+                    bi.BeginInit();
+                    bi.CreateOptions = BitmapCreateOptions.None;
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.StreamSource = ms;
+                    bi.EndInit();
+                    bi.Freeze();
+                    return bi;
+                }
+                else if (!string.IsNullOrEmpty(AttachmentPath) && File.Exists(AttachmentPath))
+                {
+                    var bi = new BitmapImage();
+                    bi.BeginInit();
+                    bi.CreateOptions = BitmapCreateOptions.None;
+                    bi.CacheOption = BitmapCacheOption.OnLoad;
+                    bi.UriSource = new Uri(AttachmentPath, UriKind.Absolute);
+                    bi.EndInit();
+                    bi.Freeze();
+                    return bi;
+                }
+            }
+            catch { }
+            return null;
         }
 
         public DateTime Timestamp { get; set; }
@@ -137,7 +225,7 @@ namespace SyncPulse.Client.Models
             _ => "#94A3B8" // رمادي فاتح عند الإرسال
         };
 
-        // فقاعة الرسالة (Sender: Soft Blue, Receiver: Pure White)
+        // فقاعة الرسالة بنمط تليجرام الحديث
         public string BubbleBackground => IsOutgoing ? "#EFF6FF" : "#FFFFFF";
         public string BubbleBorder => IsOutgoing ? "#BFDBFE" : "#E2E8F0";
         public string TextColor => "#0F172A";
