@@ -30,6 +30,7 @@ namespace SyncPulse.Client.Services
         public event Action<ChatMessagePacket>? MessageReceived;
         public event Action<MessageAckPacket>? MessageAckReceived;
         public event Action<CallSignalPacket>? CallSignalReceived;
+        public event Action<MediaFramePacket>? MediaFrameReceived;
         public event Action<string>? SystemBroadcastReceived;
         public event Action<UserPresenceChangedPacket>? PresenceChanged;
         public event Action<TypingIndicatorPacket>? TypingIndicatorReceived;
@@ -165,6 +166,12 @@ namespace SyncPulse.Client.Services
                         case PacketType.TypingIndicator:
                             var typing = packet.GetPayload<TypingIndicatorPacket>();
                             if (typing != null) TypingIndicatorReceived?.Invoke(typing);
+                            break;
+
+                        case PacketType.AudioFrame:
+                        case PacketType.VideoFrame:
+                            var media = packet.GetPayload<MediaFramePacket>();
+                            if (media != null) MediaFrameReceived?.Invoke(media);
                             break;
 
                         case PacketType.ProtocolError:

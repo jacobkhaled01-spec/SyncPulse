@@ -109,6 +109,11 @@ namespace SyncPulse.Server.Engine
                 case PacketType.ClearChatHistoryRequest:
                     await HandleClearChatHistoryAsync(session, packet);
                     break;
+
+                case PacketType.AudioFrame:
+                case PacketType.VideoFrame:
+                    await HandleMediaFrameOverTcpAsync(session, packet);
+                    break;
             }
         }
 
@@ -376,6 +381,20 @@ namespace SyncPulse.Server.Engine
             };
 
             await session.SendPacketAsync(SyncPacket.Create(PacketType.GetCallHistoryResponse, response, packet.Header.SequenceNumber));
+        }
+
+        private async Task HandleMediaFrameOverTcpAsync(ClientSession session, SyncPacket packet)
+        {
+            var mediaFrame = packet.GetPayload<MediaFramePacket>();
+            if (mediaFrame == null || !session.IsAuthenticated) return;
+
+            if (_callCoordinator.TryGetPeerUserId(mediaFrame.CallID, session.UserID, out int peerUserId))
+            {
+                if (_sessionManager.TryGetSession(peerUserId, out var peerSession))
+                {
+                    await peerSession.SendPacketAsync(packet);
+                }
+            }
         }
     }
 }

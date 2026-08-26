@@ -28,7 +28,7 @@ namespace SyncPulse.Client.ViewModels
         public ClientMainViewModel()
         {
             _network = new ClientNetworkService();
-            _media = new MediaStreamService();
+            _media = new MediaStreamService(_network);
 
             _authVM = new AuthViewModel(_network);
             _authVM.AuthenticatedSuccessfully += OnAuthenticated;

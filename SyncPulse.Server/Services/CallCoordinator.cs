@@ -38,6 +38,17 @@ namespace SyncPulse.Server.Services
             _mediaRelay = mediaRelay;
         }
 
+        public bool TryGetPeerUserId(int callId, int currentUserId, out int peerUserId)
+        {
+            peerUserId = 0;
+            if (_activeCalls.TryGetValue(callId, out var state))
+            {
+                peerUserId = (currentUserId == state.CallerID) ? state.ReceiverID : state.CallerID;
+                return true;
+            }
+            return false;
+        }
+
         public async Task HandleCallSignalAsync(ClientSession senderSession, CallSignalPacket signal)
         {
             switch (signal.Action)

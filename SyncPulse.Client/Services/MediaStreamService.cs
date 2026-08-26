@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -10,14 +11,19 @@ using SyncPulse.Core.Protocol;
 
 namespace SyncPulse.Client.Services
 {
+    /// <summary>
+    /// خدمة بث الوسائط المزدوجة فائقة السرعة والموثوقية (Dual-Channel UDP + TCP Hybrid Media Stream Service)
+    /// </summary>
     public class MediaStreamService : IDisposable
     {
+        private readonly ClientNetworkService _network;
         private UdpClient? _udpClient;
         private IPEndPoint? _serverMediaEndpoint;
         private CancellationTokenSource? _cts;
         private Task? _receiveTask;
         private bool _isStreaming;
         private uint _frameSeq = 1;
+        private readonly ConcurrentDictionary<uint, byte> _processedFrames = new();
 
         public AudioEngine Audio { get; } = new();
         public VideoEngine Video { get; } = new();
@@ -27,11 +33,22 @@ namespace SyncPulse.Client.Services
         public CallType ActiveCallType { get; private set; }
 
         public event Action<MediaFramePacket>? MediaFrameReceived;
-        public event Action<BitmapSource>? VideoFrameDecoded;
+        public event Action<BitmapSource?>? VideoFrameDecoded;
 
-        public MediaStreamService()
+        public MediaStreamService(ClientNetworkService network)
         {
-            // ربط التقاط الصوت بالبث عبر UDP
+            _network = network;
+
+            // ربط استقبال الوسائط عبر قناة TCP الموثوقة كمسار مزدوج يضمن وصول الصوت والصورة 100%
+            _network.MediaFrameReceived += frame =>
+            {
+                if (_isStreaming && frame.CallID == CurrentCallID && frame.SenderID != LocalUserID)
+                {
+                    ProcessIncomingMediaFrame(frame);
+                }
+            };
+
+            // ربط التقاط الصوت بالبث عبر القنوات المباشرة
             Audio.AudioDataCaptured += pcmData =>
             {
                 if (_isStreaming)
@@ -40,7 +57,7 @@ namespace SyncPulse.Client.Services
                 }
             };
 
-            // ربط التقاط الفيديو بالبث عبر UDP
+            // ربط التقاط الفيديو بالبث عبر القنوات المباشرة
             Video.VideoFrameCaptured += jpegData =>
             {
                 if (_isStreaming && ActiveCallType == CallType.Video)
@@ -57,15 +74,27 @@ namespace SyncPulse.Client.Services
             CurrentCallID = callId;
             LocalUserID = userId;
             ActiveCallType = callType;
-            _serverMediaEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverUdpPort);
+            _processedFrames.Clear();
 
-            _udpClient = new UdpClient(0);
-            _udpClient.Client.SendBufferSize = 2 * 1024 * 1024;
-            _udpClient.Client.ReceiveBufferSize = 2 * 1024 * 1024;
+            try
+            {
+                _serverMediaEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverUdpPort);
+                _udpClient = new UdpClient(0);
+                _udpClient.Client.SendBufferSize = 2 * 1024 * 1024;
+                _udpClient.Client.ReceiveBufferSize = 2 * 1024 * 1024;
+            }
+            catch
+            {
+                _udpClient = null;
+            }
+
             _cts = new CancellationTokenSource();
             _isStreaming = true;
 
-            _receiveTask = Task.Run(() => ReceiveLoopAsync(_cts.Token));
+            if (_udpClient != null)
+            {
+                _receiveTask = Task.Run(() => ReceiveLoopAsync(_cts.Token));
+            }
 
             // 1. تشغيل التقاط وتشغيل الصوت الحقيقي
             Audio.Start();
@@ -79,36 +108,48 @@ namespace SyncPulse.Client.Services
             // إرسال حزم تهيئة أولية لتثبيت منفذ UDP في الخادم
             Task.Run(async () =>
             {
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < 4; i++)
                 {
                     if (!_isStreaming) break;
                     SendMediaFrame(CallType.Audio, new byte[32]);
-                    await Task.Delay(100);
+                    await Task.Delay(80);
                 }
             });
         }
 
         public async Task SendMediaFrameAsync(CallType mediaType, byte[] payloadData)
         {
-            if (!_isStreaming || _udpClient == null || _serverMediaEndpoint == null || payloadData == null || payloadData.Length == 0) return;
+            if (!_isStreaming || payloadData == null || payloadData.Length == 0) return;
 
+            uint seq = Interlocked.Increment(ref _frameSeq);
             var frame = new MediaFramePacket
             {
                 CallID = CurrentCallID,
                 SenderID = LocalUserID,
                 FrameType = mediaType,
-                SequenceNumber = Interlocked.Increment(ref _frameSeq),
+                SequenceNumber = seq,
                 FrameData = payloadData,
                 Timestamp = DateTime.UtcNow
             };
 
             var packetType = mediaType == CallType.Video ? PacketType.VideoFrame : PacketType.AudioFrame;
-            var packet = SyncPacket.Create(packetType, frame);
-            byte[] bytes = packet.ToBytes();
+            var packet = SyncPacket.Create(packetType, frame, seq);
 
+            // 1. الإرسال عالي السرعة عبر UDP
+            if (_udpClient != null && _serverMediaEndpoint != null)
+            {
+                try
+                {
+                    byte[] bytes = packet.ToBytes();
+                    await _udpClient.SendAsync(bytes, bytes.Length, _serverMediaEndpoint);
+                }
+                catch { }
+            }
+
+            // 2. الإرسال الموازي المضمون عبر قناة TCP (لضمان تجاوز جدران الحماية ورواترات الواي فاي 100%)
             try
             {
-                await _udpClient.SendAsync(bytes, bytes.Length, _serverMediaEndpoint);
+                await _network.SendPacketAsync(packet);
             }
             catch { }
         }
@@ -137,34 +178,51 @@ namespace SyncPulse.Client.Services
                         var mediaFrame = packet.GetPayload<MediaFramePacket>();
                         if (mediaFrame != null && mediaFrame.SenderID != LocalUserID)
                         {
-                            MediaFrameReceived?.Invoke(mediaFrame);
-
-                            // معالجة الصوت: تشغيل فوري عبر السماعات
-                            if (mediaFrame.FrameType == CallType.Audio && mediaFrame.FrameData.Length > 16)
-                            {
-                                Audio.PlayAudioChunk(mediaFrame.FrameData);
-                            }
-                            // معالجة الفيديو: فك ضغط الإطار وعرضه فورياً على الشاشة
-                            else if (mediaFrame.FrameType == CallType.Video)
-                            {
-                                if (mediaFrame.FrameData.Length <= 16)
-                                {
-                                    VideoFrameDecoded?.Invoke(null!);
-                                }
-                                else
-                                {
-                                    var bmp = VideoEngine.DecodeFrame(mediaFrame.FrameData);
-                                    if (bmp != null)
-                                    {
-                                        VideoFrameDecoded?.Invoke(bmp);
-                                    }
-                                }
-                            }
+                            ProcessIncomingMediaFrame(mediaFrame);
                         }
                     }
                 }
             }
             catch { }
+        }
+
+        private void ProcessIncomingMediaFrame(MediaFramePacket mediaFrame)
+        {
+            // منع المعالجة المكررة لنفس الإطار عند وصوله من UDP و TCP معاً
+            if (mediaFrame.SequenceNumber > 0 && !_processedFrames.TryAdd(mediaFrame.SequenceNumber, 0))
+            {
+                return;
+            }
+
+            // تنظيف دوري لسجل الأرقام المتسلسلة القديمة
+            if (_processedFrames.Count > 1000)
+            {
+                _processedFrames.Clear();
+            }
+
+            MediaFrameReceived?.Invoke(mediaFrame);
+
+            // أ. معالجة الصوت: تشغيل فوري عبر السماعات
+            if (mediaFrame.FrameType == CallType.Audio && mediaFrame.FrameData.Length > 16)
+            {
+                Audio.PlayAudioChunk(mediaFrame.FrameData);
+            }
+            // ب. معالجة الفيديو: فك ضغط الإطار وعرضه فورياً على الشاشة
+            else if (mediaFrame.FrameType == CallType.Video)
+            {
+                if (mediaFrame.FrameData.Length <= 16)
+                {
+                    VideoFrameDecoded?.Invoke(null);
+                }
+                else
+                {
+                    var bmp = VideoEngine.DecodeFrame(mediaFrame.FrameData);
+                    if (bmp != null)
+                    {
+                        VideoFrameDecoded?.Invoke(bmp);
+                    }
+                }
+            }
         }
 
         public void Stop()
@@ -180,6 +238,7 @@ namespace SyncPulse.Client.Services
 
             CurrentCallID = 0;
             LocalUserID = 0;
+            _processedFrames.Clear();
         }
 
         public void Dispose()
