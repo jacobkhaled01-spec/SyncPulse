@@ -82,7 +82,20 @@ namespace SyncPulse.Client.ViewModels
             }
         }
 
+        private BitmapSource? _localVideoFrame;
+        public BitmapSource? LocalVideoFrame
+        {
+            get => _localVideoFrame;
+            set
+            {
+                _localVideoFrame = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(HasLocalVideo));
+            }
+        }
+
         public bool HasVideoFrame => _remoteVideoFrame != null && IsConnected && IsVideoCall;
+        public bool HasLocalVideo => _localVideoFrame != null && IsConnected && IsVideoCall && !IsCameraOff;
 
         public CallAction CallState
         {
@@ -179,12 +192,21 @@ namespace SyncPulse.Client.ViewModels
                 OnPropertyChanged(nameof(DurationText));
             };
 
-            // ربط استقبال وتحديث إطارات الفيديو المباشرة
+            // ربط استقبال وتحديث إطارات الفيديو المباشرة للطرف البعيد
             _media.VideoFrameDecoded += bmp =>
             {
                 App.Current?.Dispatcher.Invoke(() =>
                 {
                     RemoteVideoFrame = bmp;
+                });
+            };
+
+            // ربط تحديث إطار الكاميرا المحلية (Picture-in-Picture)
+            _media.LocalVideoFrameReady += bmp =>
+            {
+                App.Current?.Dispatcher.Invoke(() =>
+                {
+                    LocalVideoFrame = bmp;
                 });
             };
 

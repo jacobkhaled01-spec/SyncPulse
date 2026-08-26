@@ -34,10 +34,14 @@ namespace SyncPulse.Client.Services
 
         public event Action<MediaFramePacket>? MediaFrameReceived;
         public event Action<BitmapSource?>? VideoFrameDecoded;
+        public event Action<BitmapSource?>? LocalVideoFrameReady;
 
         public MediaStreamService(ClientNetworkService network)
         {
             _network = network;
+
+            // ربط معاينة الفيديو المحلية
+            Video.LocalVideoFrameReady += bmp => LocalVideoFrameReady?.Invoke(bmp);
 
             // ربط استقبال الوسائط عبر قناة TCP الموثوقة كمسار مزدوج يضمن وصول الصوت والصورة 100%
             _network.MediaFrameReceived += frame =>

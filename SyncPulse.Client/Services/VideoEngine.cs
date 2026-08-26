@@ -45,6 +45,7 @@ namespace SyncPulse.Client.Services
         public int FrameHeight { get; set; } = 180;
 
         public event Action<byte[]>? VideoFrameCaptured;
+        public event Action<BitmapSource?>? LocalVideoFrameReady;
 
         #region GDI Fallback for devices without physical webcam
 
@@ -123,7 +124,8 @@ namespace SyncPulse.Client.Services
             }
             catch { }
 
-            // إرسال إطار تفريغ فارغ للطرف الآخر لإخفاء الصورة فورياً
+            // إرسال إطار تفريغ فارغ للطرف الآخر وللمعاينة المحلية
+            LocalVideoFrameReady?.Invoke(null);
             VideoFrameCaptured?.Invoke(new byte[1]);
         }
 
@@ -175,6 +177,11 @@ namespace SyncPulse.Client.Services
                 if (jpegBytes.Length > 0)
                 {
                     VideoFrameCaptured?.Invoke(jpegBytes);
+                    var localBmp = DecodeFrame(jpegBytes);
+                    if (localBmp != null)
+                    {
+                        LocalVideoFrameReady?.Invoke(localBmp);
+                    }
                 }
             }
             catch { }

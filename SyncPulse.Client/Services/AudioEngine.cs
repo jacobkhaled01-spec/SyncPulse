@@ -1,20 +1,22 @@
 using System;
+using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SyncPulse.Client.Services
 {
     /// <summary>
-    /// محرك الصوت الأصلي عالي الأداء والسرعة لنظام Windows بدون أي حزم خارجية (WinMM Core Audio Engine)
+    /// محرك الصوت عالي النقاء والدقة (16 kHz HD Voice PCM Engine) لنظام Windows
     /// </summary>
     public class AudioEngine : IDisposable
     {
-        // إعدادات الصوت: 8000 Hz, 16-bit Mono (16 KB/sec) - مثالية للشبكات المحلية والواي فاي
-        public const int SampleRate = 8000;
+        // إعدادات الصوت عالية النقاء: 16000 Hz, 16-bit Mono (32 KB/sec) - معيار HD Voice الدولي
+        public const int SampleRate = 16000;
         public const short BitsPerSample = 16;
         public const short Channels = 1;
         public const int BufferDurationMs = 40; // كل 40 مللي ثانية حزمة صوتية
-        public const int BufferSize = (SampleRate * Channels * (BitsPerSample / 8) * BufferDurationMs) / 1000; // 640 بايت
+        public const int BufferSize = (SampleRate * Channels * (BitsPerSample / 8) * BufferDurationMs) / 1000; // 1280 بايت
 
         private IntPtr _hWaveIn = IntPtr.Zero;
         private IntPtr _hWaveOut = IntPtr.Zero;
@@ -22,8 +24,8 @@ namespace SyncPulse.Client.Services
         private bool _isPlaying;
         private WaveInProc? _waveInProc;
 
-        private GCHandle[] _inHeaderHandles = new GCHandle[4];
-        private GCHandle[] _inBufferHandles = new GCHandle[4];
+        private readonly GCHandle[] _inHeaderHandles = new GCHandle[4];
+        private readonly GCHandle[] _inBufferHandles = new GCHandle[4];
 
         public bool IsMuted { get; set; }
 
@@ -33,10 +35,12 @@ namespace SyncPulse.Client.Services
 
         private const int CALLBACK_FUNCTION = 0x00030000;
         private const int WIM_DATA = 0x3C0;
+        private const int WOM_DONE = 0x3BD;
         private const int WHDR_PREPARED = 0x00000002;
         private const int WHDR_DONE = 0x00000001;
 
         private delegate void WaveInProc(IntPtr hwi, int uMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
+        private delegate void WaveOutProc(IntPtr hwo, int uMsg, IntPtr dwInstance, IntPtr dwParam1, IntPtr dwParam2);
 
         [StructLayout(LayoutKind.Sequential)]
         private struct WAVEFORMATEX
@@ -91,6 +95,9 @@ namespace SyncPulse.Client.Services
         private static extern int waveOutPrepareHeader(IntPtr hwo, IntPtr pwh, int cbwh);
 
         [DllImport("winmm.dll", SetLastError = true)]
+        private static extern int waveOutUnprepareHeader(IntPtr hwo, IntPtr pwh, int cbwh);
+
+        [DllImport("winmm.dll", SetLastError = true)]
         private static extern int waveOutWrite(IntPtr hwo, IntPtr pwh, int cbwh);
 
         [DllImport("winmm.dll", SetLastError = true)]
@@ -121,7 +128,7 @@ namespace SyncPulse.Client.Services
                 {
                     _isRecording = true;
 
-                    // تهيئة 4 مخازن دائرية للميكروفون
+                    // تهيئة 4 مخازن دائرية للميكروفون بحجم 1280 بايت
                     for (int i = 0; i < 4; i++)
                     {
                         byte[] buffer = new byte[BufferSize];
@@ -193,11 +200,15 @@ namespace SyncPulse.Client.Services
                 waveOutPrepareHeader(_hWaveOut, pHeader, Marshal.SizeOf<WAVEHDR>());
                 waveOutWrite(_hWaveOut, pHeader, Marshal.SizeOf<WAVEHDR>());
 
-                // تحرير المورد لاحقاً بعد انتهاء التشغيل
-                Task.Delay(100).ContinueWith(_ =>
+                // تحرير المورد لاحقاً بعد انتهاء التشغيل الفعلي
+                Task.Delay(120).ContinueWith(_ =>
                 {
                     try
                     {
+                        if (_hWaveOut != IntPtr.Zero)
+                        {
+                            waveOutUnprepareHeader(_hWaveOut, pHeader, Marshal.SizeOf<WAVEHDR>());
+                        }
                         if (bufferHandle.IsAllocated) bufferHandle.Free();
                         Marshal.FreeHGlobal(pHeader);
                     }
@@ -250,6 +261,7 @@ namespace SyncPulse.Client.Services
             }
             catch { }
 
+            // تحرير مقابض الذاكرة المثبتة
             for (int i = 0; i < 4; i++)
             {
                 try
