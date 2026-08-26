@@ -203,7 +203,7 @@ namespace SyncPulse.Client.Services
 
         private static ImageCodecInfo? GetJpegEncoder()
         {
-            foreach (var codec in ImageCodecInfo.GetImageDecoders())
+            foreach (var codec in ImageCodecInfo.GetImageEncoders())
             {
                 if (codec.FormatID == ImageFormat.Jpeg.Guid)
                 {
