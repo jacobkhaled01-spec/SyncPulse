@@ -1,71 +1,60 @@
 /* ==========================================================================
-   SyncPulse Interactive Presentation System - Style Sheet
-   Theme: Pure Academic Light Theme (Crisp Porcelain, Royal Sapphire & Emerald)
-   Fonts: Cairo, Outfit, JetBrains Mono
+   SyncPulse Executive Academic Slide Deck - PowerPoint Theme
+   Style: Executive University Defense (Oxford Navy, Royal Blue & Crisp White)
+   Typography: Cairo (Arabic Primary), Outfit (Latin / Metrics), JetBrains Mono (Code)
    ========================================================================== */
 
 :root {
-    /* Backgrounds */
-    --bg-main: #F8FAFC;
-    --bg-card: #FFFFFF;
-    --bg-header: rgba(255, 255, 255, 0.95);
-    --bg-subtle: #F1F5F9;
-    --bg-accent-blue: #EFF6FF;
-    --bg-accent-green: #ECFDF5;
-    --bg-accent-purple: #F5F3FF;
-    --bg-accent-amber: #FFFBEB;
-    --bg-accent-red: #FEF2F2;
-
-    /* Borders & Lines */
-    --border-light: #E2E8F0;
-    --border-subtle: #CBD5E1;
-    --border-card: #E2E8F0;
-    --border-focus: #3B82F6;
-
-    /* Primary Accent Colors */
-    --primary-blue: #2563EB;
-    --primary-blue-dark: #1D4ED8;
-    --primary-blue-light: #60A5FA;
-    --emerald-green: #059669;
-    --emerald-light: #10B981;
-    --purple-accent: #7C3AED;
-    --amber-warning: #D97706;
-    --rose-danger: #DC2626;
-    --cyan-accent: #0284C7;
-
-    /* Typography Colors */
-    --text-primary: #0F172A;
-    --text-secondary: #334155;
+    /* Presentation Canvas & Staging */
+    --ppt-stage-bg: #E2E8F0;
+    --ppt-slide-bg: #FFFFFF;
+    --ppt-card-bg: #F8FAFC;
+    --ppt-card-hover: #F1F5F9;
+    
+    /* Executive 2-Color Palette (Oxford Navy & Royal Blue) */
+    --ppt-navy-dark: #0F172A;
+    --ppt-navy-primary: #1E3A8A;
+    --ppt-blue-accent: #2563EB;
+    --ppt-blue-light: #EFF6FF;
+    --ppt-blue-border: #BFDBFE;
+    
+    /* Functional Semantic Colors (Used sparingly) */
+    --ppt-green-dark: #065F46;
+    --ppt-green-light: #ECFDF5;
+    --ppt-green-border: #A7F3D0;
+    
+    --ppt-red-dark: #991B1B;
+    --ppt-red-light: #FEF2F2;
+    --ppt-red-border: #FECACA;
+    
+    /* Text Hierarchy */
+    --text-heading: #0F172A;
+    --text-body: #334155;
     --text-muted: #64748B;
-    --text-dim: #94A3B8;
-    --text-inverse: #FFFFFF;
+    --text-subtle: #94A3B8;
+    
+    /* Borders & Dividers */
+    --border-slide: #CBD5E1;
+    --border-card: #E2E8F0;
+    --border-dark: #0F172A;
 
     /* Fonts */
-    --font-ar: 'Cairo', system-ui, -apple-system, sans-serif;
-    --font-en: 'Outfit', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono', monospace;
+    --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --font-en: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
 
-    /* Spacing & Radii */
-    --radius-sm: 8px;
-    --radius-md: 14px;
-    --radius-lg: 20px;
-    --radius-xl: 28px;
+    /* Radii */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
     --radius-full: 9999px;
 
-    /* Shadows */
-    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 16px -2px rgba(0, 0, 0, 0.06), 0 2px 6px -1px rgba(0, 0, 0, 0.04);
-    --shadow-lg: 0 12px 32px -4px rgba(15, 23, 42, 0.08), 0 4px 12px -2px rgba(15, 23, 42, 0.03);
-    --shadow-hover: 0 20px 40px -6px rgba(37, 99, 235, 0.12);
-
-    /* Transitions */
-    --trans-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    --trans-smooth: 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    /* PowerPoint Diffuse Shadow */
+    --shadow-ppt-slide: 0 16px 48px -12px rgba(15, 23, 42, 0.18), 0 0 0 1px rgba(15, 23, 42, 0.05);
+    --shadow-card: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
-/* --------------------------------------------------------------------------
-   Base Resets & Canvas Setup
-   -------------------------------------------------------------------------- */
+/* Base Setup */
 * {
     margin: 0;
     padding: 0;
@@ -73,13 +62,11 @@
 }
 
 body {
-    background-color: var(--bg-main);
-    background-image: 
-        radial-gradient(at 0% 0%, rgba(37, 99, 235, 0.04) 0px, transparent 50%),
-        radial-gradient(at 100% 100%, rgba(5, 150, 105, 0.03) 0px, transparent 50%),
-        radial-gradient(at 50% 50%, rgba(124, 58, 237, 0.02) 0px, transparent 60%);
-    color: var(--text-primary);
+    background-color: var(--ppt-stage-bg);
+    color: var(--text-body);
     font-family: var(--font-ar);
+    direction: rtl;
+    text-align: right;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -88,22 +75,37 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+/* LTR Terms Helper (Ensures English terms never reverse Arabic word order) */
+.en-term, .code-inline, code, pre {
+    direction: ltr;
+    display: inline-block;
+    font-family: var(--font-en);
+    unicode-bidi: embed;
+}
+
+code, .code-inline {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 2px 6px;
+    background: #E2E8F0;
+    color: #1E293B;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+}
+
 /* --------------------------------------------------------------------------
-   1. Top Header Bar
+   1. PowerPoint Top Command Bar
    -------------------------------------------------------------------------- */
 .presentation-header {
-    background: var(--bg-header);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border-light);
-    padding: 10px 24px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border-slide);
+    padding: 8px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 64px;
-    position: relative;
+    height: 54px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
     z-index: 50;
-    box-shadow: var(--shadow-sm);
 }
 
 .header-left {
@@ -113,36 +115,33 @@ body {
 }
 
 .header-logo {
-    width: 40px;
-    height: 40px;
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
-    border-radius: var(--radius-md);
+    width: 34px;
+    height: 34px;
+    background: var(--ppt-navy-primary);
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-}
-
-.logo-bolt {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .header-titles h2 {
-    font-family: var(--font-en);
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 800;
-    color: var(--text-primary);
-    line-height: 1.2;
+    color: var(--ppt-navy-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
 }
 
 .header-titles h2 span {
-    color: var(--primary-blue);
-    font-size: 0.95rem;
+    color: var(--ppt-blue-accent);
+    font-family: var(--font-en);
 }
 
 .header-titles p {
-    font-size: 0.76rem;
+    font-size: 0.72rem;
     color: var(--text-muted);
     font-weight: 600;
 }
@@ -151,15 +150,15 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    width: 260px;
+    gap: 4px;
+    width: 240px;
 }
 
 .slide-indicator {
     font-family: var(--font-en);
-    font-size: 0.85rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-secondary);
+    color: var(--text-heading);
     display: flex;
     align-items: center;
     gap: 4px;
@@ -167,21 +166,21 @@ body {
 
 .slide-indicator .slide-label {
     font-family: var(--font-ar);
-    font-size: 0.78rem;
+    font-size: 0.76rem;
     color: var(--text-muted);
     margin-left: 4px;
 }
 
 .slide-indicator .slide-current {
-    color: var(--primary-blue);
-    font-size: 1.05rem;
+    color: var(--ppt-blue-accent);
+    font-size: 0.95rem;
     font-weight: 800;
 }
 
 .progress-bar-container {
     width: 100%;
-    height: 5px;
-    background: var(--border-light);
+    height: 4px;
+    background: #E2E8F0;
     border-radius: var(--radius-full);
     overflow: hidden;
 }
@@ -189,9 +188,9 @@ body {
 .progress-bar {
     height: 100%;
     width: 8%;
-    background: linear-gradient(90deg, var(--primary-blue), var(--emerald-light));
+    background: var(--ppt-navy-primary);
     border-radius: var(--radius-full);
-    transition: width var(--trans-smooth);
+    transition: width 0.3s ease;
 }
 
 .header-right {
@@ -201,255 +200,132 @@ body {
 }
 
 .nav-icon-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    color: var(--text-secondary);
+    background: #FFFFFF;
+    border: 1px solid var(--border-slide);
+    color: var(--text-body);
     font-family: var(--font-ar);
-    font-size: 0.82rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    padding: 7px 14px;
-    border-radius: var(--radius-md);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: var(--trans-fast);
-    box-shadow: var(--shadow-sm);
+    transition: 0.15s ease;
 }
 
 .nav-icon-btn:hover {
-    background: var(--bg-subtle);
-    border-color: var(--border-subtle);
-    color: var(--primary-blue);
-    transform: translateY(-1px);
+    background: var(--ppt-card-bg);
+    border-color: var(--ppt-blue-accent);
+    color: var(--ppt-blue-accent);
 }
 
 .nav-action-btn {
-    background: linear-gradient(135deg, var(--primary-blue), var(--primary-blue-dark));
+    background: var(--ppt-navy-primary);
     color: white;
     text-decoration: none;
     font-family: var(--font-ar);
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    padding: 7px 16px;
-    border-radius: var(--radius-md);
+    padding: 6px 14px;
+    border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     gap: 6px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    transition: var(--trans-fast);
+    transition: 0.15s ease;
 }
 
 .nav-action-btn:hover {
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
-    transform: translateY(-1px);
+    background: var(--ppt-blue-accent);
 }
 
 /* --------------------------------------------------------------------------
-   2. Main Presentation Viewport & Slide Deck
+   2. Main Slide Viewport (16:9 Aspect Ratio Presentation Frame)
    -------------------------------------------------------------------------- */
 .presentation-viewport {
     flex: 1;
-    position: relative;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 24px 36px;
+    padding: 16px 24px;
+    position: relative;
+    overflow: hidden;
 }
 
+/* PowerPoint Slide Canvas (16:9 Ratio Container) */
 .slide {
     position: absolute;
-    width: calc(100% - 72px);
-    max-width: 1400px;
-    height: calc(100% - 48px);
-    background: var(--bg-card);
-    border: 1px solid var(--border-card);
-    border-radius: var(--radius-xl);
-    padding: 36px 44px;
+    width: 100%;
+    max-width: 1320px;
+    height: 100%;
+    max-height: 740px;
+    background: var(--ppt-slide-bg);
+    border: 1px solid var(--border-slide);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-ppt-slide);
+    padding: 32px 48px 24px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    box-shadow: var(--shadow-lg);
+    justify-content: space-between;
     opacity: 0;
-    transform: scale(0.96) translateX(-30px);
+    transform: scale(0.98);
     pointer-events: none;
-    transition: transform var(--trans-smooth), opacity var(--trans-smooth);
+    transition: opacity 0.3s ease, transform 0.3s ease;
     overflow-y: auto;
 }
 
 .slide.active {
     opacity: 1;
-    transform: scale(1) translateX(0);
+    transform: scale(1);
     pointer-events: all;
     z-index: 10;
 }
 
-.slide.prev {
-    opacity: 0;
-    transform: scale(0.96) translateX(30px);
-}
-
-/* Slide Internal Header Block */
+/* Slide Header Ribbon (PowerPoint Style) */
 .slide-header-block {
-    margin-bottom: 22px;
+    margin-bottom: 20px;
+    border-bottom: 2px solid var(--ppt-blue-light);
+    padding-bottom: 12px;
 }
 
 .section-tag {
     display: inline-block;
-    background: var(--bg-accent-blue);
-    color: var(--primary-blue);
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    font-size: 0.78rem;
+    background: var(--ppt-blue-light);
+    color: var(--ppt-navy-primary);
+    border: 1px solid var(--ppt-blue-border);
+    font-size: 0.76rem;
     font-weight: 800;
-    padding: 4px 12px;
-    border-radius: var(--radius-full);
-    margin-bottom: 8px;
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 6px;
     font-family: var(--font-en);
 }
 
 .slide-header-block h2 {
-    font-size: 1.7rem;
+    font-size: 1.55rem;
     font-weight: 800;
-    color: var(--text-primary);
-    letter-spacing: -0.5px;
-    line-height: 1.3;
+    color: var(--ppt-navy-dark);
+    line-height: 1.25;
 }
 
 .slide-header-block p {
-    font-size: 0.95rem;
+    font-size: 0.88rem;
     color: var(--text-muted);
     font-weight: 600;
     margin-top: 4px;
 }
 
 /* --------------------------------------------------------------------------
-   3. Hero Slide (Slide 1)
+   3. Slide Content Layouts & Elements
    -------------------------------------------------------------------------- */
-.hero-slide {
-    text-align: center;
+.slide-body {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
-
-.hero-badge {
-    background: var(--bg-accent-blue);
-    border: 1px solid rgba(37, 99, 235, 0.25);
-    color: var(--primary-blue);
-    padding: 6px 18px;
-    border-radius: var(--radius-full);
-    font-size: 0.88rem;
-    font-weight: 700;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
-}
-
-.hero-title {
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--text-primary);
-    line-height: 1.3;
-    letter-spacing: -1px;
-}
-
-.gradient-text {
-    background: linear-gradient(135deg, var(--primary-blue), #0284C7, var(--emerald-green));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-family: var(--font-en);
-}
-
-.hero-subtitle {
-    font-size: 1.1rem;
-    color: var(--text-secondary);
-    max-width: 920px;
-    margin: 16px auto 28px;
-    line-height: 1.7;
-    font-weight: 500;
-}
-
-.hero-features-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
-    width: 100%;
-    max-width: 1100px;
-    margin-bottom: 28px;
-}
-
-.feature-chip {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    padding: 14px 18px;
-    border-radius: var(--radius-md);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    text-align: right;
-    box-shadow: var(--shadow-sm);
-    transition: var(--trans-fast);
-}
-
-.feature-chip:hover {
-    border-color: var(--primary-blue);
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-}
-
-.feature-chip .icon {
-    font-size: 24px;
-}
-
-.feature-chip strong {
-    display: block;
-    font-size: 0.88rem;
-    color: var(--text-primary);
-}
-
-.feature-chip small {
-    font-size: 0.74rem;
-    color: var(--text-muted);
-    font-family: var(--font-mono);
-}
-
-.hero-team-footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-.team-label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: var(--text-muted);
-}
-
-.team-badges {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
     justify-content: center;
 }
 
-.team-badge {
-    background: var(--bg-subtle);
-    border: 1px solid var(--border-light);
-    color: var(--text-secondary);
-    font-size: 0.78rem;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: var(--radius-full);
-}
-
-/* --------------------------------------------------------------------------
-   4. Universal Cards & Layout Grids
-   -------------------------------------------------------------------------- */
 .grid-2-cols {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -459,682 +335,626 @@ body {
 .grid-3-cols {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 18px;
+    gap: 16px;
 }
 
-.card {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 22px;
-    box-shadow: var(--shadow-sm);
+.grid-4-cols {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+/* Standard PowerPoint Card Box */
+.ppt-card {
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    transition: var(--trans-fast);
+    box-shadow: var(--shadow-card);
 }
 
-.card:hover {
-    border-color: var(--border-subtle);
-    box-shadow: var(--shadow-md);
+.ppt-card.navy-border {
+    border-top: 3px solid var(--ppt-navy-primary);
 }
 
-.card h3 {
-    font-size: 1.15rem;
+.ppt-card.blue-border {
+    border-top: 3px solid var(--ppt-blue-accent);
+}
+
+.ppt-card h3 {
+    font-size: 1.05rem;
     font-weight: 800;
-    color: var(--text-primary);
-    margin-bottom: 12px;
-}
-
-.card-badge {
-    align-self: flex-start;
-    font-size: 0.72rem;
-    font-weight: 800;
-    padding: 3px 10px;
-    border-radius: var(--radius-full);
-    margin-bottom: 8px;
-}
-
-.card-badge.purple { background: var(--bg-accent-purple); color: var(--purple-accent); }
-.card-badge.blue { background: var(--bg-accent-blue); color: var(--primary-blue); }
-.card-badge.green { background: var(--bg-accent-green); color: var(--emerald-green); }
-.card-badge.red { background: var(--bg-accent-red); color: var(--rose-danger); }
-
-.card-title-icon {
+    color: var(--ppt-navy-dark);
+    margin-bottom: 10px;
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
+    gap: 8px;
 }
 
-.card-title-icon .icon {
-    font-size: 22px;
+.ppt-card h3 .icon {
+    font-size: 18px;
 }
 
-.card-title-icon.red h3 { color: var(--rose-danger); }
-.card-title-icon.green h3 { color: var(--emerald-green); }
-.card-title-icon.blue h3 { color: var(--primary-blue); }
-
-.problem-card {
-    border-top: 4px solid var(--rose-danger);
-    background: #FFFDFD;
+/* Problem & Solution Cards */
+.ppt-card.problem {
+    background: var(--ppt-red-light);
+    border: 1px solid var(--ppt-red-border);
+    border-top: 4px solid var(--ppt-red-dark);
 }
 
-.solution-card {
-    border-top: 4px solid var(--emerald-green);
-    background: #FDFEFE;
+.ppt-card.problem h3 {
+    color: var(--ppt-red-dark);
 }
 
-/* Styled Lists */
-.styled-list {
+.ppt-card.solution {
+    background: var(--ppt-green-light);
+    border: 1px solid var(--ppt-green-border);
+    border-top: 4px solid var(--ppt-green-dark);
+}
+
+.ppt-card.solution h3 {
+    color: var(--ppt-green-dark);
+}
+
+/* Standard PowerPoint Bullet Lists */
+.ppt-list {
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
+    text-align: right;
 }
 
-.styled-list li {
-    font-size: 0.88rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
+.ppt-list li {
+    font-size: 0.86rem;
+    color: var(--text-body);
+    line-height: 1.55;
     position: relative;
     padding-right: 18px;
 }
 
-.styled-list li::before {
-    content: "•";
-    color: var(--primary-blue);
-    font-size: 1.4rem;
+.ppt-list li::before {
+    content: "■";
+    color: var(--ppt-navy-primary);
+    font-size: 0.65rem;
     position: absolute;
     right: 0;
-    top: -2px;
+    top: 3px;
 }
 
-.styled-list.text-sm li {
-    font-size: 0.82rem;
-    gap: 8px;
+.ppt-card.problem .ppt-list li::before {
+    content: "✖";
+    color: var(--ppt-red-dark);
+    font-size: 0.75rem;
+    top: 1px;
 }
 
-.mini-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.mini-list li {
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-    padding-right: 14px;
-    position: relative;
-}
-
-.mini-list li::before {
+.ppt-card.solution .ppt-list li::before {
     content: "✔";
-    color: var(--emerald-green);
-    font-size: 0.8rem;
-    position: absolute;
-    right: 0;
+    color: var(--ppt-green-dark);
+    font-size: 0.75rem;
+    top: 1px;
+}
+
+.ppt-list strong {
+    color: var(--ppt-navy-dark);
+    font-weight: 800;
 }
 
 /* --------------------------------------------------------------------------
-   5. Architecture Diagram (Slide 3)
+   4. Hero Title Slide (Slide 1)
    -------------------------------------------------------------------------- */
-.architecture-diagram-grid {
+.hero-container {
+    text-align: center;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-}
-
-.arch-box {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 18px 24px;
-}
-
-.core-box {
-    border: 2px solid var(--purple-accent);
-    background: #FAF8FF;
-}
-
-.arch-box-header {
-    display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
+    justify-content: center;
+    height: 100%;
+    padding: 10px 0;
 }
 
-.arch-icon {
-    font-size: 26px;
-}
-
-.arch-box-header h3 {
-    font-size: 1.05rem;
+.hero-academic-badge {
+    background: var(--ppt-blue-light);
+    border: 1px solid var(--ppt-blue-border);
+    color: var(--ppt-navy-primary);
+    font-size: 0.84rem;
     font-weight: 800;
-    color: var(--text-primary);
+    padding: 5px 16px;
+    border-radius: var(--radius-full);
+    margin-bottom: 14px;
 }
 
-.arch-box-header small {
-    font-size: 0.74rem;
+.hero-main-title {
+    font-size: 2.35rem;
+    font-weight: 900;
+    color: var(--ppt-navy-dark);
+    line-height: 1.25;
+    margin-bottom: 10px;
+}
+
+.hero-main-title .brand-accent {
+    color: var(--ppt-blue-accent);
+    font-family: var(--font-en);
+}
+
+.hero-lead-desc {
+    font-size: 1rem;
+    color: var(--text-body);
+    max-width: 900px;
+    line-height: 1.6;
+    margin-bottom: 22px;
+}
+
+.hero-pillars-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    width: 100%;
+    max-width: 1050px;
+    margin-bottom: 22px;
+}
+
+.pillar-box {
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-top: 3px solid var(--ppt-navy-primary);
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    text-align: right;
+}
+
+.pillar-box strong {
+    display: block;
+    font-size: 0.86rem;
+    color: var(--ppt-navy-dark);
+    font-weight: 800;
+    margin-bottom: 2px;
+}
+
+.pillar-box small {
+    font-size: 0.72rem;
     color: var(--text-muted);
     font-family: var(--font-mono);
 }
 
-.arch-box-content {
+.hero-speakers-strip {
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    padding: 8px 18px;
     display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.pill {
-    background: white;
-    border: 1px solid var(--border-light);
-    padding: 6px 14px;
-    border-radius: var(--radius-full);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text-secondary);
-    box-shadow: var(--shadow-sm);
-}
-
-.arch-branches {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    align-items: center;
     gap: 16px;
+    font-size: 0.8rem;
 }
 
-.branch-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 18px 22px;
+.hero-speakers-strip strong {
+    color: var(--ppt-navy-primary);
 }
 
-.server-branch { border-top: 4px solid var(--primary-blue); background: #F8FAFF; }
-.client-branch { border-top: 4px solid var(--emerald-green); background: #F8FFFC; }
+.speaker-pill-inline {
+    background: #FFFFFF;
+    border: 1px solid var(--border-card);
+    padding: 3px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--text-heading);
+}
 
 /* --------------------------------------------------------------------------
-   6. 12-Byte Header Binary Table & Steps (Slide 4)
+   5. Clean Binary Table & Code (Slide 4)
    -------------------------------------------------------------------------- */
-.binary-header-table {
+.binary-table-ppt {
+    width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr 1.5fr 2fr 2fr;
     gap: 6px;
-    margin-bottom: 14px;
+    margin-bottom: 12px;
 }
 
-.byte-block {
-    background: white;
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-sm);
+.binary-cell {
+    background: #FFFFFF;
+    border: 1px solid var(--border-card);
+    border-top: 3px solid var(--ppt-navy-primary);
     padding: 8px 4px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
+    border-radius: var(--radius-sm);
 }
 
-.byte-block .b-name { font-size: 0.72rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-en); }
-.byte-block .b-val { font-size: 0.68rem; color: var(--primary-blue); font-family: var(--font-mono); font-weight: 700; }
-.byte-block .b-size { font-size: 0.62rem; color: var(--text-dim); }
+.binary-cell .name {
+    font-size: 0.72rem;
+    font-weight: 800;
+    font-family: var(--font-en);
+    color: var(--ppt-navy-dark);
+    display: block;
+}
 
-.b-magic { border-top: 3px solid var(--primary-blue); }
-.b-ver { border-top: 3px solid var(--cyan-accent); }
-.b-type { border-top: 3px solid var(--purple-accent); }
-.b-len { border-top: 3px solid var(--emerald-green); }
-.b-seq { border-top: 3px solid var(--amber-warning); }
+.binary-cell .val {
+    font-size: 0.74rem;
+    font-family: var(--font-mono);
+    color: var(--ppt-blue-accent);
+    font-weight: 700;
+    margin-top: 2px;
+    display: block;
+}
 
-.code-snippet-box {
+.binary-cell .size {
+    font-size: 0.65rem;
+    color: var(--text-subtle);
+    display: block;
+}
+
+.ppt-code-container {
     background: #0F172A;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-sm);
     overflow: hidden;
-    color: #F8FAFC;
     margin-top: 8px;
 }
 
-.code-title {
+.ppt-code-header {
     background: #1E293B;
-    padding: 6px 12px;
+    padding: 5px 12px;
     font-size: 0.72rem;
     font-family: var(--font-mono);
-    color: var(--text-dim);
+    color: #94A3B8;
     border-bottom: 1px solid #334155;
+    direction: ltr;
+    text-align: left;
 }
 
-.code-snippet-box pre {
-    padding: 12px;
+.ppt-code-container pre {
+    padding: 10px 14px;
     font-family: var(--font-mono);
     font-size: 0.74rem;
     line-height: 1.5;
+    color: #F8FAFC;
+    direction: ltr;
+    text-align: left;
     overflow-x: auto;
 }
 
-.code-snippet-box .kw { color: #F43F5E; }
-.code-snippet-box .fn { color: #38BDF8; }
-.code-snippet-box .num { color: #FBBF24; }
-
-.step-card {
-    background: white;
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 12px 16px;
+/* --------------------------------------------------------------------------
+   6. Step Boxes (Slide 4, 5, 8)
+   -------------------------------------------------------------------------- */
+.ppt-step-row {
     display: flex;
+    gap: 10px;
     align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 10px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-card);
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    margin-bottom: 8px;
     font-size: 0.84rem;
     line-height: 1.5;
 }
 
-.step-num {
-    width: 24px;
-    height: 24px;
-    border-radius: var(--radius-full);
-    background: var(--primary-blue);
+.ppt-step-badge {
+    width: 22px;
+    height: 22px;
+    background: var(--ppt-navy-primary);
     color: white;
-    font-size: 0.76rem;
+    border-radius: var(--radius-full);
+    font-size: 0.72rem;
     font-weight: 800;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    font-family: var(--font-en);
 }
 
-.highlight-info-box {
-    background: var(--bg-accent-blue);
-    border: 1px solid rgba(37, 99, 235, 0.25);
-    border-radius: var(--radius-md);
-    padding: 10px 14px;
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/* --------------------------------------------------------------------------
-   7. Auto Discovery Workflow (Slide 5)
-   -------------------------------------------------------------------------- */
-.discovery-workflow-grid {
+/* Discovery Flow (Slide 5) */
+.flow-3-boxes {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
     margin-top: 10px;
 }
 
-.discovery-step-card {
+.flow-step-box {
     flex: 1;
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-top: 3px solid var(--ppt-navy-primary);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: right;
 }
 
-.discovery-step-card .step-icon {
-    font-size: 32px;
-}
-
-.discovery-step-card h4 {
-    font-size: 0.95rem;
+.flow-step-box h4 {
+    font-size: 0.92rem;
+    color: var(--ppt-navy-dark);
     font-weight: 800;
-    color: var(--text-primary);
+    margin-bottom: 6px;
 }
 
-.discovery-step-card p {
+.flow-step-box p {
     font-size: 0.8rem;
-    color: var(--text-secondary);
+    color: var(--text-body);
     line-height: 1.5;
 }
 
-.discovery-step-card code {
-    background: white;
-    border: 1px solid var(--border-light);
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--primary-blue);
-    margin-top: 6px;
-}
-
-.discovery-arrow {
-    font-size: 24px;
-    color: var(--primary-blue);
+.flow-arrow-sep {
+    font-size: 20px;
+    color: var(--ppt-navy-primary);
     font-weight: 900;
 }
 
-/* --------------------------------------------------------------------------
-   8. Message Lifecycle (Slide 8)
-   -------------------------------------------------------------------------- */
-.message-lifecycle-container {
+/* Message Status Lifecycle (Slide 8) */
+.lifecycle-strip {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 22px;
+    gap: 10px;
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    padding: 16px;
 }
 
-.life-step {
+.status-step-box {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    gap: 6px;
 }
 
-.life-icon {
-    width: 44px;
-    height: 44px;
+.status-step-box .badge-icon {
+    width: 36px;
+    height: 36px;
     border-radius: var(--radius-full);
+    background: var(--ppt-navy-primary);
     color: white;
-    font-size: 16px;
     font-weight: 900;
+    font-size: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 0 auto 6px;
 }
 
-.life-icon.blue { background: var(--primary-blue); }
-.life-icon.amber { background: var(--amber-warning); }
-.life-icon.green { background: var(--emerald-green); }
-.life-icon.sky { background: #0284C7; }
+.status-step-box.green .badge-icon { background: var(--ppt-green-dark); }
+.status-step-box.blue .badge-icon { background: var(--ppt-blue-accent); }
 
-.life-status {
+.status-step-box strong {
+    display: block;
     font-size: 0.82rem;
-    font-weight: 800;
+    color: var(--ppt-navy-dark);
     font-family: var(--font-en);
-    color: var(--text-primary);
+    margin-bottom: 2px;
 }
 
-.life-step p {
-    font-size: 0.76rem;
-    color: var(--text-secondary);
-    line-height: 1.4;
-}
-
-.life-arrow {
-    font-size: 20px;
-    color: var(--text-dim);
+.status-step-box p {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+    line-height: 1.35;
 }
 
 /* --------------------------------------------------------------------------
-   9. Audio Specs Bar (Slide 9)
-   -------------------------------------------------------------------------- */
-.audio-specs-bar {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-    background: var(--bg-accent-blue);
-    border: 1px solid rgba(37, 99, 235, 0.2);
-    border-radius: var(--radius-md);
-    padding: 14px 18px;
-}
-
-.spec-item {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.spec-item .lbl { font-size: 0.72rem; color: var(--text-muted); }
-.spec-item .val { font-size: 0.86rem; font-weight: 800; color: var(--text-primary); font-family: var(--font-mono); }
-.spec-item .val.text-green { color: var(--emerald-green); }
-
-/* --------------------------------------------------------------------------
-   10. Speaker Matrix Grid (Slide 11)
+   7. Speaker Matrix (Slide 11)
    -------------------------------------------------------------------------- */
 .speaker-matrix-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    gap: 12px;
 }
 
-.speaker-card {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    padding: 20px;
-    text-align: center;
+.speaker-deck-card {
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    border-top: 4px solid var(--ppt-navy-primary);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    text-align: right;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    box-shadow: var(--shadow-sm);
-    transition: var(--trans-fast);
+    gap: 6px;
 }
 
-.speaker-card:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-md);
-}
-
-.speaker-card.s1 { border-top: 4px solid var(--primary-blue); }
-.speaker-card.s2 { border-top: 4px solid var(--purple-accent); }
-.speaker-card.s3 { border-top: 4px solid var(--amber-warning); }
-.speaker-card.s4 { border-top: 4px solid var(--emerald-green); }
-
-.speaker-avatar {
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-full);
-    background: var(--bg-card);
-    border: 2px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2rem;
-    font-weight: 800;
-    color: var(--primary-blue);
-    font-family: var(--font-en);
-    box-shadow: var(--shadow-sm);
-}
-
-.speaker-role {
+.speaker-deck-card .sp-num {
     font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--text-muted);
-}
-
-.speaker-card h4 {
-    font-size: 1.05rem;
     font-weight: 800;
-    color: var(--text-primary);
-}
-
-.speaker-card p {
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
-}
-
-/* --------------------------------------------------------------------------
-   11. Test Results Hero (Slide 12)
-   -------------------------------------------------------------------------- */
-.test-results-hero {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-}
-
-.test-score-box {
-    background: var(--bg-accent-green);
-    border: 2px solid rgba(5, 150, 105, 0.3);
-    border-radius: var(--radius-xl);
-    padding: 16px 40px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-}
-
-.score-num {
-    font-size: 2.4rem;
-    font-weight: 900;
-    color: var(--emerald-green);
+    color: var(--ppt-blue-accent);
     font-family: var(--font-en);
 }
 
-.score-label {
-    font-size: 0.92rem;
+.speaker-deck-card h4 {
+    font-size: 0.98rem;
     font-weight: 800;
-    color: var(--emerald-green);
+    color: var(--ppt-navy-dark);
 }
 
-.test-categories-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    width: 100%;
-}
-
-.test-pill {
-    background: var(--bg-main);
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-md);
-    padding: 10px 16px;
-    font-size: 0.84rem;
+.speaker-deck-card .sp-role {
+    font-size: 0.76rem;
+    color: var(--text-muted);
     font-weight: 700;
-    color: var(--text-secondary);
+    margin-bottom: 4px;
+}
+
+.speaker-deck-card p {
+    font-size: 0.78rem;
+    color: var(--text-body);
+    line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   8. Tests Verification Banner (Slide 12)
+   -------------------------------------------------------------------------- */
+.tests-metric-banner {
+    background: var(--ppt-green-light);
+    border: 1px solid var(--ppt-green-border);
+    border-radius: var(--radius-sm);
+    padding: 12px 24px;
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+}
+
+.tests-metric-banner .score {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--ppt-green-dark);
+    font-family: var(--font-en);
+}
+
+.tests-metric-banner .score-text {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--ppt-green-dark);
+}
+
+.tests-grid-2x5 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
 }
 
-.test-pill.pass .chk {
-    color: var(--emerald-green);
+.test-item-pill {
+    background: var(--ppt-card-bg);
+    border: 1px solid var(--border-card);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--text-body);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.test-item-pill .check {
+    color: var(--ppt-green-dark);
     font-weight: 900;
 }
 
 /* --------------------------------------------------------------------------
-   12. Slide 13 Conclusion CTA
+   9. Slide 13 Conclusion CTA
    -------------------------------------------------------------------------- */
-.demo-cta-box {
-    margin-top: 14px;
-}
-
-.live-demo-launch-btn {
-    background: linear-gradient(135deg, var(--primary-blue), var(--emerald-green));
+.launch-cta-btn {
+    background: var(--ppt-navy-primary);
     color: white;
     text-decoration: none;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
-    padding: 14px 36px;
-    border-radius: var(--radius-full);
+    padding: 12px 32px;
+    border-radius: var(--radius-sm);
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.3);
-    transition: var(--trans-fast);
+    gap: 10px;
+    box-shadow: 0 4px 14px rgba(30, 58, 138, 0.25);
+    transition: 0.15s ease;
 }
 
-.live-demo-launch-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(37, 99, 235, 0.4);
-}
-
-.demo-features-reminder {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--text-muted);
+.launch-cta-btn:hover {
+    background: var(--ppt-blue-accent);
 }
 
 /* --------------------------------------------------------------------------
-   13. Footer Navigation Bar
+   10. Slide Footer (PowerPoint Widescreen Standard)
    -------------------------------------------------------------------------- */
-.presentation-footer {
-    background: var(--bg-header);
-    backdrop-filter: blur(16px);
-    border-top: 1px solid var(--border-light);
-    padding: 10px 24px;
+.slide-footer-ppt {
+    border-top: 1px solid var(--border-card);
+    padding-top: 8px;
+    margin-top: 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 56px;
-    position: relative;
-    z-index: 50;
-    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.02);
+    font-size: 0.72rem;
+    color: var(--text-subtle);
+    font-family: var(--font-ar);
 }
 
-.footer-left {
+.slide-footer-ppt .f-title {
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.slide-footer-ppt .f-speaker {
+    color: var(--ppt-navy-primary);
+    font-weight: 700;
+}
+
+/* --------------------------------------------------------------------------
+   11. Bottom Controls Bar
+   -------------------------------------------------------------------------- */
+.presentation-footer {
+    background: #FFFFFF;
+    border-top: 1px solid var(--border-slide);
+    padding: 6px 24px;
     display: flex;
-    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+    height: 48px;
+    z-index: 50;
 }
 
 .footer-btn {
-    background: var(--bg-card);
-    border: 1px solid var(--border-light);
-    color: var(--text-secondary);
+    background: #FFFFFF;
+    border: 1px solid var(--border-slide);
+    color: var(--text-body);
     font-family: var(--font-ar);
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     font-weight: 700;
-    padding: 7px 18px;
-    border-radius: var(--radius-md);
+    padding: 5px 14px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
     display: flex;
     align-items: center;
-    gap: 8px;
-    transition: var(--trans-fast);
-    box-shadow: var(--shadow-sm);
+    gap: 6px;
+    transition: 0.15s ease;
 }
 
 .footer-btn:hover {
-    background: var(--bg-subtle);
-    border-color: var(--border-subtle);
+    background: var(--ppt-card-bg);
+    border-color: var(--ppt-navy-primary);
+    color: var(--ppt-navy-primary);
 }
 
 .footer-btn.primary {
-    background: var(--primary-blue);
-    border-color: var(--primary-blue);
+    background: var(--ppt-navy-primary);
+    border-color: var(--ppt-navy-primary);
     color: white;
 }
 
 .footer-btn.primary:hover {
-    background: var(--primary-blue-dark);
+    background: var(--ppt-blue-accent);
 }
 
 .speaker-cue {
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
 }
 
 .speaker-cue strong {
-    color: var(--primary-blue);
+    color: var(--ppt-navy-primary);
 }
 
 .shortcuts-hint {
-    font-size: 0.74rem;
-    color: var(--text-dim);
+    font-size: 0.72rem;
+    color: var(--text-subtle);
 }
 
 /* --------------------------------------------------------------------------
-   14. Speaker Notes & Jump Menu Modals
+   12. Speaker Notes Drawer & Jump Menu Modal
    -------------------------------------------------------------------------- */
 .speaker-notes-drawer {
     position: fixed;
-    bottom: 56px;
+    bottom: 48px;
     left: 24px;
     width: 440px;
-    max-height: 380px;
-    background: white;
-    border: 1px solid var(--border-light);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-lg);
+    max-height: 360px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-slide);
+    border-radius: var(--radius-md);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     z-index: 100;
     transform: translateY(120%);
-    transition: transform var(--trans-smooth);
+    transition: transform 0.3s ease;
 }
 
 .speaker-notes-drawer.active {
@@ -1142,34 +962,36 @@ body {
 }
 
 .notes-header {
-    background: var(--bg-subtle);
-    padding: 10px 16px;
+    background: var(--ppt-card-bg);
+    padding: 8px 14px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-light);
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    border-bottom: 1px solid var(--border-card);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .notes-header h3 {
-    font-size: 0.88rem;
+    font-size: 0.84rem;
     font-weight: 800;
+    color: var(--ppt-navy-dark);
 }
 
 .close-notes-btn, .close-menu-btn {
     background: transparent;
     border: none;
-    font-size: 1rem;
+    font-size: 0.95rem;
     color: var(--text-muted);
     cursor: pointer;
 }
 
 .notes-body {
-    padding: 16px;
+    padding: 14px;
     overflow-y: auto;
-    font-size: 0.84rem;
-    color: var(--text-secondary);
+    font-size: 0.82rem;
+    color: var(--text-body);
     line-height: 1.6;
+    text-align: right;
 }
 
 .slide-menu-modal {
@@ -1178,15 +1000,15 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(15, 23, 42, 0.4);
-    backdrop-filter: blur(4px);
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(2px);
     display: flex;
     align-items: center;
     justify-content: center;
     z-index: 200;
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--trans-fast);
+    transition: opacity 0.2s ease;
 }
 
 .slide-menu-modal.active {
@@ -1195,69 +1017,59 @@ body {
 }
 
 .menu-content {
-    background: white;
+    background: #FFFFFF;
     width: 90%;
-    max-width: 580px;
-    max-height: 80vh;
-    border-radius: var(--radius-xl);
-    box-shadow: var(--shadow-lg);
+    max-width: 540px;
+    max-height: 75vh;
+    border-radius: var(--radius-md);
+    box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     overflow: hidden;
 }
 
 .menu-header {
-    padding: 16px 22px;
-    background: var(--bg-subtle);
+    padding: 12px 18px;
+    background: var(--ppt-card-bg);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-card);
 }
 
 .menu-list {
-    padding: 12px;
+    padding: 10px;
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 4px;
 }
 
 .menu-item-btn {
-    background: white;
-    border: 1px solid var(--border-light);
-    padding: 10px 14px;
-    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    border: 1px solid var(--border-card);
+    padding: 8px 12px;
+    border-radius: var(--radius-sm);
     text-align: right;
     font-family: var(--font-ar);
-    font-size: 0.86rem;
+    font-size: 0.82rem;
     font-weight: 700;
-    color: var(--text-secondary);
+    color: var(--text-body);
     cursor: pointer;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    transition: var(--trans-fast);
+    transition: 0.15s ease;
 }
 
 .menu-item-btn:hover, .menu-item-btn.active {
-    background: var(--bg-accent-blue);
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
+    background: var(--ppt-blue-light);
+    border-color: var(--ppt-blue-accent);
+    color: var(--ppt-navy-primary);
 }
 
 .menu-item-btn .speaker-tag {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--text-muted);
 }
-
-/* Helpers */
-.mt-16 { margin-top: 16px; }
-.mt-24 { margin-top: 24px; }
-.mb-10 { margin-bottom: 10px; }
-.mb-24 { margin-bottom: 24px; }
-.p-12 { padding: 12px; }
-.text-center { text-align: center; }
-.text-sm { font-size: 0.82rem; }
-.text-muted { color: var(--text-muted); }
