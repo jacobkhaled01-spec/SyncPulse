@@ -1,101 +1,61 @@
 /* ==========================================================================
-   SyncPulse Architectural Blueprint & Bento Infographic Presentation Deck
-   Style: High-Precision Engineering Blueprint Dashboard (CAD & Tech Bento UI)
-   Typography: Cairo (Primary Arabic), Plus Jakarta Sans / Outfit, JetBrains Mono
+   SyncPulse Master Executive Slide Deck - Modern Presentation Theme
+   Clean, Elegant, Spacious, High-Impact Academic & Corporate Defense
    ========================================================================== */
 
 :root {
-    /* Blueprint Engineering Canvas */
-    --blueprint-bg: #F0F4F8;
-    --blueprint-grid-line: rgba(30, 58, 138, 0.05);
-    --blueprint-dot: rgba(37, 99, 235, 0.12);
+    --bg-page: #F1F5F9;
+    --bg-slide: #FFFFFF;
+    --bg-card: #F8FAFC;
+    --bg-card-hover: #FFFFFF;
     
-    /* Bento Dashboard Cards */
-    --bento-card-bg: #FFFFFF;
-    --bento-card-subtle: #F8FAFC;
-    --bento-card-inner: #F1F5F9;
-    --bento-card-hover: #F8FAFC;
+    /* Executive Palette */
+    --primary: #1E3A8A;       /* Deep Royal Navy */
+    --primary-light: #EFF6FF; /* Soft Blue Tint */
+    --accent-blue: #2563EB;   /* Bright Sapphire */
+    --accent-cyan: #0284C7;   /* Technical Cyan */
+    --accent-emerald: #059669;/* Success Green */
+    --accent-rose: #E11D48;   /* Problem Red */
     
-    /* Technical Blueprint Palette */
-    --blueprint-navy-dark: #0A192F;
-    --blueprint-navy-main: #0F2942;
-    --blueprint-navy-sub: #1E3A8A;
-    --blueprint-cyan: #0284C7;
-    --blueprint-blue-electric: #2563EB;
-    --blueprint-blue-light: #EFF6FF;
-    --blueprint-indigo: #4F46E5;
-    
-    /* Engineering Precision Accents */
-    --eng-emerald: #059669;
-    --eng-emerald-light: #ECFDF5;
-    --eng-emerald-border: #A7F3D0;
-    
-    --eng-crimson: #DC2626;
-    --eng-crimson-light: #FEF2F2;
-    --eng-crimson-border: #FECACA;
-
-    --eng-amber: #D97706;
-    --eng-amber-light: #FFFBEB;
-    --eng-amber-border: #FDE68A;
-    
-    /* Typography */
-    --text-primary: #0A192F;
-    --text-secondary: #334155;
+    /* Text Hierarchy */
+    --text-title: #0F172A;
+    --text-body: #334155;
     --text-muted: #64748B;
-    --text-subtle: #94A3B8;
-    --text-code: #0284C7;
     
-    /* Borders & Blueprint Lines */
-    --blueprint-border: #CBD5E1;
-    --blueprint-border-light: #E2E8F0;
-    --blueprint-border-active: #2563EB;
-    
-    /* Shadows & Glows */
-    --bento-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.08), 0 0 0 1px rgba(15, 23, 42, 0.06);
-    --bento-hover-shadow: 0 20px 40px -10px rgba(37, 99, 235, 0.15), 0 0 0 2px var(--blueprint-blue-electric);
-    --blueprint-glow: 0 0 15px rgba(37, 99, 235, 0.2);
+    /* Borders & Shadows */
+    --border-light: #E2E8F0;
+    --border-subtle: #CBD5E1;
+    --shadow-slide: 0 10px 30px -5px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-hover: 0 8px 24px -4px rgba(37, 99, 235, 0.12);
 
     /* Fonts */
-    --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    --font-en: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'JetBrains Mono', 'Fira Code', Consolas, monospace;
-
-    /* Radii */
-    --radius-sm: 6px;
-    --radius-md: 12px;
-    --radius-lg: 18px;
-    --radius-xl: 24px;
-    --radius-full: 9999px;
+    --font-ar: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-en: 'Outfit', sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
 }
 
-/* Base Setup */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body {
-    background-color: var(--blueprint-bg);
-    background-image: 
-        linear-gradient(to right, var(--blueprint-grid-line) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--blueprint-grid-line) 1px, transparent 1px),
-        radial-gradient(var(--blueprint-dot) 1px, transparent 1px);
-    background-size: 24px 24px, 24px 24px, 12px 12px;
-    color: var(--text-secondary);
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: var(--bg-page);
+    color: var(--text-body);
     font-family: var(--font-ar);
     direction: rtl;
     text-align: right;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
     user-select: none;
     -webkit-font-smoothing: antialiased;
 }
 
-/* LTR Terms & Code Formatting */
-.en-term, .code-inline, code, pre, .stat-number, .binary-val, .hex-tag {
+/* LTR Terms & Code */
+.en-term, .code-inline, code, pre, .badge-en {
     direction: ltr;
     display: inline-block;
     font-family: var(--font-en);
@@ -104,346 +64,173 @@ body {
 
 code, .code-inline {
     font-family: var(--font-mono);
-    font-size: 0.82em;
-    padding: 2px 7px;
+    font-size: 0.84em;
+    padding: 2px 8px;
     background: #E2E8F0;
     color: #0F2942;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
     font-weight: 700;
-    border: 1px solid #CBD5E1;
 }
 
 /* --------------------------------------------------------------------------
-   1. Engineering Top Command Navigation Header
+   App Layout
    -------------------------------------------------------------------------- */
-.presentation-header {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--blueprint-border);
-    padding: 8px 24px;
+.app-container {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 16px 24px 20px;
+}
+
+/* Top Header Bar */
+.top-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 58px;
-    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
-    z-index: 50;
+    height: 48px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 0 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
 }
 
-.header-left {
+.top-bar-left {
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
-.header-logo {
-    width: 38px;
-    height: 38px;
-    background: linear-gradient(135deg, var(--blueprint-navy-main), var(--blueprint-blue-electric));
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.brand-badge {
+    background: var(--primary);
     color: white;
-    font-size: 18px;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-    position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.header-logo::after {
-    content: "CAD";
-    position: absolute;
-    bottom: -6px;
-    right: -6px;
-    background: var(--blueprint-cyan);
-    color: white;
-    font-size: 8px;
-    font-family: var(--font-mono);
-    font-weight: 900;
-    padding: 1px 4px;
-    border-radius: 3px;
-}
-
-.header-titles h2 {
-    font-size: 1.05rem;
-    font-weight: 900;
-    color: var(--blueprint-navy-dark);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.header-titles h2 span {
-    color: var(--blueprint-blue-electric);
-    font-family: var(--font-en);
+    font-size: 0.78rem;
     font-weight: 800;
-}
-
-.header-titles p {
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.header-titles p .spec-tag {
-    background: var(--blueprint-blue-light);
-    color: var(--blueprint-navy-sub);
-    padding: 1px 6px;
-    border-radius: 3px;
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    border: 1px solid var(--blueprint-border-light);
-}
-
-.header-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    width: 280px;
-}
-
-.slide-indicator {
-    font-family: var(--font-en);
-    font-size: 0.84rem;
-    font-weight: 800;
-    color: var(--text-primary);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.slide-indicator .slide-label {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    background: #E2E8F0;
-    padding: 2px 6px;
-    border-radius: 4px;
-}
-
-.slide-indicator .slide-current {
-    color: var(--blueprint-blue-electric);
-    font-size: 1.05rem;
-    font-weight: 900;
-}
-
-.progress-bar-container {
-    width: 100%;
-    height: 5px;
-    background: #E2E8F0;
-    border-radius: var(--radius-full);
-    overflow: hidden;
-    border: 1px solid var(--blueprint-border-light);
-}
-
-.progress-bar {
-    height: 100%;
-    width: 8%;
-    background: linear-gradient(90deg, var(--blueprint-navy-main), var(--blueprint-cyan), var(--blueprint-blue-electric));
-    border-radius: var(--radius-full);
-    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.header-right {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* Defense Stopwatch Timer Widget */
-.defense-timer-widget {
-    background: var(--bento-card-bg);
-    border: 1px solid var(--blueprint-border);
     padding: 4px 10px;
-    border-radius: var(--radius-sm);
+    border-radius: 6px;
+    font-family: var(--font-en);
+}
+
+.top-bar-title {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--text-title);
+}
+
+.top-bar-right {
     display: flex;
     align-items: center;
-    gap: 6px;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--blueprint-navy-dark);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    gap: 10px;
 }
 
-.defense-timer-widget .timer-btn {
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-.defense-timer-widget .timer-btn:hover { color: var(--blueprint-blue-electric); }
-
-.nav-icon-btn {
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    color: var(--text-primary);
+.top-btn {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    color: var(--text-body);
     font-family: var(--font-ar);
     font-size: 0.8rem;
     font-weight: 700;
-    padding: 6px 12px;
-    border-radius: var(--radius-sm);
+    padding: 5px 12px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: 0.15s ease;
+    transition: 0.2s ease;
 }
 
-.nav-icon-btn:hover, .nav-icon-btn.active {
-    background: var(--blueprint-blue-light);
-    border-color: var(--blueprint-blue-electric);
-    color: var(--blueprint-navy-main);
+.top-btn:hover {
+    background: var(--primary-light);
+    border-color: var(--accent-blue);
+    color: var(--primary);
 }
 
-.nav-action-btn {
-    background: linear-gradient(135deg, var(--blueprint-navy-main), var(--blueprint-navy-sub));
+.top-btn.live-link {
+    background: var(--primary);
     color: white;
     text-decoration: none;
-    font-family: var(--font-ar);
-    font-size: 0.8rem;
-    font-weight: 800;
-    padding: 6px 14px;
-    border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    transition: 0.15s ease;
-    box-shadow: 0 3px 10px rgba(15, 41, 66, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
-
-.nav-action-btn:hover {
-    background: var(--blueprint-blue-electric);
+.top-btn.live-link:hover {
+    background: var(--accent-blue);
 }
 
 /* --------------------------------------------------------------------------
-   2. Blueprint Presentation Viewport & Slide Frame
+   Slide Presentation Canvas (Centered, Spacious 16:9)
    -------------------------------------------------------------------------- */
-.presentation-viewport {
+.slide-canvas {
     flex: 1;
-    width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px 24px;
+    margin: 12px 0;
     position: relative;
-    overflow: hidden;
-    box-sizing: border-box;
 }
 
-/* 16:9 Bento Slide Canvas */
 .slide {
     display: none;
     width: 100%;
-    max-width: 1320px;
-    height: calc(100vh - 128px);
-    max-height: 740px;
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--bento-shadow);
-    padding: 24px 32px 16px;
+    max-width: 1340px;
+    height: 100%;
+    max-height: 720px;
+    background: var(--bg-slide);
+    border: 1px solid var(--border-light);
+    border-radius: 16px;
+    box-shadow: var(--shadow-slide);
+    padding: 28px 40px 20px;
     flex-direction: column;
     justify-content: space-between;
-    box-sizing: border-box;
-    overflow-y: auto;
     position: relative;
-    margin: 0 auto;
-}
-
-.slide::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--blueprint-navy-main), var(--blueprint-cyan), var(--blueprint-blue-electric));
-    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .slide.active {
     display: flex;
-    animation: slideActiveIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation: fadeInSlide 0.3s ease forwards;
 }
 
-@keyframes slideActiveIn {
-    from {
-        opacity: 0;
-        transform: translateY(6px) scale(0.99);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+@keyframes fadeInSlide {
+    from { opacity: 0; transform: scale(0.99); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-/* Slide Header Technical Ribbon */
-.slide-header-block {
-    margin-bottom: 14px;
-    border-bottom: 1px dashed var(--blueprint-border);
-    padding-bottom: 10px;
+/* Slide Header */
+.slide-header {
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
 }
 
-.slide-header-text {
-    flex: 1;
-}
-
-.section-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: var(--blueprint-blue-light);
-    color: var(--blueprint-navy-main);
-    border: 1px solid var(--blueprint-border-light);
-    font-size: 0.72rem;
+.slide-tag {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.74rem;
     font-weight: 800;
-    padding: 2px 8px;
-    border-radius: 4px;
+    padding: 3px 10px;
+    border-radius: 6px;
     margin-bottom: 4px;
-    font-family: var(--font-mono);
+    font-family: var(--font-en);
 }
 
-.slide-header-block h2 {
-    font-size: 1.45rem;
+.slide-header h2 {
+    font-size: 1.55rem;
     font-weight: 900;
-    color: var(--blueprint-navy-dark);
+    color: var(--text-title);
     line-height: 1.25;
 }
 
-.slide-header-block p {
-    font-size: 0.84rem;
+.slide-header p {
+    font-size: 0.88rem;
     color: var(--text-muted);
     font-weight: 600;
     margin-top: 2px;
 }
 
-.header-blueprint-badge {
-    background: var(--bento-card-inner);
-    border: 1px solid var(--blueprint-border-light);
-    border-radius: var(--radius-sm);
-    padding: 4px 10px;
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--blueprint-navy-sub);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-/* --------------------------------------------------------------------------
-   3. Bento Grid Systems & Blueprint Cards
-   -------------------------------------------------------------------------- */
+/* Slide Body & Cards */
 .slide-body {
     flex: 1;
     display: flex;
@@ -451,151 +238,107 @@ code, .code-inline {
     justify-content: center;
 }
 
-/* Bento Grid Formats */
-.bento-grid-2 {
+.cards-2-col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 16px;
+    gap: 20px;
 }
 
-.bento-grid-3 {
+.cards-3-col {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-}
-
-.bento-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.bento-grid-asymmetric {
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
     gap: 16px;
 }
 
-.bento-grid-3-asym {
+.cards-4-col {
     display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
+    grid-template-columns: repeat(4, 1fr);
     gap: 14px;
 }
 
-/* Bento Box Container */
-.bento-box {
-    background: var(--bento-card-bg);
-    border: 1px solid var(--blueprint-border);
-    border-radius: var(--radius-md);
-    padding: 16px 18px;
+/* Presentation Card */
+.deck-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-top: 4px solid var(--primary);
+    border-radius: 12px;
+    padding: 18px 20px;
     display: flex;
     flex-direction: column;
-    position: relative;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.bento-box:hover {
-    border-color: var(--blueprint-blue-electric);
-    box-shadow: var(--bento-shadow);
+.deck-card:hover {
+    background: var(--bg-card-hover);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
 }
 
-.bento-box.navy-accent {
-    border-top: 4px solid var(--blueprint-navy-main);
-}
+.deck-card.blue { border-top-color: var(--accent-blue); }
+.deck-card.cyan { border-top-color: var(--accent-cyan); }
+.deck-card.emerald { border-top-color: var(--accent-emerald); }
 
-.bento-box.blue-accent {
-    border-top: 4px solid var(--blueprint-blue-electric);
+.deck-card.problem {
+    background: #FFF1F2;
+    border-color: #FECDD3;
+    border-top-color: var(--accent-rose);
 }
+.deck-card.problem h3 { color: var(--accent-rose); }
 
-.bento-box.cyan-accent {
-    border-top: 4px solid var(--blueprint-cyan);
+.deck-card.solution {
+    background: #ECFDF5;
+    border-color: #A7F3D0;
+    border-top-color: var(--accent-emerald);
 }
+.deck-card.solution h3 { color: var(--accent-emerald); }
 
-.bento-box.emerald-accent {
-    border-top: 4px solid var(--eng-emerald);
-}
-
-.bento-box-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.deck-card h3 {
+    font-size: 1.05rem;
+    font-weight: 800;
+    color: var(--text-title);
     margin-bottom: 10px;
-    border-bottom: 1px solid var(--blueprint-border-light);
-    padding-bottom: 6px;
-}
-
-.bento-box-header h3 {
-    font-size: 0.98rem;
-    font-weight: 800;
-    color: var(--blueprint-navy-dark);
     display: flex;
     align-items: center;
-    gap: 6px;
-}
-
-.bento-box-header .box-code-tag {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    font-weight: 800;
-    color: var(--blueprint-blue-electric);
-    background: var(--blueprint-blue-light);
-    padding: 2px 6px;
-    border-radius: 3px;
-}
-
-/* Problem & Solution Bento Cards */
-.bento-box.problem {
-    background: var(--eng-crimson-light);
-    border: 1px solid var(--eng-crimson-border);
-    border-top: 4px solid var(--eng-crimson);
-}
-.bento-box.problem .bento-box-header h3 { color: var(--eng-crimson); }
-
-.bento-box.solution {
-    background: var(--eng-emerald-light);
-    border: 1px solid var(--eng-emerald-border);
-    border-top: 4px solid var(--eng-emerald);
-}
-.bento-box.solution .bento-box-header h3 { color: var(--eng-emerald); }
-
-/* Technical Lists */
-.tech-list {
-    list-style: none;
-    display: flex;
-    flex-direction: column;
     gap: 8px;
 }
 
-.tech-list li {
-    font-size: 0.84rem;
-    color: var(--text-secondary);
-    line-height: 1.5;
+.deck-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+.deck-list li {
+    font-size: 0.88rem;
+    color: var(--text-body);
+    line-height: 1.55;
     position: relative;
     padding-right: 18px;
 }
 
-.tech-list li::before {
-    content: "▫";
-    color: var(--blueprint-blue-electric);
-    font-weight: 900;
+.deck-list li::before {
+    content: "■";
+    color: var(--accent-blue);
+    font-size: 0.65rem;
     position: absolute;
     right: 0;
-    top: 0;
+    top: 3px;
 }
 
-.bento-box.problem .tech-list li::before { content: "✕"; color: var(--eng-crimson); font-size: 0.72rem; }
-.bento-box.solution .tech-list li::before { content: "✓"; color: var(--eng-emerald); font-size: 0.75rem; }
+.deck-card.problem .deck-list li::before { content: "✖"; color: var(--accent-rose); font-size: 0.75rem; }
+.deck-card.solution .deck-list li::before { content: "✔"; color: var(--accent-emerald); font-size: 0.75rem; }
 
-.tech-list strong {
-    color: var(--blueprint-navy-dark);
+.deck-list strong {
+    color: var(--text-title);
     font-weight: 800;
 }
 
 /* --------------------------------------------------------------------------
-   4. Hero Blueprint Title Slide (Slide 1)
+   Hero Slide 1
    -------------------------------------------------------------------------- */
-.hero-blueprint-container {
+.hero-layout {
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -604,453 +347,309 @@ code, .code-inline {
     height: 100%;
 }
 
-.blueprint-meta-strip {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: var(--blueprint-blue-light);
-    border: 1px solid var(--blueprint-border-light);
-    padding: 4px 14px;
-    border-radius: var(--radius-full);
-    font-size: 0.8rem;
+.hero-pill {
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.82rem;
     font-weight: 800;
-    color: var(--blueprint-navy-main);
+    padding: 5px 16px;
+    border-radius: 9999px;
     margin-bottom: 12px;
-    font-family: var(--font-mono);
 }
 
-.hero-blueprint-title {
-    font-size: 2.2rem;
+.hero-layout h1 {
+    font-size: 2.25rem;
     font-weight: 900;
-    color: var(--blueprint-navy-dark);
+    color: var(--text-title);
     line-height: 1.25;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
 }
 
-.hero-blueprint-title .brand-gradient {
-    background: linear-gradient(135deg, var(--blueprint-navy-main), var(--blueprint-blue-electric), var(--blueprint-cyan));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.hero-layout h1 span {
+    color: var(--accent-blue);
     font-family: var(--font-en);
 }
 
-.hero-blueprint-desc {
-    font-size: 0.94rem;
-    color: var(--text-secondary);
+.hero-desc {
+    font-size: 0.98rem;
+    color: var(--text-body);
     max-width: 900px;
-    line-height: 1.6;
-    margin-bottom: 16px;
+    line-height: 1.65;
+    margin-bottom: 22px;
 }
 
-.hero-bento-metrics {
+.hero-features {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 12px;
     width: 100%;
-    max-width: 1060px;
-    margin-bottom: 16px;
+    max-width: 1050px;
+    margin-bottom: 20px;
 }
 
-.hero-metric-cell {
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-top: 3px solid var(--blueprint-blue-electric);
-    border-radius: var(--radius-sm);
-    padding: 10px 12px;
+.hero-feature-box {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-top: 3px solid var(--primary);
+    padding: 12px 14px;
+    border-radius: 8px;
     text-align: right;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
 }
 
-.hero-metric-cell strong {
+.hero-feature-box strong {
     display: block;
-    font-size: 0.84rem;
-    color: var(--blueprint-navy-dark);
+    font-size: 0.88rem;
+    color: var(--text-title);
     font-weight: 800;
+    margin-bottom: 2px;
 }
 
-.hero-speakers-strip {
-    background: var(--bento-card-subtle);
-    border: 1px solid var(--blueprint-border);
-    border-radius: var(--radius-sm);
-    padding: 8px 16px;
+.hero-feature-box small {
+    font-size: 0.74rem;
+    color: var(--accent-cyan);
+    font-family: var(--font-mono);
+    font-weight: 700;
+}
+
+.hero-speakers {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 8px;
+    padding: 8px 18px;
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 12px;
-    font-size: 0.78rem;
-    flex-wrap: wrap;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+    font-size: 0.8rem;
 }
 
-.hero-speakers-strip strong {
-    color: var(--blueprint-navy-main);
-    font-weight: 800;
+.hero-speakers strong {
+    color: var(--primary);
 }
 
-.speaker-pill-inline {
+.speaker-pill {
     background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
+    border: 1px solid var(--border-light);
     padding: 3px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 0.74rem;
+    border-radius: 6px;
+    font-size: 0.76rem;
     font-weight: 700;
-    color: var(--text-primary);
+    color: var(--text-title);
 }
 
 /* --------------------------------------------------------------------------
-   5. Interactive 12-Byte FrameHeader Blueprint (Slide 4)
+   Slide 4: FrameHeader Table
    -------------------------------------------------------------------------- */
-.blueprint-packet-diagram {
-    background: #0A192F;
-    border-radius: var(--radius-md);
-    padding: 14px;
-    border: 1px solid #1E293B;
-    margin-bottom: 12px;
-}
-
-.packet-header-grid {
+.frame-table-row {
     display: grid;
     grid-template-columns: 1fr 1fr 1.6fr 2.2fr 2.2fr;
     gap: 6px;
+    margin-bottom: 12px;
 }
 
-.packet-bit-box {
-    background: #112240;
-    border: 1px solid #233554;
-    border-top: 3px solid var(--blueprint-cyan);
+.frame-cell {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-top: 3px solid var(--primary);
     padding: 8px 4px;
     text-align: center;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    transition: 0.15s ease;
+    border-radius: 6px;
 }
 
-.packet-bit-box:hover, .packet-bit-box.active {
-    background: #1D4ED8;
-    border-color: #60A5FA;
-    transform: translateY(-2px);
-}
-
-.packet-bit-box .bit-label {
-    font-size: 0.7rem;
-    font-family: var(--font-mono);
-    color: #93C5FD;
+.frame-cell .name {
+    font-size: 0.72rem;
     font-weight: 800;
+    font-family: var(--font-en);
+    color: var(--text-title);
     display: block;
 }
 
-.packet-bit-box .bit-val {
-    font-size: 0.74rem;
+.frame-cell .val {
+    font-size: 0.76rem;
     font-family: var(--font-mono);
-    color: #FFFFFF;
-    font-weight: 900;
+    color: var(--accent-blue);
+    font-weight: 700;
     margin-top: 2px;
     display: block;
 }
 
-.packet-bit-box .bit-offset {
-    font-size: 0.62rem;
-    color: #64748B;
-    font-family: var(--font-mono);
-    display: block;
-}
-
-.blueprint-code-frame {
+.code-box {
     background: #0F172A;
-    border-radius: var(--radius-sm);
+    border-radius: 8px;
     overflow: hidden;
-    border: 1px solid #1E293B;
+    margin-top: 8px;
 }
 
-.code-top-ribbon {
+.code-box-header {
     background: #1E293B;
     padding: 4px 12px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    font-size: 0.72rem;
     font-family: var(--font-mono);
-    font-size: 0.7rem;
     color: #94A3B8;
+    border-bottom: 1px solid #334155;
+    direction: ltr;
+    text-align: left;
 }
 
-.blueprint-code-frame pre {
+.code-box pre {
     padding: 10px 14px;
     font-family: var(--font-mono);
-    font-size: 0.74rem;
+    font-size: 0.75rem;
     line-height: 1.45;
-    color: #E2E8F0;
+    color: #F8FAFC;
     direction: ltr;
     text-align: left;
     overflow-x: auto;
 }
 
 /* --------------------------------------------------------------------------
-   6. SVG Network Topology & Pulse Animation (Slide 5)
+   Slide Footer & Bottom Navigation Controls
    -------------------------------------------------------------------------- */
-.discovery-pipeline-bento {
-    display: grid;
-    grid-template-columns: 1fr 40px 1fr 40px 1fr;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
-}
-
-.discovery-node-card {
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-top: 4px solid var(--blueprint-navy-main);
-    border-radius: var(--radius-sm);
-    padding: 14px;
-    text-align: right;
-    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
-}
-
-.discovery-node-card h4 {
-    font-size: 0.88rem;
-    color: var(--blueprint-navy-dark);
-    font-weight: 800;
-    margin-bottom: 4px;
-}
-
-.discovery-node-card p {
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-    line-height: 1.45;
-    margin-bottom: 6px;
-}
-
-.pipeline-pulse-arrow {
-    text-align: center;
-    font-size: 20px;
-    color: var(--blueprint-blue-electric);
-    font-weight: 900;
-    animation: pulseArrow 1.5s infinite ease-in-out;
-}
-
-@keyframes pulseArrow {
-    0%, 100% { transform: scale(1); opacity: 0.6; }
-    50% { transform: scale(1.25); opacity: 1; color: var(--blueprint-cyan); }
-}
-
-/* --------------------------------------------------------------------------
-   7. Live Ring Buffer Circular Matrix (Slide 9)
-   -------------------------------------------------------------------------- */
-.ring-buffer-matrix {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.ring-buffer-cell {
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-top: 3px solid var(--blueprint-navy-main);
-    border-radius: var(--radius-sm);
-    padding: 8px 4px;
-    text-align: center;
-    transition: 0.2s ease;
-}
-
-.ring-buffer-cell.in-use {
-    background: var(--eng-emerald-light);
-    border-color: var(--eng-emerald-border);
-    border-top-color: var(--eng-emerald);
-    transform: scale(1.04);
-    box-shadow: 0 4px 10px rgba(5, 150, 105, 0.2);
-}
-
-.ring-buffer-cell .cell-title {
-    font-size: 0.68rem;
-    font-family: var(--font-mono);
-    font-weight: 800;
-    color: var(--blueprint-navy-dark);
-    display: block;
-}
-
-.ring-buffer-cell .cell-status {
-    font-size: 0.62rem;
-    font-family: var(--font-mono);
-    font-weight: 700;
-    color: var(--eng-emerald);
-    display: block;
-    margin-top: 2px;
-}
-
-/* --------------------------------------------------------------------------
-   8. 4-Speaker Bento Matrix (Slide 11)
-   -------------------------------------------------------------------------- */
-.speaker-bento-matrix {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 12px;
-}
-
-.speaker-blueprint-card {
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-top: 4px solid var(--blueprint-navy-main);
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
-    text-align: right;
+.slide-footer-info {
+    border-top: 1px solid var(--border-light);
+    padding-top: 8px;
+    margin-top: 12px;
     display: flex;
-    flex-direction: column;
     justify-content: space-between;
-    box-shadow: var(--bento-shadow);
-}
-
-.speaker-blueprint-card .sp-badge {
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    font-weight: 900;
-    color: var(--blueprint-blue-electric);
-}
-
-.speaker-blueprint-card h4 {
-    font-size: 0.95rem;
-    font-weight: 900;
-    color: var(--blueprint-navy-dark);
-    margin: 3px 0;
-}
-
-.speaker-blueprint-card .sp-role {
+    align-items: center;
     font-size: 0.74rem;
     color: var(--text-muted);
-    font-weight: 700;
-    margin-bottom: 6px;
 }
 
-.speaker-blueprint-card p {
-    font-size: 0.78rem;
-    color: var(--text-secondary);
-    line-height: 1.45;
-}
-
-/* --------------------------------------------------------------------------
-   9. Slide Footer Strip
-   -------------------------------------------------------------------------- */
-.slide-footer-blueprint {
-    border-top: 1px solid var(--blueprint-border-light);
-    padding-top: 8px;
-    margin-top: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.72rem;
-    color: var(--text-subtle);
-    font-family: var(--font-mono);
-}
-
-.slide-footer-blueprint .f-project {
-    color: var(--text-muted);
-    font-weight: 700;
-}
-
-.slide-footer-blueprint .f-speaker {
-    color: var(--blueprint-navy-main);
+.slide-footer-info .f-speaker {
+    color: var(--primary);
     font-weight: 800;
-    font-family: var(--font-ar);
 }
 
-/* --------------------------------------------------------------------------
-   10. Command Bottom Controls Bar
-   -------------------------------------------------------------------------- */
-.presentation-footer {
+/* Bottom Presentation Controls Bar */
+.bottom-bar {
+    height: 52px;
     background: #FFFFFF;
-    border-top: 1px solid var(--blueprint-border);
-    padding: 6px 24px;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 48px;
-    z-index: 50;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
 }
 
-.footer-btn {
+.nav-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-btn {
     background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    color: var(--text-primary);
+    border: 1px solid var(--border-light);
+    color: var(--text-body);
     font-family: var(--font-ar);
-    font-size: 0.8rem;
-    font-weight: 700;
-    padding: 5px 14px;
-    border-radius: var(--radius-sm);
+    font-size: 0.82rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 8px;
     cursor: pointer;
     display: flex;
     align-items: center;
     gap: 6px;
-    transition: 0.15s ease;
+    transition: 0.2s ease;
 }
 
-.footer-btn:hover {
-    background: var(--blueprint-blue-light);
-    border-color: var(--blueprint-navy-main);
-    color: var(--blueprint-navy-main);
+.nav-btn:hover {
+    background: var(--bg-card);
+    border-color: var(--primary);
+    color: var(--primary);
 }
 
-.footer-btn.primary {
-    background: var(--blueprint-navy-main);
-    border-color: var(--blueprint-navy-main);
+.nav-btn.primary {
+    background: var(--primary);
+    border-color: var(--primary);
     color: white;
 }
-
-.footer-btn.primary:hover {
-    background: var(--blueprint-blue-electric);
+.nav-btn.primary:hover {
+    background: var(--accent-blue);
 }
 
-.speaker-cue {
-    font-size: 0.8rem;
+.slide-counter {
+    font-family: var(--font-en);
+    font-size: 0.88rem;
+    font-weight: 800;
+    color: var(--text-title);
+    padding: 0 8px;
+}
+
+.slide-counter .current {
+    color: var(--accent-blue);
+    font-size: 1.05rem;
+}
+
+.speaker-cue-text {
+    font-size: 0.82rem;
     color: var(--text-muted);
 }
-
-.speaker-cue strong {
-    color: var(--blueprint-navy-main);
+.speaker-cue-text strong {
+    color: var(--primary);
 }
 
-.shortcuts-hint {
-    font-size: 0.72rem;
-    color: var(--text-subtle);
-    font-family: var(--font-mono);
-}
-
-/* --------------------------------------------------------------------------
-   11. Laser Pointer & Grid Light-Table
-   -------------------------------------------------------------------------- */
-.laser-dot {
+/* Speaker Notes Drawer & Modal */
+.notes-drawer {
     position: fixed;
-    width: 12px;
-    height: 12px;
-    background: #EF4444;
-    border-radius: 50%;
-    box-shadow: 0 0 14px 4px rgba(239, 68, 68, 0.85), 0 0 4px #FFFFFF;
-    pointer-events: none;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    display: none;
+    bottom: 80px;
+    left: 24px;
+    width: 440px;
+    max-height: 380px;
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+    z-index: 100;
+    transform: translateY(120%);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.laser-dot.active {
-    display: block;
+.notes-drawer.active {
+    transform: translateY(0);
 }
 
-.slide-grid-modal {
+.notes-drawer-header {
+    background: var(--bg-card);
+    padding: 10px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-light);
+    border-radius: 12px 12px 0 0;
+}
+
+.notes-drawer-body {
+    padding: 16px;
+    overflow-y: auto;
+    font-size: 0.84rem;
+    color: var(--text-body);
+    line-height: 1.65;
+    text-align: right;
+}
+
+.grid-modal {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(10, 25, 47, 0.88);
-    backdrop-filter: blur(8px);
+    width: 100vw;
+    height: 100vh;
+    background: rgba(15, 23, 42, 0.85);
+    backdrop-filter: blur(6px);
     display: flex;
     flex-direction: column;
     z-index: 300;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s ease;
-    padding: 30px 40px;
+    transition: opacity 0.2s ease;
+    padding: 32px 40px;
 }
 
-.slide-grid-modal.active {
+.grid-modal.active {
     opacity: 1;
     pointer-events: all;
 }
@@ -1063,112 +662,46 @@ code, .code-inline {
     margin-bottom: 20px;
 }
 
-.grid-modal-header h3 {
-    font-size: 1.25rem;
-    font-weight: 800;
-    font-family: var(--font-mono);
-}
-
-.grid-thumbnails-container {
+.grid-thumbs {
     flex: 1;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 16px;
     overflow-y: auto;
-    padding-bottom: 20px;
 }
 
-.thumb-card {
+.thumb-box {
     background: #FFFFFF;
-    border-radius: var(--radius-sm);
+    border-radius: 10px;
     border: 2px solid transparent;
-    padding: 12px 14px;
+    padding: 14px;
     cursor: pointer;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    transition: 0.15s ease;
     height: 120px;
+    transition: transform 0.2s ease;
 }
 
-.thumb-card:hover, .thumb-card.active {
-    border-color: var(--blueprint-blue-electric);
+.thumb-box:hover, .thumb-box.active {
+    border-color: var(--accent-blue);
     transform: translateY(-3px);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
 }
 
-.thumb-card .thumb-num {
+.thumb-box .num {
     font-size: 0.72rem;
     font-weight: 800;
-    font-family: var(--font-mono);
-    color: var(--blueprint-blue-electric);
+    font-family: var(--font-en);
+    color: var(--accent-blue);
 }
 
-.thumb-card .thumb-title {
-    font-size: 0.82rem;
-    font-weight: 800;
-    color: var(--blueprint-navy-dark);
-    line-height: 1.35;
-}
-
-.thumb-card .thumb-speaker {
-    font-size: 0.68rem;
-    color: var(--text-muted);
-}
-
-/* --------------------------------------------------------------------------
-   12. Speaker Notes Drawer
-   -------------------------------------------------------------------------- */
-.speaker-notes-drawer {
-    position: fixed;
-    bottom: 48px;
-    left: 24px;
-    width: 440px;
-    max-height: 380px;
-    background: #FFFFFF;
-    border: 1px solid var(--blueprint-border);
-    border-radius: var(--radius-md);
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
-    display: flex;
-    flex-direction: column;
-    z-index: 100;
-    transform: translateY(120%);
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.speaker-notes-drawer.active {
-    transform: translateY(0);
-}
-
-.notes-header {
-    background: var(--bento-card-subtle);
-    padding: 8px 14px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid var(--blueprint-border-light);
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
-.notes-header h3 {
+.thumb-box .title {
     font-size: 0.84rem;
     font-weight: 800;
-    color: var(--blueprint-navy-dark);
+    color: var(--text-title);
 }
 
-.close-notes-btn, .close-menu-btn {
-    background: transparent;
-    border: none;
-    font-size: 0.95rem;
+.thumb-box .spk {
+    font-size: 0.7rem;
     color: var(--text-muted);
-    cursor: pointer;
-}
-
-.notes-body {
-    padding: 14px;
-    overflow-y: auto;
-    font-size: 0.82rem;
-    color: var(--text-secondary);
-    line-height: 1.6;
-    text-align: right;
 }

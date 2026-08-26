@@ -263,7 +263,7 @@ function prevSlide() {
  * Update Speaker Notes Drawer Content
  */
 function updateSpeakerNotes(slideIndex) {
-    const notesContainer = document.getElementById('speaker-notes-content');
+    const notesContainer = document.getElementById('notes-content') || document.getElementById('speaker-notes-content');
     if (!notesContainer) return;
 
     const currentNote = speakerNotes[slideIndex];
@@ -283,8 +283,10 @@ function updateSpeakerNotes(slideIndex) {
  * Toggle Speaker Notes Drawer
  */
 function toggleNotes() {
-    const drawer = document.getElementById('speaker-notes-drawer');
+    const drawer = document.getElementById('notes-drawer') || document.getElementById('speaker-notes-drawer');
     const btn = document.getElementById('btn-notes');
+    if (!drawer) return;
+
     presentationState.isNotesOpen = !presentationState.isNotesOpen;
 
     if (presentationState.isNotesOpen) {
@@ -297,49 +299,10 @@ function toggleNotes() {
 }
 
 /**
- * Build Slide Jump Menu
- */
-function buildSlideMenu() {
-    const menuList = document.getElementById('slide-menu-list');
-    if (!menuList) return;
-
-    menuList.innerHTML = '';
-    const slides = document.querySelectorAll('.slide');
-
-    slides.forEach((slide, index) => {
-        const title = slide.getAttribute('data-title') || `الشريحة ${index + 1}`;
-        const speaker = slide.getAttribute('data-speaker') || '';
-
-        const itemBtn = document.createElement('button');
-        itemBtn.className = 'menu-item-btn';
-        itemBtn.id = `menu-item-${index}`;
-        itemBtn.innerHTML = `
-            <span><strong>${(index + 1).toString().padStart(2, '0')}.</strong> ${title}</span>
-            <span class="speaker-tag">${speaker}</span>
-        `;
-        itemBtn.onclick = () => {
-            goToSlide(index);
-            toggleMenu();
-        };
-        menuList.appendChild(itemBtn);
-    });
-}
-
-function toggleMenu() {
-    const modal = document.getElementById('slide-menu-modal');
-    presentationState.isMenuOpen = !presentationState.isMenuOpen;
-    if (presentationState.isMenuOpen) {
-        modal.classList.add('active');
-    } else {
-        modal.classList.remove('active');
-    }
-}
-
-/**
  * Build Visual Grid Light-Table (Overview Mode)
  */
 function buildGridOverview() {
-    const container = document.getElementById('grid-thumbnails-container');
+    const container = document.getElementById('grid-thumbs-container') || document.getElementById('grid-thumbnails-container');
     if (!container) return;
 
     container.innerHTML = '';
@@ -350,14 +313,14 @@ function buildGridOverview() {
         const speaker = slide.getAttribute('data-speaker') || '';
 
         const card = document.createElement('div');
-        card.className = 'thumb-card';
+        card.className = 'thumb-box';
         card.id = `thumb-card-${index}`;
         card.innerHTML = `
             <div>
-                <span class="thumb-num">SLIDE ${(index + 1).toString().padStart(2, '0')}</span>
-                <h4 class="thumb-title">${title}</h4>
+                <span class="num">SLIDE ${(index + 1).toString().padStart(2, '0')}</span>
+                <h4 class="title">${title}</h4>
             </div>
-            <span class="thumb-speaker">${speaker}</span>
+            <span class="spk">${speaker}</span>
         `;
         card.onclick = () => {
             goToSlide(index);
@@ -368,7 +331,8 @@ function buildGridOverview() {
 }
 
 function toggleGrid() {
-    const modal = document.getElementById('slide-grid-modal');
+    const modal = document.getElementById('grid-modal') || document.getElementById('slide-grid-modal');
+    if (!modal) return;
     presentationState.isGridOpen = !presentationState.isGridOpen;
     if (presentationState.isGridOpen) {
         modal.classList.add('active');
