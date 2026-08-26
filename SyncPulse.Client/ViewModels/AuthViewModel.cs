@@ -115,9 +115,15 @@ namespace SyncPulse.Client.ViewModels
         {
             _discoveryListener.ServerDiscovered += announcement =>
             {
-                ServerIP = announcement.ServerIP;
-                ServerPort = announcement.TcpPort;
-                DiscoveryStatus = $"🟢 تم اكتشاف الخادم تلقائياً: {announcement.ServerName} ({announcement.ServerIP})";
+                App.Current?.Dispatcher.Invoke(() =>
+                {
+                    if (!string.IsNullOrWhiteSpace(announcement.ServerIP) && announcement.ServerIP != "0.0.0.0")
+                    {
+                        ServerIP = announcement.ServerIP;
+                        ServerPort = announcement.TcpPort;
+                        DiscoveryStatus = $"🟢 متصل بالخادم تلقائياً: {announcement.ServerIP}:{announcement.TcpPort}";
+                    }
+                });
             };
 
             try

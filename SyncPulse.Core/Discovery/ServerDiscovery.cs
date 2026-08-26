@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -26,7 +27,7 @@ namespace SyncPulse.Core.Discovery
         private UdpClient? _udpClient;
         private CancellationTokenSource? _cts;
 
-        public void StartBroadcasting(ServerAnnouncement announcement, int intervalMs = 2000)
+        public void StartBroadcasting(ServerAnnouncement announcement, int intervalMs = 1500)
         {
             Stop();
 
@@ -43,14 +44,19 @@ namespace SyncPulse.Core.Discovery
             _cts = new CancellationTokenSource();
             Task.Run(async () =>
             {
-                var broadcastEndpoint = new IPEndPoint(IPAddress.Broadcast, DiscoveryPort);
                 byte[] messageBytes = SerializationUtils.SerializeToUtf8Bytes(announcement);
 
                 while (!_cts.Token.IsCancellationRequested && _udpClient != null)
                 {
                     try
                     {
-                        await _udpClient.SendAsync(messageBytes, broadcastEndpoint, _cts.Token);
+                        var targets = NetworkUtils.GetBroadcastAddresses();
+                        foreach (var target in targets)
+                        {
+                            var broadcastEndpoint = new IPEndPoint(target, DiscoveryPort);
+                            await _udpClient.SendAsync(messageBytes, broadcastEndpoint, _cts.Token);
+                        }
+
                         await Task.Delay(intervalMs, _cts.Token);
                     }
                     catch (OperationCanceledException)
@@ -96,6 +102,7 @@ namespace SyncPulse.Core.Discovery
             {
                 _udpClient = new UdpClient();
                 _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReuseAddress, true);
+                _udpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, true);
                 _udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, ServerDiscoveryBroadcaster.DiscoveryPort));
             }
             catch
@@ -115,7 +122,7 @@ namespace SyncPulse.Core.Discovery
 
                         if (announcement != null)
                         {
-                            if (string.IsNullOrWhiteSpace(announcement.ServerIP) || announcement.ServerIP == "0.0.0.0")
+                            if (string.IsNullOrWhiteSpace(announcement.ServerIP) || announcement.ServerIP == "0.0.0.0" || announcement.ServerIP == "127.0.0.1")
                             {
                                 announcement.ServerIP = result.RemoteEndPoint.Address.ToString();
                             }
