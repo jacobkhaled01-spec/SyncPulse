@@ -367,7 +367,8 @@ namespace SyncPulse.Tests
             var calls = new CallRepository(db);
             var audit = new AuditLogRepository(db);
             var sessionMgr = new SessionManager(users, audit);
-            var coordinator = new CallCoordinator(sessionMgr, calls, audit);
+            var mediaRelay = new UdpMediaRelay();
+            var coordinator = new CallCoordinator(sessionMgr, calls, audit, mediaRelay);
 
             try
             {

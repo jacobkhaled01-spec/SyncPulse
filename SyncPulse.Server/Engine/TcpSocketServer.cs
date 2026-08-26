@@ -55,8 +55,8 @@ namespace SyncPulse.Server.Engine
 
             // 2. تهيئة طبقة الخدمات
             Sessions = new SessionManager(Users, AuditLogs);
-            CallCoordinator = new CallCoordinator(Sessions, Calls, AuditLogs);
             MediaRelay = new UdpMediaRelay();
+            CallCoordinator = new CallCoordinator(Sessions, Calls, AuditLogs, MediaRelay);
             DiscoveryBroadcaster = new ServerDiscoveryBroadcaster();
             Dispatcher = new PacketDispatcher(Users, Contacts, Messages, Calls, Sessions, CallCoordinator, AuditLogs);
         }

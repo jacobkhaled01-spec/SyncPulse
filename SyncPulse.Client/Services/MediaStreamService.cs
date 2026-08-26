@@ -60,6 +60,8 @@ namespace SyncPulse.Client.Services
             _serverMediaEndpoint = new IPEndPoint(IPAddress.Parse(serverIp), serverUdpPort);
 
             _udpClient = new UdpClient(0);
+            _udpClient.Client.SendBufferSize = 2 * 1024 * 1024;
+            _udpClient.Client.ReceiveBufferSize = 2 * 1024 * 1024;
             _cts = new CancellationTokenSource();
             _isStreaming = true;
 
@@ -74,8 +76,16 @@ namespace SyncPulse.Client.Services
                 Video.Start();
             }
 
-            // إرسال حزمة تهيئة أولية لمكرر UDP Relay
-            SendMediaFrame(CallType.Audio, new byte[16]);
+            // إرسال حزم تهيئة أولية لتثبيت منفذ UDP في الخادم
+            Task.Run(async () =>
+            {
+                for (int i = 0; i < 3; i++)
+                {
+                    if (!_isStreaming) break;
+                    SendMediaFrame(CallType.Audio, new byte[32]);
+                    await Task.Delay(100);
+                }
+            });
         }
 
         public async Task SendMediaFrameAsync(CallType mediaType, byte[] payloadData)

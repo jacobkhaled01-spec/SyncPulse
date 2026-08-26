@@ -5,6 +5,7 @@ using SyncPulse.Core.Enums;
 using SyncPulse.Core.Packets;
 using SyncPulse.Core.Protocol;
 using SyncPulse.Server.Data;
+using SyncPulse.Server.Engine;
 
 namespace SyncPulse.Server.Services
 {
@@ -19,7 +20,7 @@ namespace SyncPulse.Server.Services
     }
 
     /// <summary>
-    /// منسق إشارات المكالمات الفردية وتتبع حالة الاتصال
+    /// منسق إشارات المكالمات الفردية وتتبع حالة الاتصال وتسجيل المشتركين في مكرر الوسائط
     /// </summary>
     public class CallCoordinator
     {
@@ -27,12 +28,14 @@ namespace SyncPulse.Server.Services
         private readonly SessionManager _sessionManager;
         private readonly CallRepository _callRepo;
         private readonly AuditLogRepository _auditRepo;
+        private readonly UdpMediaRelay _mediaRelay;
 
-        public CallCoordinator(SessionManager sessionManager, CallRepository callRepo, AuditLogRepository auditRepo)
+        public CallCoordinator(SessionManager sessionManager, CallRepository callRepo, AuditLogRepository auditRepo, UdpMediaRelay mediaRelay)
         {
             _sessionManager = sessionManager;
             _callRepo = callRepo;
             _auditRepo = auditRepo;
+            _mediaRelay = mediaRelay;
         }
 
         public async Task HandleCallSignalAsync(ClientSession senderSession, CallSignalPacket signal)
@@ -98,6 +101,9 @@ namespace SyncPulse.Server.Services
             };
             _activeCalls[callId] = callState;
 
+            // تسجيل طرفي المكالمة في مكرر UDP Relay لتمرير الصوت والفيديو فوراً
+            _mediaRelay.RegisterCallParticipants(callId, signal.CallerID, signal.ReceiverID);
+
             // 3. تمرير طلب الرنين للطرف الآخر
             await receiverSession.SendPacketAsync(SyncPacket.Create(PacketType.CallOffer, signal));
             await _auditRepo.LogAsync("Info", "Call", $"بدء مكالمة {signal.Type} بين {signal.CallerUsername} و {signal.ReceiverUsername}", signal.CallerID);
@@ -110,6 +116,7 @@ namespace SyncPulse.Server.Services
             {
                 callState.ConnectedAt = DateTime.UtcNow;
                 callerTargetId = callState.CallerID;
+                _mediaRelay.RegisterCallParticipants(signal.CallID, callState.CallerID, callState.ReceiverID);
             }
 
             // إشعار المتصل بأن المكالمة قُبلت
@@ -125,6 +132,7 @@ namespace SyncPulse.Server.Services
                 await _callRepo.EndCallAsync(signal.CallID, 0, "Rejected");
                 targetId = callState.CallerID;
             }
+            _mediaRelay.UnregisterCall(signal.CallID);
             await RelaySignalAsync(targetId, signal);
         }
 
@@ -143,6 +151,7 @@ namespace SyncPulse.Server.Services
                 peerId = (session.UserID == callState.CallerID) ? callState.ReceiverID : callState.CallerID;
             }
 
+            _mediaRelay.UnregisterCall(signal.CallID);
             signal.DurationSeconds = duration;
 
             // إشعار كلا الطرفين بانتهاء المكالمة
