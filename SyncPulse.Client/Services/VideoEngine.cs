@@ -220,11 +220,14 @@ namespace SyncPulse.Client.Services
 
             try
             {
-                if (_videoSource != null && _videoSource.IsRunning)
+                if (_videoSource != null)
                 {
-                    _videoSource.SignalToStop();
-                    _videoSource.WaitForStop();
                     _videoSource.NewFrame -= OnWebcamNewFrame;
+                    if (_videoSource.IsRunning)
+                    {
+                        _videoSource.SignalToStop();
+                        _videoSource.Stop();
+                    }
                     _videoSource = null;
                 }
             }

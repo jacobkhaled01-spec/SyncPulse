@@ -1,13 +1,14 @@
-﻿using System.Configuration;
-using System.Data;
+using System;
 using System.Windows;
 
-namespace SyncPulse.Client;
-
-/// <summary>
-/// Interaction logic for App.xaml
-/// </summary>
-public partial class App : Application
+namespace SyncPulse.Client
 {
+    public partial class App : Application
+    {
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            Environment.Exit(0);
+        }
+    }
 }
-
