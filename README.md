@@ -1,11 +1,12 @@
 # 🚀 SyncPulse (SecureTalk)
 ### نظام المراسلة والاتصالات المتقدم للشبكات المحلية واللاسلكية (LAN & Wi-Fi)
 ### Enterprise Local Instant Messaging & 1-to-1 Voice/Video Calling System
+### وفق المعايير القياسية الدولية (ISO/IEC/IEEE 12207, ISO 25010, & APA 7th Edition)
 
 ---
 
 ## 🌟 نظرة عامة (Overview)
-**SyncPulse** هو نظام اتصالات ومراسلة محلي شامل فائق السرعة والأمان، مبني بمعمارية **Client-Server** مركزية مستوحاة من منصة **Telegram**. يدعم النظام كلاً من الشبكات السلكية (Ethernet LAN) والشبكات اللاسلكية المحلية (Local Wi-Fi / WLAN & Hotspots) مع ميزة **الاكتشاف التلقائي للخادم (Auto-Discovery)**، ونقل الملفات بالبايتات الحقيقية، ومكالمات الصوت والفيديو الفورية عبر مكرر UDP Relay.
+**SyncPulse** هو نظام اتصالات ومراسلة محلي شامل فائق السرعة والأمان، مبني بمعمارية **Client-Server** مركزية مستوحاة من منصة **Telegram**. يدعم النظام كلاً من الشبكات السلكية (Ethernet LAN) والشبكات اللاسلكية المحلية (Local Wi-Fi / WLAN & Hotspots) مع ميزة **الاكتشاف التلقائي للخادم (Auto-Discovery)**، ونقل الملفات والوسائط بنمط Telegram المباشر، ومكالمات الصوت والفيديو الفورية بجودة HD عبر محرك صوت 16kHz محمي من أخطاء الذاكرة وبث فيديو مزدوج (PiP).
 
 ---
 
@@ -15,7 +16,7 @@
    - بروتوكول تأطير الحزم المعياري (12-Byte Header / IETF TLV).
    - نماذج البيانات وحزم البروتوكول (DTOs & Enums).
    - محركات التشفير، تجزئة كلمات المرور مع Salt (PBKDF2/SHA-256)، ورموز JWT (RFC 7519).
-   - خدمة الاكتشاف التلقائي لشبكات الواي فاي (UDP Port 8887).
+   - خدمة الاكتشاف التلقائي لشبكات الواي فاي عبر كافة البطاقات والموجهات الفرعية (UDP Port 8887).
 
 2. **`SyncPulse.Server` (تطبيق الخادم الإداري):**
    - واجهة إدارية حديثة (WPF Admin Dashboard) باللونين الأزرق والأبيض النقي لمراقبة المتصلين وحركة الحزم وموارد النظام.
@@ -25,11 +26,12 @@
 
 3. **`SyncPulse.Client` (تطبيق العميل التفاعلي):**
    - واجهة مستخدم عصرية وسلسة بنمط WPF / MVVM باللونين الأزرق والأبيض النقي.
+   - **عرض الوسائط المتعددة بنمط تليجرام:** عرض الصور المباشرة (Inline Images)، بطاقات الصوت التفاعلية، وبطاقات المستندات الذكية.
+   - **مكالمات صوت وفيديو HD عالية النقاء:** محرك صوت 16 kHz بدون تشويش، محمي من أخطاء الذاكرة (Zero-Crash Ring Buffers)، مع ميزة المعاينة الذاتية في الزاوية (Picture-in-Picture PIP).
+   - **التحكم الفيزيائي بالكاميرا:** إطفاء ضوء الكاميرا الحقيقي (LED) فورياً عند كتم الكاميرا وإعادة تشغيله عند التفعيل.
    - البحث الشامل باسم المستخدم (`@username`) وإدارة جهات الاتصال.
    - المراسلة الفردية المباشرة مع حالات التسليم والقراءة (✓ أُرسلت / ✓✓ استُلمت / ✓✓ زرقاء قُرئت).
    - مؤشر "جاري الكتابة..." اللحظي (`✍️ يكتب الآن...`).
-   - إرسال واستقبال وحفظ الملفات الفعلي مع بطاقات المرفقات وزر `💾 حفظ باسم...`.
-   - المكالمات الصوتية والمرئية الفردية المباشرة مع نافذة عائمة ومؤقت دقيق بالثواني.
    - درج سجل المكالمات التفاعلي (`Call History Drawer`).
 
 4. **`SyncPulse.Tests` (مشروع الاختبارات الآلية المستقل):**
@@ -58,21 +60,13 @@ dotnet run --project SyncPulse.Tests/SyncPulse.Tests.csproj
 
 ---
 
-## 📚 وثائق ومراجع المشروع الهندسية
-* [**`TECH_STACK.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/TECH_STACK.md): خريطة التقنيات والخوارزميات والمعايير وربطها بملفات الكود المصدري.
-* [**`REVIEW_GUIDE.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/REVIEW_GUIDE.md): دليل مراجعة النظام الشامل للمطورين ومدراء المشاريع ولجان التحكيم.
-* [**`CHANGELOG.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/CHANGELOG.md): سجل التغييرات الهندسي وفق نظام SemVer 2.0.0 وتوثيق APA 7.
-* [**`AGENTS.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/AGENTS.md): ميثاق وضوابط العمل الهندسية وقواعد منع الانهيار.
-* [**`ARCHITECTURE.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/ARCHITECTURE.md): الدليل المعماري والتقني السريع والمنافذ وقاعدة البيانات.
-* [**`CONTRIBUTING.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/CONTRIBUTING.md): دليل المساهمة وإرشادات الفروع والدمج.
-* [**`وثيقة_التحليل_والتصميم_الهندسي.md`**](file:///d:/IT%20FILES/level%204/%D8%AE%D8%A7%D8%AF%D9%85%20%D9%88%D8%B9%D9%85%D9%8A%D9%84/%D9%86%D8%B8%D8%B1%D9%8A/%D8%A7%D9%84%D9%85%D8%B4%D8%B1%D9%88%D8%B9/%D9%85%D8%B4%D8%B1%D9%88%D8%B9%20%D8%A7%D9%84%D9%85%D8%B1%D8%A7%D8%B3%D9%84%D9%87%20%D9%88%D8%A7%D9%84%D8%A7%D8%AA%D8%B5%D8%A7%D9%84%D8%A7%D8%AA/%D9%88%D8%AB%D9%8A%D9%82%D8%A9_%D8%A7%D9%84%D8%AA%D8%AD%D9%84%D9%8A%D9%84_%D9%88%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85_%D8%A7%D9%84%D9%87%D9%86%D8%AF%D8%B3%D9%8A.md): الوثيقة المرجعية الشاملة لتحليل وتصميم النظم (SRDD).
+## 📚 المراجع الهندسية والأكاديمية (References - APA 7th Edition)
 
----
-
-## 👥 فريق العمل والمطورين
-* **المطور (أ):** مهندس الخادم وقواعد البيانات والتحكم (`SyncPulse.Server`).
-* **المطور (ب):** مهندس تطبيق العميل والواجهات والوسائط (`SyncPulse.Client`).
-
----
-## 📄 الترخيص
-هذا المشروع مرخص بموجب رخصة [MIT License](LICENSE).
+1. Bass, L., Clements, P., & Kazman, R. (2021). *Software Architecture in Practice* (4th ed.). Addison-Wesley Professional.
+2. Forouzan, B. A. (2012). *Data Communications and Networking* (5th ed.). McGraw-Hill Education.
+3. International Organization for Standardization. (2011). *Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE) — System and software quality models* (ISO/IEC 25010:2011). ISO.
+4. International Organization for Standardization. (2017). *Systems and software engineering — Software life cycle processes* (ISO/IEC/IEEE 12207:2017). ISO.
+5. Jones, M., Bradley, J., & Sakimura, N. (2015). *JSON Web Token (JWT)* (RFC 7519). Internet Engineering Task Force. https://doi.org/10.17487/RFC7519
+6. Martin, R. C. (2017). *Clean Architecture: A Craftsman's Guide to Software Structure and Design*. Prentice Hall.
+7. Postel, J. (1981). *Transmission Control Protocol* (RFC 793). Internet Engineering Task Force. https://doi.org/10.17487/RFC0793
+8. Schulzrinne, H., Casner, S., Frederick, R., & Jacobson, V. (2003). *RTP: A Transport Protocol for Real-Time Applications* (RFC 3550). Internet Engineering Task Force. https://doi.org/10.17487/RFC3550
