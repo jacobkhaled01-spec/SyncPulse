@@ -7,10 +7,13 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Outfit:wght@500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;600;700;800;900&family=Outfit:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+    <!-- Virtual Laser Pointer Element -->
+    <div class="laser-dot" id="laser-dot"></div>
 
     <!-- PowerPoint Top Header Bar -->
     <header class="presentation-header" id="presentation-header">
@@ -35,14 +38,28 @@
         </div>
 
         <div class="header-right">
-            <button class="nav-icon-btn" id="btn-notes" onclick="toggleNotes()" title="ملاحظات المتحدثين (Press N)">
+            <!-- Presentation Defense Stopwatch -->
+            <div class="defense-timer-widget" title="مؤقت المناقشة للتحكم بزمن العرض">
+                <span>⏱️</span>
+                <span id="timer-display">00:00</span>
+                <button class="timer-btn" id="timer-toggle-btn" onclick="toggleTimer()" title="بدء / إيقاف المؤقت">▶</button>
+                <button class="timer-btn" onclick="resetTimer()" title="إعادة ضبط المؤقت">↺</button>
+            </div>
+
+            <button class="nav-icon-btn" id="btn-laser" onclick="toggleLaser()" title="المؤشر الليزري التفاعلي (Press L)">
+                <span>🔴</span> ليزر
+            </button>
+            <button class="nav-icon-btn" id="btn-grid" onclick="toggleGrid()" title="شبكة الشرائح المصغرة (Press G)">
+                <span>⊞</span> الشرائح
+            </button>
+            <button class="nav-icon-btn" id="btn-notes" onclick="toggleNotes()" title="ملاحظات وتوجيهات المتحدثين (Press N)">
                 <span>📝</span> الملاحظات
             </button>
             <button class="nav-icon-btn" id="btn-menu" onclick="toggleMenu()" title="فهرس الشرائح (Press M)">
                 <span>☰</span> الفهرس
             </button>
             <button class="nav-icon-btn" id="btn-fullscreen" onclick="toggleFullscreen()" title="ملء الشاشة (Press F)">
-                <span>⛶</span> ملء الشاشة
+                <span>⛶</span>
             </button>
             <a href="../SyncPulse.Web/index.html" class="nav-action-btn" title="الانتقال لمركز العرض المباشر للأجهزة الثلاثة">
                 <span>🚀</span> العرض الحي
@@ -231,27 +248,27 @@
                     <div class="ppt-card">
                         <h3>📐 تركيبة الترويسة الثنائية (<span class="en-term">12-Byte FrameHeader</span>)</h3>
                         <div class="binary-table-ppt">
-                            <div class="binary-cell">
+                            <div class="binary-cell selected" title="بايت التحقق الفوري من هوية البروتوكول">
                                 <span class="name">Magic</span>
                                 <span class="val">0x53 ('S')</span>
                                 <span class="size">1 Byte</span>
                             </div>
-                            <div class="binary-cell">
+                            <div class="binary-cell" title="رقم إصدار بروتوكول التأطير">
                                 <span class="name">Version</span>
                                 <span class="val">0x01</span>
                                 <span class="size">1 Byte</span>
                             </div>
-                            <div class="binary-cell">
+                            <div class="binary-cell" title="نوع الحزمة (Auth, Chat, Call, etc.)">
                                 <span class="name">PacketType</span>
                                 <span class="val">Short (Int16)</span>
                                 <span class="size">2 Bytes</span>
                             </div>
-                            <div class="binary-cell">
+                            <div class="binary-cell" title="حجم حمولة البيانات بالبايت">
                                 <span class="name">PayloadLength</span>
                                 <span class="val">Length (Int32)</span>
                                 <span class="size">4 Bytes</span>
                             </div>
-                            <div class="binary-cell">
+                            <div class="binary-cell" title="الرقم التسلسلي لمنع التكرار">
                                 <span class="name">SequenceNumber</span>
                                 <span class="val">Seq (Int32)</span>
                                 <span class="size">4 Bytes</span>
@@ -321,29 +338,35 @@ return buf;</code></pre>
                 <div class="slide-body">
                     <div class="flow-3-boxes">
                         <div class="flow-step-box">
-                            <h4>1. إعلان الخادم الدوري (<span class="en-term">Announce</span>)</h4>
-                            <p>يبث الخادم حزمة برودكاست خفيفة كل 3 ثوانٍ على عنوان <span class="en-term">255.255.255.255</span> ومنفذ <span class="en-term">8887</span> تحوي نص الإعلان والمنفذ.</p>
+                            <div>
+                                <h4>1. إعلان الخادم الدوري (<span class="en-term">Announce</span>)</h4>
+                                <p>يبث الخادم حزمة برودكاست خفيفة كل 3 ثوانٍ على عنوان <span class="en-term">255.255.255.255</span> ومنفذ <span class="en-term">8887</span> تحوي نص الإعلان والمنفذ.</p>
+                            </div>
                             <code class="en-term">SYNCPULSE_SERVER_ANNOUNCE:8888</code>
                         </div>
 
                         <div class="flow-arrow-sep">➔</div>
 
                         <div class="flow-step-box">
-                            <h4>2. التقاط العميل للإعلان (<span class="en-term">Listen</span>)</h4>
-                            <p>عند فتح العميل، يستمع على المنفذ <span class="en-term">8887</span>، ويلتقط إعلان الخادم فورياً ويستخرج عنوان IP الفعلي للخادم من ترويسة الحزمة.</p>
+                            <div>
+                                <h4>2. التقاط العميل للإعلان (<span class="en-term">Listen</span>)</h4>
+                                <p>عند فتح العميل، يستمع على المنفذ <span class="en-term">8887</span>، ويلتقط إعلان الخادم فورياً ويستخرج عنوان IP الفعلي للخادم من ترويسة الحزمة.</p>
+                            </div>
                             <code class="en-term">serverIP = res.RemoteEndPoint.Address</code>
                         </div>
 
                         <div class="flow-arrow-sep">➔</div>
 
                         <div class="flow-step-box">
-                            <h4>3. بدء الاتصال الفوري (<span class="en-term">Connect</span>)</h4>
-                            <p>يبدأ العميل مصافحة TCP فورياً على المنفذ <span class="en-term">8888</span> ويسجل دخوله بسلاسة تامة وتجربة مستخدم ذكية وسريعة.</p>
+                            <div>
+                                <h4>3. بدء الاتصال الفوري (<span class="en-term">Connect</span>)</h4>
+                                <p>يبدأ العميل مصافحة TCP فورياً على المنفذ <span class="en-term">8888</span> ويسجل دخوله بسلاسة تامة وتجربة مستخدم ذكية وسريعة.</p>
+                            </div>
                             <code class="en-term">await client.ConnectAsync(serverIP, 8888)</code>
                         </div>
                     </div>
 
-                    <div class="ppt-card mt-16" style="background:#F8FAFC;">
+                    <div class="ppt-card" style="background:#F8FAFC; margin-top:14px;">
                         <h3>💡 القيمة الأكاديمية للاكتشاف التلقائي في مقرر خادم وعميل</h3>
                         <p class="text-sm" style="color:#334155; line-height:1.6;">
                             تطبيق عملي لبروتوكول <strong>UDP Broadcast</strong> في إدارة الشبكات المحلية، وحل مشكلة تغير عناوين الـ DHCP الديناميكية في شبكات الواي فاي الجامعية والمؤسسية دون الحاجة لخوادم DNS خارجية.
@@ -479,7 +502,7 @@ return buf;</code></pre>
 
                 <div class="slide-body">
                     <div class="lifecycle-strip">
-                        <div class="status-step-box">
+                        <div class="status-step-box" title="انقر لتجربة التغيير التفاعلي">
                             <div class="badge-icon">✓</div>
                             <strong>Sent (0)</strong>
                             <p>تُرسل الرسالة وتُحفظ فوراً في قاعدة بيانات الخادم بحالة أُرسلت (صح واحدة رمادية).</p>
@@ -487,7 +510,7 @@ return buf;</code></pre>
 
                         <div class="flow-arrow-sep">➔</div>
 
-                        <div class="status-step-box">
+                        <div class="status-step-box" style="background:#F1F5F9;">
                             <div class="badge-icon" style="background:#475569;">⏳</div>
                             <strong>Offline Queue</strong>
                             <p>إذا كان المستلم غير متصل، يحتفظ الخادم بالرسالة ويدفعها له تلقائياً فور اتصاله.</p>
@@ -510,12 +533,12 @@ return buf;</code></pre>
                         </div>
                     </div>
 
-                    <div class="grid-2-cols mt-16">
-                        <div class="ppt-card" style="padding:14px;">
+                    <div class="grid-2-cols" style="margin-top:14px;">
+                        <div class="ppt-card" style="padding:12px 14px;">
                             <strong>كشف المقابس المعلقة (<span class="en-term">Half-Open Sockets</span>):</strong>
                             <p class="text-sm" style="color:#475569; margin-top:4px;">فحص القراءة الصفرية <span class="en-term">ReadAsync() == 0</span> ونبضات القلب <span class="en-term">Heartbeat</span> كل 30 ثانية لتنظيف المقابس التالفة فورياً.</p>
                         </div>
-                        <div class="ppt-card" style="padding:14px;">
+                        <div class="ppt-card" style="padding:12px 14px;">
                             <strong>أمان الخيوط المتزامنة (<span class="en-term">Thread Safety</span>):</strong>
                             <p class="text-sm" style="color:#475569; margin-top:4px;">إدارة الجلسات عبر <span class="en-term">ConcurrentDictionary</span> وأقفال المزامنة لمنع أي تضارب بين الخيوط (<span class="en-term">Race Conditions</span>).</p>
                         </div>
@@ -573,24 +596,17 @@ return buf;</code></pre>
                     </div>
                 </div>
 
-                <div class="slide-body mt-16">
-                    <div class="grid-4-cols">
-                        <div class="pillar-box">
-                            <strong>معدل العينات (<span class="en-term">Rate</span>)</strong>
-                            <small class="en-term">16,000 Hz (HD Voice)</small>
-                        </div>
-                        <div class="pillar-box">
-                            <strong>عمق العينة (<span class="en-term">Depth</span>)</strong>
-                            <small class="en-term">16-bit PCM Mono</small>
-                        </div>
-                        <div class="pillar-box">
-                            <strong>حجم الإطار (<span class="en-term">Frame Size</span>)</strong>
-                            <small class="en-term">1,280 Bytes / 40 ms</small>
-                        </div>
-                        <div class="pillar-box">
-                            <strong>استهلاك المعالج والذاكرة</strong>
-                            <small class="en-term">&lt; 1% CPU / Zero GC</small>
-                        </div>
+                <div class="slide-body" style="margin-top:12px;">
+                    <strong style="font-size:0.8rem; color:#1E3A8A;">🔄 محاكاة دوران المخازن الدائرية الثابتة في الذاكرة (Pre-Pinned Ring Buffers):</strong>
+                    <div class="ring-buffer-visualizer">
+                        <div class="ring-slot active-slot"><span class="slot-title">BUF #0</span><span class="slot-state">IN USE</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #1</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #2</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #3</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #4</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #5</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #6</span><span class="slot-state">READY</span></div>
+                        <div class="ring-slot"><span class="slot-title">BUF #7</span><span class="slot-state">READY</span></div>
                     </div>
                 </div>
             </div>
@@ -770,13 +786,13 @@ return buf;</code></pre>
                     سيتم الآن تشغيل الخادم على الجهاز الأول، والعميلين على الجهازين الآخرين، ومراقبة التفاعل عبر مركز العرض المباشر.
                 </p>
 
-                <div style="margin-top:10px;">
+                <div style="margin-top:8px;">
                     <a href="../SyncPulse.Web/index.html" class="launch-cta-btn">
                         <span>🖥️</span> فتح مركز العرض المباشر للأجهزة الثلاثة (Live Hub)
                     </a>
                 </div>
 
-                <div class="hero-speakers-strip" style="margin-top:24px;">
+                <div class="hero-speakers-strip" style="margin-top:20px;">
                     <span>📡 اكتشاف تلقائي للواي فاي</span> • 
                     <span>✉️ رسائل ومزامنة Offline</span> • 
                     <span>🎙️ صوت 16kHz HD نقي</span> • 
@@ -809,7 +825,7 @@ return buf;</code></pre>
         </div>
 
         <div class="footer-right">
-            <span class="shortcuts-hint">الاختصارات: [السهمين / المسافة للتنقل] • [F ملء الشاشة] • [N الملاحظات]</span>
+            <span class="shortcuts-hint">الاختصارات: [السهمين / المسافة للتنقل] • [L الليزر] • [G شبكة الشرائح] • [N الملاحظات] • [F ملء الشاشة]</span>
         </div>
     </footer>
 
@@ -824,7 +840,7 @@ return buf;</code></pre>
         </div>
     </aside>
 
-    <!-- Slide Jump Menu Modal (Collapsible with 'M' / Menu) -->
+    <!-- Slide Jump Menu Modal (Collapsible with 'M') -->
     <div class="slide-menu-modal" id="slide-menu-modal">
         <div class="menu-content">
             <div class="menu-header">
@@ -834,6 +850,17 @@ return buf;</code></pre>
             <div class="menu-list" id="slide-menu-list">
                 <!-- Injected via JS -->
             </div>
+        </div>
+    </div>
+
+    <!-- Slide Grid Light-Table Modal (Collapsible with 'G') -->
+    <div class="slide-grid-modal" id="slide-grid-modal">
+        <div class="grid-modal-header">
+            <h3>⊞ شبكة معاينة الشرائح (Slide Light-Table Overview)</h3>
+            <button class="close-menu-btn" style="color:white; font-size:1.4rem;" onclick="toggleGrid()">✕</button>
+        </div>
+        <div class="grid-thumbnails-container" id="grid-thumbnails-container">
+            <!-- Injected via JS -->
         </div>
     </div>
 

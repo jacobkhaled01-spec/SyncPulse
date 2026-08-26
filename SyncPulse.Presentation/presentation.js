@@ -1,17 +1,28 @@
 /**
- * SyncPulse Interactive Presentation Engine
- * Controls Slide Deck Navigation, Speaker Notes, Jump Menu, and Keyboard Shortcuts.
+ * SyncPulse Interactive Presentation Engine - Executive Edition
+ * Controls Slide Navigation, Speaker Notes, Stopwatch Timer, Virtual Laser Pointer, and Interactive Simulators.
  */
 
-// Presentation State
+// Global Presentation State
 const presentationState = {
     currentSlide: 0,
     totalSlides: 13,
     isNotesOpen: false,
-    isMenuOpen: false
+    isMenuOpen: false,
+    isGridOpen: false,
+    isLaserActive: false,
+    
+    // Stopwatch Timer
+    timerSeconds: 0,
+    timerInterval: null,
+    isTimerRunning: false,
+    
+    // Ring buffer animation
+    ringBufferIndex: 0,
+    ringBufferInterval: null
 };
 
-// Speaker Notes Data tailored specifically for the 4-Speaker Team
+// Speaker Notes for the 4-Speaker Team
 const speakerNotes = [
     {
         slide: 1,
@@ -21,7 +32,7 @@ const speakerNotes = [
             <ul>
                 <li>الترحيب بأستاذ المقرر ولجنة الإشراف الكريمة.</li>
                 <li>تقديم اسم المشروع: SyncPulse (SecureTalk) كنظام اتصالات محلي آمن مصمم خصيصاً لمقرر برمجة خادم وعميل.</li>
-                <li>التأكيد على أن المشروع مبني من الصفر على المقابس الخام (Raw TCP/UDP Sockets) دون الاعتماد على SignalR أو WebRTC.</li>
+                <li>التأكيد على أن المشروع مبني من الصفر على المقابس الخام (Raw TCP/UDP Sockets) دون الاعتماد على مكتبات جاهزة مثل SignalR أو WebRTC.</li>
                 <li>توضيح هيكل الفريق المكون من 4 مهندسين متكاملين في مجالات المعمارية، الأمان، السيرفر، والميديا.</li>
             </ul>
         `
@@ -34,7 +45,7 @@ const speakerNotes = [
             <ul>
                 <li>شرح مشكلة انقطاع الإنترنت السحابي في المؤسسات والمنشآت المعزولة.</li>
                 <li>توضيح خطر تسريب البيانات الحساسة للمزودين الخارجيين وفقدان السيادة الرقمية.</li>
-                <li>توضيح حل SyncPulse: نظام On-Premise 100% يعمل باستقلالية تامة داخل الشبكة المحلية LAN/WLAN بأقل زمن تأخير.</li>
+                <li>توضيح حل SyncPulse: نظام On-Premise 100% يعمل باستقلالية تامة داخل الشبكة المحلية LAN/WLAN بأقل زمن تأخير (&lt;10ms).</li>
             </ul>
         `
     },
@@ -153,10 +164,10 @@ const speakerNotes = [
         slide: 12,
         speaker: "جميع المتحدثين",
         notes: `
-            <strong>حزمة الاختبارات الآلية (SyncPulse.Tests):</strong>
+            <strong>التحقق الآلي والاختبارات الشاملة (62/62):</strong>
             <ul>
-                <li>استعراض نجاح 62 اختباراً آلياً شاملاً بنسبة 100% (0 Failures).</li>
-                <li>تغطية كافة الوحدات: التأطير، التشفير، تجزئة الدفق، SQLite، الجلسات، المكالمات، وUDP Relay.</li>
+                <li>استعراض نتائج اختبارات مشروع SyncPulse.Tests الآلية الـ 62 بدون أي فشل (Zero Failures).</li>
+                <li>التأكيد على اختبار كل وحدة بمفردها واختبار التدفق الكامل End-to-End.</li>
             </ul>
         `
     },
@@ -164,76 +175,84 @@ const speakerNotes = [
         slide: 13,
         speaker: "جميع المتحدثين",
         notes: `
-            <strong>الخاتمة والانتقال للعرض الحي:</strong>
+            <strong>الخاتمة والانتقال للعرض العملي الحي:</strong>
             <ul>
-                <li>شكر الأستاذ واللجنة.</li>
-                <li>النقر على زر "فتح مركز العرض المباشر للأجهزة الثلاثة" للبدء بالبث العملي الحي.</li>
+                <li>شكر أستاذ المقرر ولجنة الإشراف على اهتمامهم ودعمهم.</li>
+                <li>الإعلان عن بدء العرض العملي الحي للأجهزة الثلاثة عبر مركز العرض المباشر (SyncPulse Live Web Hub).</li>
             </ul>
         `
     }
 ];
 
-// DOM Elements
-const slides = document.querySelectorAll('.slide');
-const currentSlideNumEl = document.getElementById('current-slide-num');
-const progressBarEl = document.getElementById('slide-progress-bar');
-const speakerCueLabel = document.getElementById('speaker-cue-label');
-const notesDrawer = document.getElementById('speaker-notes-drawer');
-const notesContent = document.getElementById('speaker-notes-content');
-const menuModal = document.getElementById('slide-menu-modal');
-const menuList = document.getElementById('slide-menu-list');
+// Document Ready Initialization
+document.addEventListener('DOMContentLoaded', () => {
+    initPresentation();
+    setupKeyboardShortcuts();
+    buildSlideMenu();
+    buildGridOverview();
+    initLaserPointer();
+    initSimulators();
+});
 
 /**
- * Navigate to a specific slide index (0 to totalSlides - 1)
+ * Initialize Slides, Indicators, and Progress Bar
+ */
+function initPresentation() {
+    const slides = document.querySelectorAll('.slide');
+    presentationState.totalSlides = slides.length;
+    document.getElementById('total-slides-num').innerText = presentationState.totalSlides.toString().padStart(2, '0');
+    goToSlide(0);
+}
+
+/**
+ * Navigate to a specific slide index
  */
 function goToSlide(index) {
-    if (index < 0 || index >= presentationState.totalSlides) return;
+    const slides = document.querySelectorAll('.slide');
+    if (index < 0 || index >= slides.length) return;
 
-    // Update Classes
-    slides.forEach((slide, idx) => {
-        slide.classList.remove('active', 'prev');
-        if (idx === index) {
+    slides.forEach((slide, i) => {
+        if (i === index) {
             slide.classList.add('active');
-        } else if (idx < index) {
-            slide.classList.add('prev');
+        } else {
+            slide.classList.remove('active');
         }
     });
 
     presentationState.currentSlide = index;
 
-    // Update UI Indicators
-    const slideNumber = index + 1;
-    const formattedNum = slideNumber < 10 ? `0${slideNumber}` : `${slideNumber}`;
-    currentSlideNumEl.textContent = formattedNum;
+    // Update Header Indicators
+    const currentNumStr = (index + 1).toString().padStart(2, '0');
+    document.getElementById('current-slide-num').innerText = currentNumStr;
 
     // Update Progress Bar
-    const progressPercent = (slideNumber / presentationState.totalSlides) * 100;
-    progressBarEl.style.width = `${progressPercent}%`;
+    const progressPercent = ((index + 1) / presentationState.totalSlides) * 100;
+    document.getElementById('slide-progress-bar').style.width = `${progressPercent}%`;
 
-    // Update Current Speaker Cue
-    const currentSlideEl = slides[index];
-    const speakerName = currentSlideEl.getAttribute('data-speaker') || 'المتحدث الحالي';
-    speakerCueLabel.innerHTML = `المتحدث الحالي: <strong>${speakerName}</strong>`;
+    // Update Speaker Cue in Footer
+    const activeSlide = slides[index];
+    const speakerName = activeSlide.getAttribute('data-speaker') || 'فريق العمل الهندسي';
+    const cueElem = document.getElementById('speaker-cue-label');
+    if (cueElem) {
+        cueElem.innerHTML = `المتحدث الحالي: <strong>${speakerName}</strong>`;
+    }
 
-    // Update Notes Content
-    updateNotesContent(slideNumber);
+    // Update Speaker Notes Content
+    updateSpeakerNotes(index);
 
-    // Update Menu Active Item
-    updateMenuActiveItem(index);
+    // Update Active states in Menu & Grid
+    updateActiveMenuAndGrid(index);
+
+    // Slide-specific triggers
+    handleSlideSpecialTriggers(index);
 }
 
-/**
- * Next Slide
- */
 function nextSlide() {
     if (presentationState.currentSlide < presentationState.totalSlides - 1) {
         goToSlide(presentationState.currentSlide + 1);
     }
 }
 
-/**
- * Previous Slide
- */
 function prevSlide() {
     if (presentationState.currentSlide > 0) {
         goToSlide(presentationState.currentSlide - 1);
@@ -241,74 +260,237 @@ function prevSlide() {
 }
 
 /**
+ * Update Speaker Notes Drawer Content
+ */
+function updateSpeakerNotes(slideIndex) {
+    const notesContainer = document.getElementById('speaker-notes-content');
+    if (!notesContainer) return;
+
+    const currentNote = speakerNotes[slideIndex];
+    if (currentNote) {
+        notesContainer.innerHTML = `
+            <div style="margin-bottom: 8px; color: #1E3A8A; font-weight: 800; font-size: 0.86rem;">
+                🎙️ ${currentNote.speaker}
+            </div>
+            ${currentNote.notes}
+        `;
+    } else {
+        notesContainer.innerHTML = `<p style="color: #64748B;">لا توجد ملاحظات إضافية لهذه الشريحة.</p>`;
+    }
+}
+
+/**
  * Toggle Speaker Notes Drawer
  */
 function toggleNotes() {
+    const drawer = document.getElementById('speaker-notes-drawer');
+    const btn = document.getElementById('btn-notes');
     presentationState.isNotesOpen = !presentationState.isNotesOpen;
+
     if (presentationState.isNotesOpen) {
-        notesDrawer.classList.add('active');
+        drawer.classList.add('active');
+        if (btn) btn.classList.add('active');
     } else {
-        notesDrawer.classList.remove('active');
+        drawer.classList.remove('active');
+        if (btn) btn.classList.remove('active');
     }
 }
 
 /**
- * Update Notes Content based on current slide
+ * Build Slide Jump Menu
  */
-function updateNotesContent(slideNum) {
-    const noteObj = speakerNotes.find(n => n.slide === slideNum);
-    if (noteObj) {
-        notesContent.innerHTML = `
-            <div style="background:#EFF6FF; border:1px solid #BFDBFE; padding:6px 12px; border-radius:6px; margin-bottom:10px; font-weight:800; color:#1D4ED8;">
-                👤 ${noteObj.speaker}
-            </div>
-            ${noteObj.notes}
-        `;
-    } else {
-        notesContent.innerHTML = `<p style="color:#94A3B8;">لا توجد ملاحظات مخصصة لهذه الشريحة.</p>`;
-    }
-}
+function buildSlideMenu() {
+    const menuList = document.getElementById('slide-menu-list');
+    if (!menuList) return;
 
-/**
- * Toggle Slide Jump Menu Modal
- */
-function toggleMenu() {
-    presentationState.isMenuOpen = !presentationState.isMenuOpen;
-    if (presentationState.isMenuOpen) {
-        menuModal.classList.add('active');
-    } else {
-        menuModal.classList.remove('active');
-    }
-}
-
-/**
- * Build Jump Menu List
- */
-function buildJumpMenu() {
     menuList.innerHTML = '';
-    slides.forEach((slide, idx) => {
-        const slideTitle = slide.getAttribute('data-title') || `الشريحة ${idx + 1}`;
+    const slides = document.querySelectorAll('.slide');
+
+    slides.forEach((slide, index) => {
+        const title = slide.getAttribute('data-title') || `الشريحة ${index + 1}`;
         const speaker = slide.getAttribute('data-speaker') || '';
-        const btn = document.createElement('button');
-        btn.className = `menu-item-btn ${idx === presentationState.currentSlide ? 'active' : ''}`;
-        btn.innerHTML = `
-            <span><strong>${idx + 1}.</strong> ${slideTitle}</span>
+
+        const itemBtn = document.createElement('button');
+        itemBtn.className = 'menu-item-btn';
+        itemBtn.id = `menu-item-${index}`;
+        itemBtn.innerHTML = `
+            <span><strong>${(index + 1).toString().padStart(2, '0')}.</strong> ${title}</span>
             <span class="speaker-tag">${speaker}</span>
         `;
-        btn.onclick = () => {
-            goToSlide(idx);
+        itemBtn.onclick = () => {
+            goToSlide(index);
             toggleMenu();
         };
-        menuList.appendChild(btn);
+        menuList.appendChild(itemBtn);
     });
 }
 
-function updateMenuActiveItem(activeIndex) {
-    const items = menuList.querySelectorAll('.menu-item-btn');
-    items.forEach((item, idx) => {
-        if (idx === activeIndex) item.classList.add('active');
-        else item.classList.remove('active');
+function toggleMenu() {
+    const modal = document.getElementById('slide-menu-modal');
+    presentationState.isMenuOpen = !presentationState.isMenuOpen;
+    if (presentationState.isMenuOpen) {
+        modal.classList.add('active');
+    } else {
+        modal.classList.remove('active');
+    }
+}
+
+/**
+ * Build Visual Grid Light-Table (Overview Mode)
+ */
+function buildGridOverview() {
+    const container = document.getElementById('grid-thumbnails-container');
+    if (!container) return;
+
+    container.innerHTML = '';
+    const slides = document.querySelectorAll('.slide');
+
+    slides.forEach((slide, index) => {
+        const title = slide.getAttribute('data-title') || `الشريحة ${index + 1}`;
+        const speaker = slide.getAttribute('data-speaker') || '';
+
+        const card = document.createElement('div');
+        card.className = 'thumb-card';
+        card.id = `thumb-card-${index}`;
+        card.innerHTML = `
+            <div>
+                <span class="thumb-num">SLIDE ${(index + 1).toString().padStart(2, '0')}</span>
+                <h4 class="thumb-title">${title}</h4>
+            </div>
+            <span class="thumb-speaker">${speaker}</span>
+        `;
+        card.onclick = () => {
+            goToSlide(index);
+            toggleGrid();
+        };
+        container.appendChild(card);
     });
+}
+
+function toggleGrid() {
+    const modal = document.getElementById('slide-grid-modal');
+    presentationState.isGridOpen = !presentationState.isGridOpen;
+    if (presentationState.isGridOpen) {
+        modal.classList.add('active');
+    } else {
+        modal.classList.remove('active');
+    }
+}
+
+function updateActiveMenuAndGrid(activeIndex) {
+    document.querySelectorAll('.menu-item-btn').forEach((btn, i) => {
+        if (i === activeIndex) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
+    document.querySelectorAll('.thumb-card').forEach((card, i) => {
+        if (i === activeIndex) card.classList.add('active');
+        else card.classList.remove('active');
+    });
+}
+
+/**
+ * Defense Presentation Stopwatch Timer
+ */
+function toggleTimer() {
+    const btn = document.getElementById('timer-toggle-btn');
+    if (presentationState.isTimerRunning) {
+        clearInterval(presentationState.timerInterval);
+        presentationState.isTimerRunning = false;
+        if (btn) btn.innerText = '▶';
+    } else {
+        presentationState.timerInterval = setInterval(() => {
+            presentationState.timerSeconds++;
+            const mins = Math.floor(presentationState.timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (presentationState.timerSeconds % 60).toString().padStart(2, '0');
+            const disp = document.getElementById('timer-display');
+            if (disp) disp.innerText = `${mins}:${secs}`;
+        }, 1000);
+        presentationState.isTimerRunning = true;
+        if (btn) btn.innerText = '⏸';
+    }
+}
+
+function resetTimer() {
+    clearInterval(presentationState.timerInterval);
+    presentationState.isTimerRunning = false;
+    presentationState.timerSeconds = 0;
+    const disp = document.getElementById('timer-display');
+    const btn = document.getElementById('timer-toggle-btn');
+    if (disp) disp.innerText = '00:00';
+    if (btn) btn.innerText = '▶';
+}
+
+/**
+ * Virtual Laser Pointer Tool
+ */
+function initLaserPointer() {
+    const laserDot = document.getElementById('laser-dot');
+    if (!laserDot) return;
+
+    window.addEventListener('mousemove', (e) => {
+        if (presentationState.isLaserActive) {
+            laserDot.style.left = `${e.clientX}px`;
+            laserDot.style.top = `${e.clientY}px`;
+        }
+    });
+}
+
+function toggleLaser() {
+    const laserDot = document.getElementById('laser-dot');
+    const btn = document.getElementById('btn-laser');
+    presentationState.isLaserActive = !presentationState.isLaserActive;
+
+    if (presentationState.isLaserActive) {
+        if (laserDot) laserDot.classList.add('active');
+        if (btn) btn.classList.add('active');
+    } else {
+        if (laserDot) laserDot.classList.remove('active');
+        if (btn) btn.classList.remove('active');
+    }
+}
+
+/**
+ * Interactive Slide Simulators
+ */
+function initSimulators() {
+    // 1. Binary Inspector on Slide 4
+    document.querySelectorAll('.binary-cell').forEach(cell => {
+        cell.addEventListener('click', () => {
+            document.querySelectorAll('.binary-cell').forEach(c => c.classList.remove('selected'));
+            cell.classList.add('selected');
+        });
+    });
+
+    // 2. Interactive Ring Buffer on Slide 9
+    startRingBufferSimulation();
+}
+
+function startRingBufferSimulation() {
+    if (presentationState.ringBufferInterval) clearInterval(presentationState.ringBufferInterval);
+    presentationState.ringBufferInterval = setInterval(() => {
+        const slots = document.querySelectorAll('.ring-slot');
+        if (!slots || slots.length === 0) return;
+
+        slots.forEach((s, idx) => {
+            if (idx === presentationState.ringBufferIndex) {
+                s.classList.add('active-slot');
+                s.querySelector('.slot-state').innerText = 'IN USE';
+            } else {
+                s.classList.remove('active-slot');
+                s.querySelector('.slot-state').innerText = 'READY';
+            }
+        });
+
+        presentationState.ringBufferIndex = (presentationState.ringBufferIndex + 1) % slots.length;
+    }, 600);
+}
+
+function handleSlideSpecialTriggers(slideIndex) {
+    if (slideIndex === 8) {
+        // Slide 9: Audio Ring buffer
+        startRingBufferSimulation();
+    }
 }
 
 /**
@@ -317,57 +499,85 @@ function updateMenuActiveItem(activeIndex) {
 function toggleFullscreen() {
     if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => {
-            console.warn(`Fullscreen error: ${err.message}`);
+            console.error(`Error entering fullscreen: ${err.message}`);
         });
     } else {
-        if (document.exitFullscreen) document.exitFullscreen();
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
     }
 }
 
 /**
- * Keyboard Navigation Shortcuts
+ * Keyboard Shortcuts
  */
-document.addEventListener('keydown', (e) => {
-    // Escape closes modals
-    if (e.key === 'Escape') {
-        if (presentationState.isMenuOpen) toggleMenu();
-        if (presentationState.isNotesOpen) toggleNotes();
-        return;
-    }
+function setupKeyboardShortcuts() {
+    document.addEventListener('keydown', (e) => {
+        // Don't trigger if user is typing
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
 
-    switch (e.key) {
-        case 'ArrowLeft':
-        case ' ':
-        case 'PageDown':
-            nextSlide();
-            break;
-        case 'ArrowRight':
-        case 'PageUp':
-            prevSlide();
-            break;
-        case 'Home':
-            goToSlide(0);
-            break;
-        case 'End':
-            goToSlide(presentationState.totalSlides - 1);
-            break;
-        case 'f':
-        case 'F':
-            toggleFullscreen();
-            break;
-        case 'n':
-        case 'N':
-            toggleNotes();
-            break;
-        case 'm':
-        case 'M':
-            toggleMenu();
-            break;
-    }
-});
+        switch (e.key) {
+            case 'ArrowLeft':
+            case ' ':
+            case 'PageDown':
+            case 'Enter':
+                e.preventDefault();
+                nextSlide();
+                break;
 
-// Initialize
-window.addEventListener('DOMContentLoaded', () => {
-    buildJumpMenu();
-    goToSlide(0);
-});
+            case 'ArrowRight':
+            case 'PageUp':
+            case 'Backspace':
+                e.preventDefault();
+                prevSlide();
+                break;
+
+            case 'Home':
+                e.preventDefault();
+                goToSlide(0);
+                break;
+
+            case 'End':
+                e.preventDefault();
+                goToSlide(presentationState.totalSlides - 1);
+                break;
+
+            case 'n':
+            case 'N':
+            case 'ى':
+                toggleNotes();
+                break;
+
+            case 'm':
+            case 'M':
+            case 'ة':
+                toggleMenu();
+                break;
+
+            case 'g':
+            case 'G':
+            case 'ل':
+                toggleGrid();
+                break;
+
+            case 'l':
+            case 'L':
+            case 'م':
+                toggleLaser();
+                break;
+
+            case 'f':
+            case 'F':
+            case 'ب':
+                toggleFullscreen();
+                break;
+
+            case 'Escape':
+                if (presentationState.isNotesOpen) toggleNotes();
+                if (presentationState.isMenuOpen) toggleMenu();
+                if (presentationState.isGridOpen) toggleGrid();
+                if (presentationState.isLaserActive) toggleLaser();
+                break;
+        }
+    });
+}
