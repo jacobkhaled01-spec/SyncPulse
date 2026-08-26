@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SyncPulse Presentation | العرض التقديمي لمشروع خادم وعميل</title>
+    <title>SyncPulse Next-Gen Showcase | العرض التقديمي التفاعلي الحديث لمقرر خادم وعميل</title>
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,79 +12,93 @@
 </head>
 <body>
 
-    <div class="app-container">
+    <!-- Virtual Laser Pointer Element -->
+    <div class="laser-dot" id="laser-dot"></div>
 
-        <!-- Top Command Bar -->
-        <header class="top-bar">
-            <div class="top-bar-left">
-                <span class="brand-badge">SyncPulse</span>
-                <span class="top-bar-title">مشروع تخرج مقرر برمجة خادم وعميل (Client-Server)</span>
+    <div class="showcase-viewport">
+        <!-- Ambient Glowing Background Lights -->
+        <div class="ambient-glow-1"></div>
+        <div class="ambient-glow-2"></div>
+
+        <!-- Top Floating Showcase Header -->
+        <header class="showcase-header">
+            <div class="header-brand">
+                <div class="brand-icon-logo">⚡</div>
+                <div class="brand-text-title">
+                    SyncPulse <span>(SecureTalk)</span>
+                </div>
             </div>
 
-            <div class="top-bar-right">
-                <button class="top-btn" id="btn-notes" onclick="toggleNotes()" title="ملاحظات المتحدث (Press N)">
-                    <span>📝</span> الملاحظات
-                </button>
-                <button class="top-btn" id="btn-grid" onclick="toggleGrid()" title="فهرس الشرائح (Press G)">
-                    <span>⊞</span> الشرائح
-                </button>
-                <button class="top-btn" onclick="toggleFullscreen()" title="ملء الشاشة (Press F)">
-                    <span>⛶</span> ملء الشاشة
-                </button>
-                <a href="../SyncPulse.Web/index.html" class="top-btn live-link" title="الانتقال لمركز العرض المباشر للأجهزة الثلاثة">
+            <div class="header-tools">
+                <!-- Multi-Theme Switcher -->
+                <div class="theme-switcher-box">
+                    <button class="theme-pill-btn active" onclick="setTheme('dark')" title="ثيم سايبر دارك">
+                        <span>🌌</span> دارك
+                    </button>
+                    <button class="theme-pill-btn" onclick="setTheme('light')" title="ثيم تيتانيوم فاتح">
+                        <span>💎</span> فاتح
+                    </button>
+                    <button class="theme-pill-btn" onclick="setTheme('matrix')" title="ثيم مصفوفة الزمرد">
+                        <span>🌿</span> ماتركس
+                    </button>
+                </div>
+
+                <a href="../SyncPulse.Web/index.html" class="header-action-btn" title="الانتقال لمركز العرض المباشر للأجهزة الثلاثة">
                     <span>🚀</span> العرض الحي
                 </a>
             </div>
         </header>
 
-        <!-- Main Slide Presentation Canvas -->
-        <main class="slide-canvas">
+        <!-- Main Slide Presentation Canvas Frame -->
+        <main class="presentation-canvas-frame">
 
             <!-- =========================================================================
-                 SLIDE 1: Title & Hero
+                 SLIDE 1: Hero Showcase
                  ========================================================================= -->
-            <section class="slide active" id="slide-1" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="عنوان المشروع والهوية">
-                <div class="hero-layout">
-                    <span class="hero-pill">🎓 مشروع تخرج مقرر برمجة خادم وعميل | تقنية المعلومات</span>
+            <section class="slide active" id="slide-1" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="عنوان وهوية النظام">
+                <div class="hero-stage-layout">
+                    <div class="hero-luxury-tag">
+                        🎓 مشروع تخرج مقرر برمجة خادم وعميل | تقنية المعلومات
+                    </div>
 
                     <h1>
                         نظام المراسلة والاتصالات المتقدم للشبكات المحلية<br>
-                        <span>SyncPulse (SecureTalk)</span>
+                        <span class="brand-highlight">SyncPulse (SecureTalk)</span>
                     </h1>
 
-                    <p class="hero-desc">
-                        نظام اتصالات محلي فائق السرعة مبني بالكامل على المقابس الخام <span class="en-term">(Raw TCP/UDP Sockets)</span> بدون أي وسيط سحابي خارجي.
+                    <p class="hero-lead-desc">
+                        نظام اتصالات محلي فائق السرعة مبني بالكامل على المقابس الخام <span class="en-term">(Raw TCP/UDP Sockets)</span> دون أي وسيط سحابي خارجي.
                     </p>
 
-                    <div class="hero-features">
-                        <div class="hero-feature-box">
+                    <div class="hero-pillars-matrix">
+                        <div class="hero-pillar-box">
                             <strong>بروتوكول مقابس أصلي</strong>
                             <small class="en-term">TCP 8888 / UDP 8889</small>
                         </div>
-                        <div class="hero-feature-box">
+                        <div class="hero-pillar-box">
                             <strong>سيادة رقمية وأمان محلي</strong>
                             <small class="en-term">100% On-Premise LAN</small>
                         </div>
-                        <div class="hero-feature-box">
+                        <div class="hero-pillar-box">
                             <strong>صوت وفيديو عالي النقاء</strong>
                             <small class="en-term">16kHz HD Voice & AForge</small>
                         </div>
-                        <div class="hero-feature-box">
+                        <div class="hero-pillar-box">
                             <strong>اكتشاف تلقائي فوري</strong>
                             <small class="en-term">UDP Broadcast 8887</small>
                         </div>
                     </div>
 
-                    <div class="hero-speakers">
+                    <div class="hero-speakers-strip">
                         <strong>فريق المناقشة (4 متحدثين):</strong>
-                        <span class="speaker-pill">م.1: المعمارية والشبكات</span>
-                        <span class="speaker-pill">م.2: الأمن والمصادقة</span>
-                        <span class="speaker-pill">م.3: الخادم وقواعد البيانات</span>
-                        <span class="speaker-pill">م.4: الميديا والذاكرة</span>
+                        <span class="speaker-bubble">م.1: المعمارية والشبكات</span>
+                        <span class="speaker-bubble">م.2: الأمن والمصادقة</span>
+                        <span class="speaker-bubble">م.3: الخادم وقواعد البيانات</span>
+                        <span class="speaker-bubble">م.4: الميديا والذاكرة</span>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 1: مهندس المعمارية والشبكات</span>
                     <span>01 / 13</span>
@@ -95,28 +109,34 @@
                  SLIDE 2: Problem vs Solution
                  ========================================================================= -->
             <section class="slide" id="slide-2" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="المشكلة والهدف الهندسي">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">01 | الدوافع والأهداف الهندسية</span>
+                        <span class="ribbon-tag">01 | الدوافع والأهداف الهندسية</span>
                         <h2>لماذا قمنا ببناء نظام SyncPulse؟</h2>
-                        <p>معالجة تحديات الاعتماد على السحابة الخارجية في البيئات المعزولة</p>
+                        <p>معالجة تحديات الاعتماد على السحابة الخارجية في الشبكات والبيئات المعزولة</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">OBJECTIVE</span>
+                    <div class="slide-counter-chip">02 / 13</div>
                 </div>
 
-                <div class="slide-body cards-2-col">
-                    <div class="deck-card problem">
-                        <h3>⚠️ تحديات التطبيقات السحابية</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-2-col">
+                    <div class="glass-card problem">
+                        <div class="card-title-row">
+                            <h3>⚠️ تحديات التطبيقات السحابية</h3>
+                            <span class="card-badge-pill">LIMITATIONS</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>توقف الاتصال:</strong> انقطاع الخدمة فورياً عند انقطاع كابل الإنترنت.</li>
                             <li><strong>انعدام الخصوصية:</strong> تسريب البيانات والملفات الحساسة لخوادم خارجية.</li>
                             <li><strong>هدر النطاق الترددي:</strong> بطء رفع وتنزيل الوسائط عبر خوادم بعيدة.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card solution">
-                        <h3>✅ الحل في نظام SyncPulse</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card solution">
+                        <div class="card-title-row">
+                            <h3>✅ الحل في نظام SyncPulse</h3>
+                            <span class="card-badge-pill">ON-PREMISE</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>استقلالية محلية تامة (<span class="en-term">100% LAN</span>):</strong> عمل متواصل بدون إنترنت.</li>
                             <li><strong>سيادة وأمان بيانات:</strong> تشفير كلمات المرور بـ <span class="en-term">PBKDF2</span> وتوكنات <span class="en-term">JWT</span>.</li>
                             <li><strong>سرعة واستجابة لحظية:</strong> نقل وسائط فائق بأقل من 10ms.</li>
@@ -124,7 +144,7 @@
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 1: مهندس المعمارية والشبكات</span>
                     <span>02 / 13</span>
@@ -135,19 +155,22 @@
                  SLIDE 3: System Architecture
                  ========================================================================= -->
             <section class="slide" id="slide-3" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="معمارية النظام والطبقات">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">02 | معمارية النظام</span>
+                        <span class="ribbon-tag">02 | معمارية النظام</span>
                         <h2>تقسيم النظام وفق معايير Clean Architecture</h2>
-                        <p>فصل فيزيائي تام للمسؤوليات لمنع التكرار وتسهيل التوسع</p>
+                        <p>فصل فيزيائي تام للمسؤوليات لمنع التكرار وتسهيل الصيانة والتوسع</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">3-TIER ARCHITECTURE</span>
+                    <div class="slide-counter-chip">03 / 13</div>
                 </div>
 
-                <div class="slide-body cards-3-col">
-                    <div class="deck-card">
-                        <h3>📦 النواة المشتركة (<span class="en-term">Core</span>)</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-3-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>📦 النواة المشتركة (<span class="en-term">Core</span>)</h3>
+                            <span class="card-badge-pill">CORE DTOs</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>ترويسة التأطير:</strong> <span class="en-term">12-Byte FrameHeader</span>.</li>
                             <li><strong>محرك التشفير:</strong> <span class="en-term">PBKDF2</span> وتوكنات <span class="en-term">JWT</span>.</li>
                             <li><strong>عقد البيانات:</strong> نماذج <span class="en-term">DTOs</span> وأنواع الحزم.</li>
@@ -155,9 +178,12 @@
                         </ul>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>🖥️ الخادم المركزي (<span class="en-term">Server</span>)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🖥️ الخادم المركزي (<span class="en-term">Server</span>)</h3>
+                            <span class="card-badge-pill">TCP/UDP SERVER</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>خادم TCP:</strong> استماع غير حاجب على المنفذ <span class="en-term">8888</span>.</li>
                             <li><strong>مكرر الوسائط:</strong> تدفقات <span class="en-term">UDP Relay</span> على المنفذ <span class="en-term">8889</span>.</li>
                             <li><strong>قاعدة البيانات:</strong> <span class="en-term">SQLite 3NF</span> بوضع <span class="en-term">WAL Mode</span>.</li>
@@ -165,9 +191,12 @@
                         </ul>
                     </div>
 
-                    <div class="deck-card cyan">
-                        <h3>💻 تطبيق العميل (<span class="en-term">Client</span>)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>💻 تطبيق العميل (<span class="en-term">Client</span>)</h3>
+                            <span class="card-badge-pill">WPF DESKTOP</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>المقابس غير الحاجبة:</strong> خدمة <span class="en-term">ClientNetworkService</span>.</li>
                             <li><strong>محرك الصوت:</strong> معيار <span class="en-term">16kHz HD Voice</span> بالمخازن الدائرية.</li>
                             <li><strong>محرك الفيديو:</strong> مكتبة <span class="en-term">AForge DirectShow & PiP</span>.</li>
@@ -176,7 +205,7 @@
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 1: مهندس المعمارية والشبكات</span>
                     <span>03 / 13</span>
@@ -187,43 +216,47 @@
                  SLIDE 4: TCP Framing & 12-Byte Header
                  ========================================================================= -->
             <section class="slide" id="slide-4" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="مقابس TCP وبروتوكول التأطير">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">03 | هندسة المقابس وبروتوكول التأطير</span>
+                        <span class="ribbon-tag">03 | هندسة المقابس وبروتوكول التأطير</span>
                         <h2>حل معضلة دفق TCP ببروتوكول التأطير (12-Byte Header)</h2>
                         <p>التغلب على مشاكل دمج وتجزئة الحزم في دفق بايتات TCP</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">12-BYTE FRAMING</span>
+                    <div class="slide-counter-chip">04 / 13</div>
                 </div>
 
-                <div class="slide-body cards-2-col">
-                    <div class="deck-card">
-                        <h3>📐 تركيبة الترويسة الثنائية</h3>
-                        <div class="frame-table-row">
-                            <div class="frame-cell">
+                <div class="slide-body grid-2-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>📐 تركيبة الترويسة الثنائية</h3>
+                            <span class="card-badge-pill">12 BYTES</span>
+                        </div>
+
+                        <div class="frame-table-grid">
+                            <div class="frame-cell-box">
                                 <span class="name">Magic</span>
-                                <span class="val">0x53 ('S')</span>
+                                <span class="val">0x53</span>
                             </div>
-                            <div class="frame-cell">
+                            <div class="frame-cell-box">
                                 <span class="name">Version</span>
                                 <span class="val">0x01</span>
                             </div>
-                            <div class="frame-cell">
-                                <span class="name">PacketType</span>
+                            <div class="frame-cell-box">
+                                <span class="name">Type</span>
                                 <span class="val">Int16</span>
                             </div>
-                            <div class="frame-cell">
-                                <span class="name">PayloadLength</span>
+                            <div class="frame-cell-box">
+                                <span class="name">Length</span>
                                 <span class="val">Int32</span>
                             </div>
-                            <div class="frame-cell">
-                                <span class="name">SeqNumber</span>
+                            <div class="frame-cell-box">
+                                <span class="name">Seq</span>
                                 <span class="val">Int32</span>
                             </div>
                         </div>
 
-                        <div class="code-box">
-                            <div class="code-box-header">FrameHeader.cs - BigEndian Serialization</div>
+                        <div class="terminal-code-box">
+                            <div class="terminal-top">FrameHeader.cs - BigEndian Serialization</div>
                             <pre><code>byte[] buf = new byte[12];
 buf[0] = 0x53; buf[1] = 0x01;
 BinaryPrimitives.WriteInt16BigEndian(buf.AsSpan(2, 2), (short)PacketType);
@@ -233,18 +266,21 @@ return buf;</code></pre>
                         </div>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>⚙️ خطوات محلل دفق التأطير (<span class="en-term">Parser</span>)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>⚙️ خطوات محلل دفق التأطير (<span class="en-term">Parser</span>)</h3>
+                            <span class="card-badge-pill">STATE MACHINE</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>1. التجميع في المخزن:</strong> قراءة دفق TCP المستمر دون افتراض وصول الحزمة دفعة واحدة.</li>
                             <li><strong>2. فحص الـ Magic Byte:</strong> التحقق من بايت <span class="en-term">0x53</span> فور اكتمال 12 بايت واستخراج طول الحمولة.</li>
-                            <li><strong>3. تسليم الحزمة الكاملة:</strong> اقتطاع الحمولة بدقة وتدوير البايتات المتبقية للحزمة التالية.</li>
+                            <li><strong>3. تسليم الحزمة الكاملة:</strong> اقتطاع الحمولة بدقة وتدوير البايتات للحزمة التالية.</li>
                             <li><strong>★ أهمية Big-Endian:</strong> توحيد قراءة الأرقام بين معالجات x86 ومعالجات ARM.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 1: مهندس المعمارية والشبكات</span>
                     <span>04 / 13</span>
@@ -255,36 +291,45 @@ return buf;</code></pre>
                  SLIDE 5: Auto-Discovery Pipeline
                  ========================================================================= -->
             <section class="slide" id="slide-5" data-speaker="المتحدث الأول (مهندس المعمارية والشبكات)" data-title="الاكتشاف التلقائي على الواي فاي">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">04 | الاكتشاف التلقائي لشبكات الواي فاي</span>
+                        <span class="ribbon-tag">04 | الاكتشاف التلقائي لشبكات الواي فاي</span>
                         <h2>ميزة Zero-Configuration Auto-Discovery (UDP 8887)</h2>
                         <p>ربط العملاء بالخادم ذاتياً وفورياً دون كتابة عنوان IP يدوياً</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">UDP BROADCAST: 8887</span>
+                    <div class="slide-counter-chip">05 / 13</div>
                 </div>
 
-                <div class="slide-body cards-3-col">
-                    <div class="deck-card">
-                        <h3>1. إعلان الخادم الدوري</h3>
-                        <p style="font-size:0.86rem; line-height:1.5; color:#334155;">يبث الخادم رسالة برودكاست كل 3 ثوانٍ على المنفذ 8887 على عنوان 255.255.255.255.</p>
-                        <code class="en-term" style="margin-top:10px;">SYNCPULSE_SERVER_ANNOUNCE:8888</code>
+                <div class="slide-body grid-3-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>1. إعلان الخادم الدوري</h3>
+                            <span class="card-badge-pill">BROADCAST</span>
+                        </div>
+                        <p style="font-size:0.88rem; line-height:1.55; color:var(--text-secondary);">يبث الخادم رسالة برودكاست كل 3 ثوانٍ على المنفذ 8887 على عنوان 255.255.255.255.</p>
+                        <code class="en-term" style="margin-top:12px;">SYNCPULSE_SERVER_ANNOUNCE:8888</code>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>2. التقاط العميل للإعلان</h3>
-                        <p style="font-size:0.86rem; line-height:1.5; color:#334155;">يستمع العميل على المنفذ 8887 ويلتقط إعلان السيرفر ويستخرج IP الخادم فورياً.</p>
-                        <code class="en-term" style="margin-top:10px;">serverIP = res.RemoteEndPoint.Address</code>
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>2. التقاط العميل للإعلان</h3>
+                            <span class="card-badge-pill">LISTEN</span>
+                        </div>
+                        <p style="font-size:0.88rem; line-height:1.55; color:var(--text-secondary);">يستمع العميل على المنفذ 8887 ويلتقط إعلان السيرفر ويستخرج IP الخادم فورياً.</p>
+                        <code class="en-term" style="margin-top:12px;">serverIP = res.RemoteEndPoint.Address</code>
                     </div>
 
-                    <div class="deck-card emerald">
-                        <h3>3. بدء الاتصال الفوري</h3>
-                        <p style="font-size:0.86rem; line-height:1.5; color:#334155;">يبدأ العميل مصافحة TCP فوراً على المنفذ 8888 ويسجل دخوله بسلاسة تامة.</p>
-                        <code class="en-term" style="margin-top:10px;">await client.ConnectAsync(ip, 8888)</code>
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>3. بدء الاتصال الفوري</h3>
+                            <span class="card-badge-pill">CONNECT</span>
+                        </div>
+                        <p style="font-size:0.88rem; line-height:1.55; color:var(--text-secondary);">يبدأ العميل مصافحة TCP فوراً على المنفذ 8888 ويسجل دخوله بسلاسة تامة.</p>
+                        <code class="en-term" style="margin-top:12px;">await client.ConnectAsync(ip, 8888)</code>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 1: مهندس المعمارية والشبكات</span>
                     <span>05 / 13</span>
@@ -295,37 +340,46 @@ return buf;</code></pre>
                  SLIDE 6: Cyber Security, PBKDF2 & JWT
                  ========================================================================= -->
             <section class="slide" id="slide-6" data-speaker="المتحدث الثاني (مهندس الأمن والمصادقة)" data-title="الأمن وتشفير كلمات المرور والـ JWT">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">05 | الأمن السيبراني والمصادقة</span>
+                        <span class="ribbon-tag">05 | الأمن السيبراني والمصادقة</span>
                         <h2>المصادقة المشفرة بـ PBKDF2/SHA-256 وتوكنات JWT</h2>
                         <p>تطبيق أعلى المعايير القياسية (NIST SP 800-63B & RFC 7519) لحماية المستخدمين</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">NIST & RFC STANDARDS</span>
+                    <div class="slide-counter-chip">06 / 13</div>
                 </div>
 
-                <div class="slide-body cards-3-col">
-                    <div class="deck-card">
-                        <h3>🔐 تجزئة كلمات المرور</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-3-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🔐 تجزئة كلمات المرور</h3>
+                            <span class="card-badge-pill">PBKDF2</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>128-bit Salt:</strong> ملح عشوائي فريد يبطل هجمات جداول قوس قزح.</li>
                             <li><strong>100,000 تكرار:</strong> إبطاء هجمات التخمين بالقوة الغاشمة.</li>
                             <li><strong>FixedTimeEquals:</strong> حماية تامة من هجمات التوقيت (<span class="en-term">Timing Attacks</span>).</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>🎫 إدارة الجلسات (<span class="en-term">JWT</span>)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🎫 إدارة الجلسات</h3>
+                            <span class="card-badge-pill">JWT RFC 7519</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>توقيع HMAC-SHA256:</strong> منع تزوير بيانات التوكن.</li>
                             <li><strong>تحقق رياضي لحظي:</strong> التحقق دون استعلام قاعدة البيانات في كل حزمة.</li>
                             <li><strong>انتهاء تلقائي:</strong> إدارة دورة حياة الجلسات بأمان.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card emerald">
-                        <h3>🛡️ التحصين وسجلات التدقيق</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🛡️ التحصين وسجلات التدقيق</h3>
+                            <span class="card-badge-pill">ISO 27001</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>Parameterized Queries:</strong> حماية قاعدة البيانات من حقن SQL.</li>
                             <li><strong>سقف 10MB للحزمة:</strong> حماية الخادم من هجمات حجب الخدمة (<span class="en-term">DoS</span>).</li>
                             <li><strong>سجلات ISO 27001:</strong> توثيق عمليات الدخول في جدول التدقيق.</li>
@@ -333,7 +387,7 @@ return buf;</code></pre>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 2: مهندس الأمن والمصادقة</span>
                     <span>06 / 13</span>
@@ -344,28 +398,34 @@ return buf;</code></pre>
                  SLIDE 7: Server Concurrency & SQLite WAL Mode
                  ========================================================================= -->
             <section class="slide" id="slide-7" data-speaker="المتحدث الثالث (مهندس الخادم وقواعد البيانات)" data-title="الخادم وقواعد البيانات والتزامن">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">06 | معمارية الخادم وقواعد البيانات والتزامن</span>
+                        <span class="ribbon-tag">06 | معمارية الخادم وقواعد البيانات والتزامن</span>
                         <h2>التزامن الفائق بـ IOCP وعزل الأعطال وقاعدة بيانات SQLite</h2>
                         <p>خدمة مئات المتصلين دون اختناق الخيوط مع مناعة تامة ضد الانهيار</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">IOCP & BULKHEAD</span>
+                    <div class="slide-counter-chip">07 / 13</div>
                 </div>
 
-                <div class="slide-body cards-2-col">
-                    <div class="deck-card">
-                        <h3>⚡ نموذج التزامن وعزل الجلسات</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-2-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>⚡ نموذج التزامن وعزل الجلسات</h3>
+                            <span class="card-badge-pill">IOCP & BULKHEAD</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>منافذ إكمال الإدخال/الإخراج (<span class="en-term">IOCP</span>):</strong> استخدام <span class="en-term">async/await</span> دون حجز خيوط في وضع الانتظار.</li>
                             <li><strong>تجنب اختناق الخيوط:</strong> تفادي عيوب حجز خيط لكل عميل (<span class="en-term">Thread-per-Client</span>).</li>
                             <li><strong>نمط الحواجز (<span class="en-term">Bulkhead</span>):</strong> عزل كل عميل في كتلة معالجة مستقلة لمنع انهيار الخادم.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>🗄️ قاعدة بيانات SQLite 3NF ووضع WAL</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🗄️ قاعدة بيانات SQLite 3NF ووضع WAL</h3>
+                            <span class="card-badge-pill">WAL MODE</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>وضع WAL Mode:</strong> قراءات متزامنة لا نهائية أثناء الكتابة دون أي أقفال حظر.</li>
                             <li><strong>تصميم الشكل المعياري 3NF:</strong> 7 جداول مترابطة بمفاتيح أجنبية تمنع تكرار البيانات.</li>
                             <li><strong>المعاملات الذرية (<span class="en-term">ACID</span>):</strong> ضمان سلامة وتناسق الرسائل والمكالمات.</li>
@@ -373,7 +433,7 @@ return buf;</code></pre>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 3: مهندس الخادم وقواعد البيانات</span>
                     <span>07 / 13</span>
@@ -384,38 +444,46 @@ return buf;</code></pre>
                  SLIDE 8: Message Sync & Offline Queue
                  ========================================================================= -->
             <section class="slide" id="slide-8" data-speaker="المتحدث الثالث (مهندس الخادم وقواعد البيانات)" data-title="المزامنة وطابور الرسائل المعلقة">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">07 | دورة حياة الرسائل والمزامنة التلغرامية</span>
+                        <span class="ribbon-tag">07 | دورة حياة الرسائل والمزامنة التلغرامية</span>
                         <h2>طابور الرسائل المعلقة (Offline Queue) ومؤشرات التسليم (✓✓)</h2>
                         <p>مزامنة فائقة لضمان عدم ضياع أي رسالة حتى عند انقطاع المستلم</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">TELEGRAM-STYLE SYNC</span>
+                    <div class="slide-counter-chip">08 / 13</div>
                 </div>
 
-                <div class="slide-body cards-4-col">
-                    <div class="deck-card">
-                        <h3>1. Sent (✓)</h3>
-                        <p style="font-size:0.84rem; color:#334155; line-height:1.45;">تُرسل الرسالة وتُحفظ فوراً في قاعدة بيانات الخادم (علامة صح رمادية واحدة).</p>
+                <div class="slide-body grid-4-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>1. Sent (✓)</h3>
+                        </div>
+                        <p style="font-size:0.86rem; line-height:1.5; color:var(--text-secondary);">تُرسل الرسالة وتُحفظ فوراً في قاعدة بيانات الخادم (علامة صح رمادية واحدة).</p>
                     </div>
 
-                    <div class="deck-card">
-                        <h3>2. Offline Queue</h3>
-                        <p style="font-size:0.84rem; color:#334155; line-height:1.45;">إذا كان المستلم غير متصل، يحتفظ الخادم بالرسالة ويدفعها له فور اتصاله.</p>
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>2. Offline Queue</h3>
+                        </div>
+                        <p style="font-size:0.86rem; line-height:1.5; color:var(--text-secondary);">إذا كان المستلم غير متصل، يحتفظ الخادم بالرسالة ويدفعها له فور اتصاله.</p>
                     </div>
 
-                    <div class="deck-card emerald">
-                        <h3>3. Delivered (✓✓)</h3>
-                        <p style="font-size:0.84rem; color:#334155; line-height:1.45;">فور استلام العميل، يُرسل إشعار تسليم فتتحول لـ (علامتي صح رماديتين).</p>
+                    <div class="glass-card solution">
+                        <div class="card-title-row">
+                            <h3>3. Delivered (✓✓)</h3>
+                        </div>
+                        <p style="font-size:0.86rem; line-height:1.5; color:var(--text-secondary);">فور استلام العميل، يُرسل إشعار تسليم فتتحول لـ (علامتي صح رماديتين).</p>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>4. Read (✓✓)</h3>
-                        <p style="font-size:0.84rem; color:#334155; line-height:1.45;">عند فتح المستلم للمحادثة، يُرسل إشعار قراءة فتتحول لـ (علامتي صح زرقاوين).</p>
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>4. Read (✓✓)</h3>
+                        </div>
+                        <p style="font-size:0.86rem; line-height:1.5; color:var(--text-secondary);">عند فتح المستلم للمحادثة، يُرسل إشعار قراءة فتتحول لـ (علامتي صح زرقاوين).</p>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 3: مهندس الخادم وقواعد البيانات</span>
                     <span>08 / 13</span>
@@ -426,27 +494,33 @@ return buf;</code></pre>
                  SLIDE 9: Audio Engine & Zero-Allocation Ring Buffers
                  ========================================================================= -->
             <section class="slide" id="slide-9" data-speaker="المتحدث الرابع (مهندس الميديا والوسائط)" data-title="محرك الصوت والمخازن الدائرية">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">08 | معالجة الصوت والذاكرة منخفضة المستوى</span>
+                        <span class="ribbon-tag">08 | معالجة الصوت والذاكرة منخفضة المستوى</span>
                         <h2>محرك الصوت 16kHz HD Voice ونظام المخازن الدائرية الثابتة</h2>
                         <p>القضاء التام والنهائي على خطأ الوصول غير المصرح به للذاكرة (0xc0000005 Status Access Violation)</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">ZERO ALLOCATION</span>
+                    <div class="slide-counter-chip">09 / 13</div>
                 </div>
 
-                <div class="slide-body cards-2-col">
-                    <div class="deck-card problem">
-                        <h3>⚠️ معضلة خطأ الذاكرة 0xc0000005</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-2-col">
+                    <div class="glass-card problem">
+                        <div class="card-title-row">
+                            <h3>⚠️ معضلة خطأ الذاكرة 0xc0000005</h3>
+                            <span class="card-badge-pill">ACCESS VIOLATION</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>الحجز المتكرر:</strong> حجز وتثبيت مصفوفة بايتات لكل إطار صوتي (40ms) كان يربك مجمع القمامة (<span class="en-term">GC</span>).</li>
                             <li><strong>تضارب مع بطاقة الصوت:</strong> تحرير مؤشرات <span class="en-term">WAVEHDR</span> أثناء قراءة بطاقة الصوت كان يسبب انهيار البرنامج.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card solution">
-                        <h3>✅ الحل: المخازن الدائرية الثابتة (<span class="en-term">Pre-Pinned</span>)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card solution">
+                        <div class="card-title-row">
+                            <h3>✅ الحل: المخازن الدائرية الثابتة</h3>
+                            <span class="card-badge-pill">ZERO ALLOC</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>تثبيت 8 مخازن مسبقاً:</strong> حجز وتثبيت 8 مخازن بـ <span class="en-term">GCHandleType.Pinned</span> مرة واحدة فقط عند بدء المكالمة.</li>
                             <li><strong>Zero-Allocation:</strong> نسخ البيانات عبر <span class="en-term">Buffer.BlockCopy</span> دورياً داخل المخزن التالي: <code class="en-term">(_outIndex + 1) % 8</code>.</li>
                             <li><strong>استقرار 100%:</strong> صفر استدعاءات للـ GC وصفر تجميد للواجهة.</li>
@@ -454,7 +528,7 @@ return buf;</code></pre>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 4: مهندس الميديا والوسائط</span>
                     <span>09 / 13</span>
@@ -467,40 +541,49 @@ return buf;</code></pre>
             <section class="slide" id="slide-10" data-speaker="المتحدث الرابع (مهندس الميديا والوسائط)" data-title="الفيديو والبث الهجين وإطفاء الـ LED">
                 <div class="slide-header">
                     <div>
-                        <span class="slide-tag">09 | الفيديو والبث الهجين والخصوصية</span>
+                        <span class="ribbon-tag">09 | الفيديو والبث الهجين والخصوصية</span>
                         <h2>محرك الفيديو المباشر AForge والبث الهجين (UDP+TCP)</h2>
                         <p>تحكم فيزيائي بضوء الكاميرا (LED) في طبقة النواة، المعاينة الذاتية PiP، وإلغاء تكرار الإطارات</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">AForge & HYBRID STREAM</span>
+                    <div class="slide-counter-chip">10 / 13</div>
                 </div>
 
-                <div class="slide-body cards-3-col">
-                    <div class="deck-card">
-                        <h3>📷 إطفاء ضوء الكاميرا</h3>
-                        <ul class="deck-list">
+                <div class="slide-body grid-3-col">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>📷 إطفاء ضوء الكاميرا</h3>
+                            <span class="card-badge-pill">PHYSICAL LED</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>مكتبة AForge DirectShow:</strong> تعامل مباشر مع مقبض الكاميرا في نظام التشغيل.</li>
                             <li><strong>إغلاق فيزيائي:</strong> إرسال إشارة <span class="en-term">SignalToStop()</span> فينطفئ ضوء الـ LED الحقيقي لحماية الخصوصية.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card blue">
-                        <h3>⚡ البث الهجين (UDP+TCP)</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>⚡ البث الهجين (UDP+TCP)</h3>
+                            <span class="card-badge-pill">HYBRID STREAM</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>قناتان متوازيتان:</strong> إرسال الوسائط عبر UDP (سريعة) و TCP (مضمونة) لتخطي جدران الحماية.</li>
                             <li><strong>إلغاء التكرار اللحظي:</strong> مفتاح ثنائي 64-بت لتشغيل الإطار الأسرع فوراً وتجاهل المكرر.</li>
                         </ul>
                     </div>
 
-                    <div class="deck-card cyan">
-                        <h3>🖼️ عرض ميديا تليجرام</h3>
-                        <ul class="deck-list">
+                    <div class="glass-card">
+                        <div class="card-title-row">
+                            <h3>🖼️ عرض ميديا تليجرام</h3>
+                            <span class="card-badge-pill">TELEGRAM UI</span>
+                        </div>
+                        <ul class="card-bullet-list">
                             <li><strong>عرض الصور المباشر:</strong> تحويل بايتات الصور لـ <span class="en-term">BitmapSource</span> داخل فقاعة الشات.</li>
                             <li><strong>مشغل الصوت المدمج:</strong> تشغيل الرسائل الصوتية مع زر التحكم وفتح المستندات.</li>
                         </ul>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">المتحدث 4: مهندس الميديا والوسائط</span>
                     <span>10 / 13</span>
@@ -511,46 +594,46 @@ return buf;</code></pre>
                  SLIDE 11: 4-Speaker Team Matrix
                  ========================================================================= -->
             <section class="slide" id="slide-11" data-speaker="جميع المتحدثين" data-title="مصفوفة توزيع المتحدثين الـ 4">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">10 | تنظيم فريق المناقشة</span>
+                        <span class="ribbon-tag">10 | تنظيم فريق المناقشة</span>
                         <h2>مصفوفة توزيع المهام على المتحدثين الأربعة (4 Speakers)</h2>
                         <p>تكامل هندسي وتوزيع موضوعي دقيق يغطي كافة محاور مقرر برمجة خادم وعميل</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#1E3A8A;">4-SPEAKER MATRIX</span>
+                    <div class="slide-counter-chip">11 / 13</div>
                 </div>
 
-                <div class="slide-body cards-4-col">
-                    <div class="deck-card">
-                        <strong style="color:#2563EB; font-family:var(--font-mono); font-size:0.75rem;">SPEAKER 01</strong>
-                        <h3>المتحدث الأول</h3>
-                        <p style="font-size:0.75rem; color:#64748B; font-weight:700; margin-bottom:6px;">مهندس المعمارية والشبكات</p>
-                        <p style="font-size:0.82rem; color:#334155; line-height:1.45;">مقابس TCP، التأطير 12-Byte، ترتيب Big-Endian، واكتشاف الواي فاي عبر UDP 8887.</p>
+                <div class="slide-body grid-4-col">
+                    <div class="glass-card">
+                        <span class="card-badge-pill" style="margin-bottom:8px;">SPEAKER 01</span>
+                        <h3 style="font-size:1.05rem; color:var(--text-primary); margin-bottom:4px;">المتحدث الأول</h3>
+                        <p style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">مهندس المعمارية والشبكات</p>
+                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">مقابس TCP، التأطير 12-Byte، ترتيب Big-Endian، واكتشاف الواي فاي عبر UDP 8887.</p>
                     </div>
 
-                    <div class="deck-card">
-                        <strong style="color:#2563EB; font-family:var(--font-mono); font-size:0.75rem;">SPEAKER 02</strong>
-                        <h3>المتحدث الثاني</h3>
-                        <p style="font-size:0.75rem; color:#64748B; font-weight:700; margin-bottom:6px;">مهندس الأمن والمصادقة</p>
-                        <p style="font-size:0.82rem; color:#334155; line-height:1.45;">تجزئة PBKDF2 مع Salt، توكنات JWT، منع حقن SQL، وسجلات تدقيق ISO 27001.</p>
+                    <div class="glass-card">
+                        <span class="card-badge-pill" style="margin-bottom:8px;">SPEAKER 02</span>
+                        <h3 style="font-size:1.05rem; color:var(--text-primary); margin-bottom:4px;">المتحدث الثاني</h3>
+                        <p style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">مهندس الأمن والمصادقة</p>
+                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">تجزئة PBKDF2 مع Salt، توكنات JWT، منع حقن SQL، وسجلات تدقيق ISO 27001.</p>
                     </div>
 
-                    <div class="deck-card">
-                        <strong style="color:#2563EB; font-family:var(--font-mono); font-size:0.75rem;">SPEAKER 03</strong>
-                        <h3>المتحدث الثالث</h3>
-                        <p style="font-size:0.75rem; color:#64748B; font-weight:700; margin-bottom:6px;">مهندس الخادم وقواعد البيانات</p>
-                        <p style="font-size:0.82rem; color:#334155; line-height:1.45;">خادم TCP بـ IOCP، نمط Bulkhead، قاعدة بيانات SQLite WAL، وطابور Offline Queue.</p>
+                    <div class="glass-card">
+                        <span class="card-badge-pill" style="margin-bottom:8px;">SPEAKER 03</span>
+                        <h3 style="font-size:1.05rem; color:var(--text-primary); margin-bottom:4px;">المتحدث الثالث</h3>
+                        <p style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">مهندس الخادم وقواعد البيانات</p>
+                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">خادم TCP بـ IOCP، نمط Bulkhead، قاعدة بيانات SQLite WAL، وطابور Offline Queue.</p>
                     </div>
 
-                    <div class="deck-card">
-                        <strong style="color:#2563EB; font-family:var(--font-mono); font-size:0.75rem;">SPEAKER 04</strong>
-                        <h3>المتحدث الرابع</h3>
-                        <p style="font-size:0.75rem; color:#64748B; font-weight:700; margin-bottom:6px;">مهندس الميديا والذاكرة</p>
-                        <p style="font-size:0.82rem; color:#334155; line-height:1.45;">مكرر UDP Relay 8889، محرك الصوت 16kHz والمخازن الدائرية، كاميرا AForge، وبث الميديا.</p>
+                    <div class="glass-card">
+                        <span class="card-badge-pill" style="margin-bottom:8px;">SPEAKER 04</span>
+                        <h3 style="font-size:1.05rem; color:var(--text-primary); margin-bottom:4px;">المتحدث الرابع</h3>
+                        <p style="font-size:0.75rem; color:var(--text-muted); font-weight:700; margin-bottom:6px;">مهندس الميديا والذاكرة</p>
+                        <p style="font-size:0.82rem; color:var(--text-secondary); line-height:1.45;">مكرر UDP Relay 8889، محرك الصوت 16kHz والمخازن الدائرية، كاميرا AForge، وبث الميديا.</p>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">فريق العمل الهندسي (4 متحدثين)</span>
                     <span>11 / 13</span>
@@ -561,36 +644,36 @@ return buf;</code></pre>
                  SLIDE 12: Automated Tests (62/62)
                  ========================================================================= -->
             <section class="slide" id="slide-12" data-speaker="جميع المتحدثين" data-title="حزمة الاختبارات والتحقق الآلي">
-                <div class="slide-header">
+                <div class="slide-ribbon">
                     <div>
-                        <span class="slide-tag">11 | الجودة والتحقق الآلي</span>
+                        <span class="ribbon-tag">11 | الجودة والتحقق الآلي</span>
                         <h2>نتائج حزمة الاختبارات الآلية الشاملة (SyncPulse.Tests)</h2>
                         <p>تحقق برمجي كامل بنسبة نجاح 100% من 10 وحدات نظام رئيسية</p>
                     </div>
-                    <span class="badge-en" style="font-weight:800; color:#059669;">62/62 PASSED</span>
+                    <div class="slide-counter-chip">12 / 13</div>
                 </div>
 
                 <div class="slide-body">
-                    <div style="background:#ECFDF5; border:1px solid #A7F3D0; border-radius:10px; padding:12px 24px; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
-                        <span style="font-size:1.8rem; font-weight:900; color:#059669; font-family:var(--font-en);">62 / 62 PASSED</span>
-                        <span style="font-size:0.95rem; font-weight:800; color:#059669;">اجتياز 62 اختباراً آلياً شاملاً بنسبة نجاح 100% (0 Failures)</span>
+                    <div style="background:var(--status-emerald-bg); border:1px solid var(--status-emerald-border); border-radius:14px; padding:14px 28px; display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                        <span style="font-size:1.9rem; font-weight:900; color:var(--status-emerald); font-family:var(--font-en);">62 / 62 PASSED</span>
+                        <span style="font-size:0.95rem; font-weight:800; color:var(--status-emerald);">اجتياز 62 اختباراً آلياً شاملاً بنسبة نجاح 100% (0 Failures)</span>
                     </div>
 
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 1. التأطير 12-Byte وترتيب Big-Endian</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 2. تسلسل حزم SyncPacket الثنائية</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 3. محرك التشفير PBKDF2 والـ Salt والـ JWT</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 4. محلل تجزئة دفق TCP (FrameStreamParser)</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 5. قاعدة بيانات SQLite والمستودعات السبعة</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 6. إدارة الجلسات وتتبع الاتصال SessionManager</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 7. منسق إشارات المكالمات CallCoordinator</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 8. مكرر تدفقات الوسائط اللحظي UdpMediaRelay</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 9. الاكتشاف التلقائي لشبكات الواي فاي UDP 8887</div>
-                        <div style="background:#F8FAFC; border:1px solid #E2E8F0; padding:8px 12px; border-radius:6px; font-size:0.82rem; font-weight:700; color:#334155;"><span style="color:#059669; font-weight:900;">✔</span> 10. اتصال كامل End-to-End عبر مقابس حقيقية</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 1. التأطير 12-Byte وترتيب Big-Endian</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 2. تسلسل حزم SyncPacket الثنائية</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 3. محرك التشفير PBKDF2 والـ Salt والـ JWT</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 4. محلل تجزئة دفق TCP (FrameStreamParser)</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 5. قاعدة بيانات SQLite والمستودعات السبعة</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 6. إدارة الجلسات وتتبع الاتصال SessionManager</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 7. منسق إشارات المكالمات CallCoordinator</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 8. مكرر تدفقات الوسائط اللحظي UdpMediaRelay</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 9. الاكتشاف التلقائي لشبكات الواي فاي UDP 8887</div>
+                        <div class="glass-card" style="padding:10px 14px; font-size:0.85rem; font-weight:700;"><span style="color:var(--status-emerald); font-weight:900;">✔</span> 10. اتصال كامل End-to-End عبر مقابس حقيقية</div>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">فريق العمل الهندسي (4 متحدثين)</span>
                     <span>12 / 13</span>
@@ -601,25 +684,27 @@ return buf;</code></pre>
                  SLIDE 13: Conclusion & Demo Launch
                  ========================================================================= -->
             <section class="slide" id="slide-13" data-speaker="جميع المتحدثين" data-title="الخاتمة والانتقال للعرض الحي">
-                <div class="hero-layout">
-                    <span class="hero-pill">🎓 جاهزون للإجابة على كافة الأسئلة وبدء العرض العملي الحي</span>
+                <div class="hero-stage-layout">
+                    <div class="hero-luxury-tag">
+                        🎓 جاهزون للإجابة على كافة الأسئلة وبدء العرض العملي الحي
+                    </div>
 
                     <h1>
                         شكراً لحسن استماعكم وإشرافكم الكريم!<br>
-                        <span>جاهزون لبدء العرض العملي الحي (Live Demo)</span>
+                        <span class="brand-highlight">جاهزون لبدء العرض العملي الحي (Live Demo)</span>
                     </h1>
 
-                    <p class="hero-desc" style="max-width:750px;">
+                    <p class="hero-lead-desc" style="max-width:780px;">
                         سيتم الآن تشغيل الخادم على الجهاز الأول، والعميلين على الجهازين الآخرين، ومراقبة التفاعل عبر مركز العرض المباشر.
                     </p>
 
-                    <div style="margin-top:8px;">
-                        <a href="../SyncPulse.Web/index.html" class="nav-btn primary" style="font-size:1.05rem; padding:12px 32px; text-decoration:none;">
+                    <div style="margin-top:10px;">
+                        <a href="../SyncPulse.Web/index.html" class="dock-action-btn primary" style="font-size:1.05rem; padding:12px 36px; text-decoration:none;">
                             <span>🖥️</span> فتح مركز العرض المباشر للأجهزة الثلاثة (Live Hub)
                         </a>
                     </div>
 
-                    <div class="hero-speakers" style="margin-top:20px;">
+                    <div class="hero-speakers-strip" style="margin-top:22px;">
                         <span>📡 اكتشاف تلقائي</span> • 
                         <span>✉️ رسائل ومزامنة Offline</span> • 
                         <span>🎙️ صوت 16kHz HD نقي</span> • 
@@ -627,7 +712,7 @@ return buf;</code></pre>
                     </div>
                 </div>
 
-                <div class="slide-footer-info">
+                <div class="slide-footer-meta">
                     <span>مشروع نظام الاتصالات والمراسلة | SyncPulse</span>
                     <span class="f-speaker">فريق العمل الهندسي (4 متحدثين)</span>
                     <span>13 / 13</span>
@@ -636,40 +721,50 @@ return buf;</code></pre>
 
         </main>
 
-        <!-- Bottom Command Navigation Controls -->
-        <footer class="bottom-bar">
-            <div class="nav-group">
-                <button class="nav-btn" onclick="prevSlide()" title="الشريحة السابقة (السهم الأيمن / PageUp)">
-                    <span>➔</span> السابقة
-                </button>
-                <button class="nav-btn primary" onclick="nextSlide()" title="الشريحة التالية (السهم الأيسر / Space / PageDown)">
-                    التالية <span>⬅</span>
-                </button>
-                <div class="slide-counter">
-                    <span class="current" id="current-slide-num">01</span>
-                    <span>/</span>
-                    <span id="total-slides-num">13</span>
-                </div>
+        <!-- Floating Master Presentation Dock -->
+        <div class="floating-master-dock">
+            <button class="dock-action-btn" onclick="prevSlide()" title="الشريحة السابقة (السهم الأيمن / PageUp)">
+                <span>➔</span> السابقة
+            </button>
+
+            <div class="dock-counter-display">
+                <span class="current" id="current-slide-num">01</span>
+                <span>/</span>
+                <span id="total-slides-num">13</span>
             </div>
 
-            <div class="speaker-cue-text" id="speaker-cue-label">
-                المتحدث الحالي: <strong>المتحدث الأول (مهندس المعمارية والشبكات)</strong>
-            </div>
+            <button class="dock-action-btn primary" onclick="nextSlide()" title="الشريحة التالية (السهم الأيسر / Space / PageDown)">
+                التالية <span>⬅</span>
+            </button>
 
-            <div class="nav-group">
-                <span style="font-size:0.75rem; color:#94A3B8;">[السهمين للتنقل] • [N الملاحظات] • [G الفهرس] • [F ملء الشاشة]</span>
-            </div>
-        </footer>
+            <div class="dock-sep"></div>
+
+            <button class="dock-action-btn" id="btn-notes" onclick="toggleNotes()" title="ملاحظات وتوجيهات المتحدثين (Press N)">
+                <span>📝</span> الملاحظات
+            </button>
+
+            <button class="dock-action-btn" id="btn-grid" onclick="toggleGrid()" title="فهرس الشرائح (Press G)">
+                <span>⊞</span> الشرائح
+            </button>
+
+            <button class="dock-action-btn" id="btn-laser" onclick="toggleLaser()" title="المؤشر الليزري التفاعلي (Press L)">
+                <span>🔴</span> ليزر
+            </button>
+
+            <button class="dock-action-btn" onclick="toggleFullscreen()" title="ملء الشاشة (Press F)">
+                <span>⛶</span>
+            </button>
+        </div>
 
     </div>
 
     <!-- Speaker Notes Drawer -->
     <aside class="notes-drawer" id="notes-drawer">
         <div class="notes-drawer-header">
-            <h3 style="font-size:0.88rem; font-weight:800; color:#0F172A;">📝 ملاحظات وتوجيهات المتحدثين</h3>
-            <button onclick="toggleNotes()" style="background:transparent; border:none; cursor:pointer; font-size:1.1rem; color:#64748B;">✕</button>
+            <h3 style="font-size:0.9rem; font-weight:800; color:var(--text-primary);">📝 ملاحظات وتوجيهات المتحدثين</h3>
+            <button onclick="toggleNotes()" style="background:transparent; border:none; cursor:pointer; font-size:1.1rem; color:var(--text-muted);">✕</button>
         </div>
-        <div class="notes-drawer-body" id="notes-content">
+        <div class="notes-body" id="notes-content">
             <!-- Dynamic Notes Injected via JS -->
         </div>
     </aside>
@@ -677,10 +772,10 @@ return buf;</code></pre>
     <!-- Slide Grid Modal -->
     <div class="grid-modal" id="grid-modal">
         <div class="grid-modal-header">
-            <h3 style="font-size:1.3rem; font-weight:800;">⊞ فهرس ومعاينة شرائح العرض</h3>
+            <h3>⊞ فهرس ومعاينة شرائح العرض</h3>
             <button onclick="toggleGrid()" style="background:transparent; border:none; color:white; font-size:1.5rem; cursor:pointer;">✕</button>
         </div>
-        <div class="grid-thumbs" id="grid-thumbs-container">
+        <div class="grid-thumbs-container" id="grid-thumbs-container">
             <!-- Injected via JS -->
         </div>
     </div>

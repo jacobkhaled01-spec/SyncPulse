@@ -458,6 +458,28 @@ function handleSlideSpecialTriggers(slideIndex) {
 }
 
 /**
+ * Multi-Theme Engine Switcher
+ */
+function setTheme(themeName) {
+    document.documentElement.setAttribute('data-theme', themeName);
+    localStorage.setItem('syncpulse_theme', themeName);
+
+    // Update active button state
+    document.querySelectorAll('.theme-pill-btn').forEach(btn => {
+        const title = btn.getAttribute('title') || '';
+        if (themeName === 'dark' && title.includes('دارك')) {
+            btn.classList.add('active');
+        } else if (themeName === 'light' && title.includes('فاتح')) {
+            btn.classList.add('active');
+        } else if (themeName === 'matrix' && title.includes('ماتركس')) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+}
+
+/**
  * Toggle Fullscreen
  */
 function toggleFullscreen() {
