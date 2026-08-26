@@ -244,9 +244,10 @@ namespace SyncPulse.Client.Services
 
             try
             {
-                using var ms = new MemoryStream(jpegBytes);
+                var ms = new MemoryStream(jpegBytes);
                 var bi = new BitmapImage();
                 bi.BeginInit();
+                bi.CreateOptions = BitmapCreateOptions.None;
                 bi.CacheOption = BitmapCacheOption.OnLoad;
                 bi.StreamSource = ms;
                 bi.EndInit();

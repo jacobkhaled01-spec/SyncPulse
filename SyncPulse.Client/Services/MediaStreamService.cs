@@ -23,7 +23,7 @@ namespace SyncPulse.Client.Services
         private Task? _receiveTask;
         private bool _isStreaming;
         private uint _frameSeq = 1;
-        private readonly ConcurrentDictionary<uint, byte> _processedFrames = new();
+        private readonly ConcurrentDictionary<long, byte> _processedFrames = new();
 
         public AudioEngine Audio { get; } = new();
         public VideoEngine Video { get; } = new();
@@ -149,7 +149,7 @@ namespace SyncPulse.Client.Services
             // 2. الإرسال الموازي المضمون عبر قناة TCP (لضمان تجاوز جدران الحماية ورواترات الواي فاي 100%)
             try
             {
-                await _network.SendPacketAsync(packet);
+                _ = _network.SendPacketAsync(packet);
             }
             catch { }
         }
@@ -189,7 +189,8 @@ namespace SyncPulse.Client.Services
         private void ProcessIncomingMediaFrame(MediaFramePacket mediaFrame)
         {
             // منع المعالجة المكررة لنفس الإطار عند وصوله من UDP و TCP معاً
-            if (mediaFrame.SequenceNumber > 0 && !_processedFrames.TryAdd(mediaFrame.SequenceNumber, 0))
+            long frameKey = ((long)mediaFrame.FrameType << 32) | (long)mediaFrame.SequenceNumber;
+            if (mediaFrame.SequenceNumber > 0 && !_processedFrames.TryAdd(frameKey, 0))
             {
                 return;
             }

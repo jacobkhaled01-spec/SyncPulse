@@ -143,7 +143,7 @@ namespace SyncPulse.Client.ViewModels
         {
             CallAction.Offer => IsIncoming ? "مكالمة واردة..." : "جاري الاتصال...",
             CallAction.Ringing => "يرن الآن...",
-            CallAction.Accept => "متصل (جاري البث الحي 🟢)",
+            CallAction.Accept => "متصل (جاري البث المباشر)",
             CallAction.Reject => "تم رفض المكالمة",
             CallAction.Busy => "الطرف الآخر مشغول في مكالمة أخرى",
             CallAction.Offline => "الطرف الآخر غير متصل بالشبكة حالياً",
