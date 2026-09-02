@@ -1,635 +1,596 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SyncPulse - برزنتيشن توزيع أدوار المتحدثين الـ 4 لمقرر خادم وعميل</title>
+  <title>SyncPulse - العرض الأكاديمي لمقرر برمجة خادم وعميل (Client-Server Programming)</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
   <div class="deck-container">
     <div class="slide-stage">
 
       <!-- ===================================================================
-           Slide 1: Executive Title & Defense Architecture
+           Slide 1: Formal Client-Server Course Title Screen
            =================================================================== -->
       <section class="slide active" id="slide-0">
         <div class="slide-header">
           <div class="header-meta">
-            <span class="speaker-pill all">👥 فريق العمل الهندسي الكامل</span>
-            <span class="timer-tag">⏱️ إجمالي وقت العرض: 15 دقيقة</span>
+            <span class="speaker-pill all">🌐 مقرر برمجة خادم وعميل | Client-Server Programming</span>
+            <span class="timer-tag">⏱️ وقت العرض: 15 دقيقة • 4 متحدثين</span>
           </div>
-          <span class="help-pill">تنقل: [ الاسهم أو المسافة ] • الملاحظات: [ N ] • شاشة كاملة: [ F ]</span>
+          <span class="help-pill">تنقل: [ الأسهم أو المسافة ] • الملاحظات: [ N ] • شاشة كاملة: [ F ]</span>
         </div>
 
-        <div class="bento-grid grid-1-3-cols">
-          <!-- Side Hero Card -->
-          <div class="bento-card"
-            style="background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%); justify-content: center; text-align: center;">
-            <div
-              style="width: 70px; height: 70px; background: #EEF2FF; border-radius: 20px; display: flex; align-items: center; justify-content: center; font-size: 36px; margin: 0 auto 16px auto;">
-              🛡️
+        <div class="bento-grid grid-1-2-cols">
+          <!-- Course Hero Card -->
+          <div class="bento-card" style="background: linear-gradient(145deg, #FFFFFF 0%, #F8FAFC 100%); justify-content: space-between; text-align: center;">
+            <div>
+              <div style="width: 68px; height: 68px; background: #EEF2FF; border: 1.5px solid #C7D2FE; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 34px; margin: 0 auto 12px auto;">
+                🔌
+              </div>
+              <h2 style="font-size: 26px; font-weight: 900; color: #0F172A; margin-bottom: 4px;">SyncPulse</h2>
+              <div style="font-size: 13px; font-weight: 800; color: #4F46E5; letter-spacing: 0.5px; margin-bottom: 14px;">CLIENT-SERVER ARCHITECTURE</div>
+              <div style="background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; font-size: 12.5px; color: #475569; text-align: right; line-height: 1.6;">
+                🎯 <strong>الهدف الأكاديمي للمشروع:</strong> بناء منظومة اتصالات موزعة (Distributed Communication Suite) مبنية بالكامل من الصفر فوق <strong>المقابس الخام (Raw TCP & UDP Sockets)</strong> دون استخدام أي مكتبات وسيطة (Zero-Cloud / No SignalR / No Firebase).
+              </div>
             </div>
-            <h2 style="font-size: 26px; font-weight: 900; color: #0F172A; margin-bottom: 8px;">SyncPulse</h2>
-            <p style="font-size: 13px; font-weight: 700; color: #4F46E5; margin-bottom: 16px;">مقرر برمجة خادم وعميل</p>
-            <div
-              style="background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; font-size: 12px; color: #475569; text-align: right; line-height: 1.6;">
-              🎯 <strong>هدف البرزنتيشن:</strong> استعراض التوزيع الدقيق لمحاور النظام الأربعة وتكامل أعضاء الفريق في
-              الشرح والعرض العملي الحي لنيل الدرجة الكاملة.
+
+            <!-- Mini Spec Tags -->
+            <div style="display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin-top: 10px;">
+              <span class="code-badge">Raw Sockets</span>
+              <span class="code-badge">IOCP Async</span>
+              <span class="code-badge">12-Byte Framing</span>
+              <span class="code-badge">UDP Relay 8889</span>
             </div>
           </div>
 
-          <!-- 4 Pillars Overview -->
+          <!-- Visual Client-Server Topology Diagram -->
           <div class="bento-card" style="justify-content: space-between;">
             <div>
-              <h1 style="font-size: 28px; font-weight: 900; color: #0F172A; margin-bottom: 6px;">مصفوفة توزيع الأدوار
-                الهندسية لفريق الـ 4 متحدثين</h1>
-              <p style="font-size: 14px; color: #64748B; margin-bottom: 20px;">توزيع محاور المقرر وفق معايير Clean
-                Architecture والفصل الصارم للمسؤوليات (3-4 دقائق لكل متحدث):</p>
+              <h1 style="font-size: 28px; font-weight: 900; color: #0F172A; margin-bottom: 6px;">معمارية الاتصال وتكامل محاور المقرر</h1>
+              <p style="font-size: 13.5px; color: #64748B; margin-bottom: 12px;">المخطط المعماري لتدفق البيانات بين العملاء والخادم المركزي الموزع على 4 مهندسين:</p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px;">
-              <!-- Role 1 Quick -->
-              <div style="background: #EEF2FF; border: 1.5px solid #C7D2FE; border-radius: 14px; padding: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                  <span style="font-weight: 900; color: #4F46E5; font-size: 15px;">👤 المتحدث الأول</span>
-                  <span
-                    style="font-size: 11px; background: #FFFFFF; padding: 2px 8px; border-radius: 99px; font-weight: 700; color: #4F46E5;">3-4
-                    دقائق</span>
-                </div>
-                <div style="font-weight: 800; font-size: 13px; color: #0F172A;">هندسة المقابس وبروتوكول التأطير</div>
-                <div style="font-size: 11px; color: #475569; margin-top: 4px;">TCP Sockets Lifecycle • 12-Byte
-                  FrameHeader • UDP 8887 Discovery</div>
+            <!-- Visual Vector Diagram: Client-Server Topology -->
+            <div class="topology-box">
+              <div class="topo-node client-node-a">
+                <div style="font-size: 20px;">💻</div>
+                <div class="topo-title">العميل A</div>
+                <span class="topo-badge" style="color: var(--s2-primary);">Client Socket</span>
               </div>
 
-              <!-- Role 2 Quick -->
-              <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 14px; padding: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                  <span style="font-weight: 900; color: #D97706; font-size: 15px;">👤 المتحدث الثاني</span>
-                  <span
-                    style="font-size: 11px; background: #FFFFFF; padding: 2px 8px; border-radius: 99px; font-weight: 700; color: #D97706;">3-4
-                    دقائق</span>
-                </div>
-                <div style="font-weight: 800; font-size: 13px; color: #0F172A;">الأمن السيبراني والمصادقة والجلسات</div>
-                <div style="font-size: 11px; color: #475569; margin-top: 4px;">PBKDF2/100k • Timing Attack Defense • JWT
-                  RFC 7519 • ISO 27001</div>
+              <div class="topo-link"></div>
+
+              <div class="topo-node server-node">
+                <div style="font-size: 22px;">🖥️</div>
+                <div class="topo-title">الخادم المركزي</div>
+                <span class="topo-badge" style="color: var(--s1-primary);">IOCP Sockets Engine</span>
+                <div style="font-size: 10px; color: #059669; font-weight: 800; margin-top: 2px;">WAL Mode DB</div>
               </div>
 
-              <!-- Role 3 Quick -->
-              <div style="background: #ECFDF5; border: 1.5px solid #A7F3D0; border-radius: 14px; padding: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                  <span style="font-weight: 900; color: #059669; font-size: 15px;">👤 المتحدث الثالث</span>
-                  <span
-                    style="font-size: 11px; background: #FFFFFF; padding: 2px 8px; border-radius: 99px; font-weight: 700; color: #059669;">3-4
-                    دقائق</span>
-                </div>
-                <div style="font-weight: 800; font-size: 13px; color: #0F172A;">خادم TCP والتزامن وقواعد البيانات</div>
-                <div style="font-size: 11px; color: #475569; margin-top: 4px;">IOCP Port 8888 • SQLite 3NF WAL •
-                  Telegram-Style Offline Queue</div>
-              </div>
+              <div class="topo-link"></div>
 
-              <!-- Role 4 Quick -->
-              <div style="background: #F5F3FF; border: 1.5px solid #DDD6FE; border-radius: 14px; padding: 14px;">
-                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                  <span style="font-weight: 900; color: #7C3AED; font-size: 15px;">👤 المتحدث الرابع</span>
-                  <span
-                    style="font-size: 11px; background: #FFFFFF; padding: 2px 8px; border-radius: 99px; font-weight: 700; color: #7C3AED;">3-4
-                    دقائق</span>
-                </div>
-                <div style="font-weight: 800; font-size: 13px; color: #0F172A;">مكرر وسائط UDP والذاكرة والبث المباشر
-                </div>
-                <div style="font-size: 11px; color: #475569; margin-top: 4px;">UDP Relay 8889 • 16kHz Zero-Alloc Audio •
-                  DirectShow LED Kill</div>
+              <div class="topo-node client-node-b">
+                <div style="font-size: 20px;">💻</div>
+                <div class="topo-title">العميل B</div>
+                <span class="topo-badge" style="color: var(--s3-primary);">Client Socket</span>
               </div>
             </div>
 
-            <div
-              style="display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 12px; border-top: 1px solid #E2E8F0;">
-              <span style="font-size: 12px; color: #64748B;">جاهزية الفريق: 4 متحدثين متكاملين • صفر تعارضات Git • 62/62
-                اختباراً ناجحاً</span>
-              <span style="font-size: 12px; font-weight: 800; color: #059669;">اضغط [ السهم الأيمن ➔ ] لبدء استعراض
-                الأدوار التفصيلية</span>
+            <!-- 4 Speakers Roles Pills -->
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+              <div style="background: var(--s1-light); border: 1px solid var(--s1-border); border-radius: 10px; padding: 10px; text-align: center;">
+                <div style="font-weight: 900; font-size: 12px; color: var(--s1-primary);">المتحدث 1</div>
+                <div style="font-size: 11px; font-weight: 700; color: #1E293B; margin-top: 2px;">المقابس والتأطير</div>
+              </div>
+              <div style="background: var(--s2-light); border: 1px solid var(--s2-border); border-radius: 10px; padding: 10px; text-align: center;">
+                <div style="font-weight: 900; font-size: 12px; color: var(--s2-primary);">المتحدث 2</div>
+                <div style="font-size: 11px; font-weight: 700; color: #1E293B; margin-top: 2px;">الأمان والمصادقة</div>
+              </div>
+              <div style="background: var(--s3-light); border: 1px solid var(--s3-border); border-radius: 10px; padding: 10px; text-align: center;">
+                <div style="font-weight: 900; font-size: 12px; color: var(--s3-primary);">المتحدث 3</div>
+                <div style="font-size: 11px; font-weight: 700; color: #1E293B; margin-top: 2px;">الخادم والتزامن</div>
+              </div>
+              <div style="background: var(--s4-light); border: 1px solid var(--s4-border); border-radius: 10px; padding: 10px; text-align: center;">
+                <div style="font-weight: 900; font-size: 12px; color: var(--s4-primary);">المتحدث 4</div>
+                <div style="font-size: 11px; font-weight: 700; color: #1E293B; margin-top: 2px;">وسائط UDP والذاكرة</div>
+              </div>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid #E2E8F0;">
+              <span style="font-size: 11.5px; font-weight: 700; color: #64748B;">جاهزية العرض: 4 متحدثين متكاملين • 3 أجهزة متصلة بالواي فاي • 62 اختباراً آلياً ناجحاً بنسبة 100%</span>
+              <span style="font-size: 11.5px; font-weight: 800; color: #4F46E5;">انتقل للشريحة التالية بالضغط على [ السهم الأيمن ➔ ]</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 2: The Team Responsibility Matrix
+           Slide 2: Client-Server Course Theoretical & Practical Matrix
            =================================================================== -->
       <section class="slide" id="slide-1">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>المصفوفة التكاملية وخريطة المسؤوليات البرمجية</h1>
-            <p>توزيع طبقات الكود على المتحدثين الأربعة لمنع أي تضارب والإجابة الدقيقة على أسئلة المناقش</p>
+            <h1>مصفوفة مفاهيم مقرر "برمجة خادم وعميل" وتوزيع الأدوار</h1>
+            <p>توزيع محاور المقرر الأكاديمية على المتحدثين الأربعة وفق معايير Clean Architecture</p>
           </div>
-          <span class="speaker-pill all">خريطة المعمارية المشتركة</span>
+          <span class="speaker-pill all">خريطة مفاهيم المقرر الأكاديمي</span>
         </div>
 
         <div class="bento-grid grid-4-cols">
-          <!-- Col 1: Sockets -->
+          <!-- Col 1: Sockets (Speaker 1) -->
           <div class="bento-card accent-s1">
             <div class="card-header-line">
-              <span style="font-size: 12px; font-weight: 800; color: var(--s1-primary);">المتحدث 1</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s1-accent);">المتحدث 1</span>
               <div class="card-icon-box s1">🔌</div>
             </div>
             <div class="card-title">المقابس والتأطير</div>
-            <div class="card-subtitle">الطبقة: النواة وبروتوكول النقل الخام (SyncPulse.Core)</div>
+            <div class="card-subtitle">Socket Lifecycle & Framing Protocols</div>
             <ul class="pillar-list">
-              <li class="pillar-item"><strong>دورة حياة المقابس:</strong> Bind, Listen, AcceptAsync, Connect.</li>
-              <li class="pillar-item"><strong>تأطير الحزم:</strong> 12-Byte Header بترتيب Big-Endian.</li>
-              <li class="pillar-item"><strong>محلل الدفق:</strong> FrameStreamParser لفك التجزئة والدمج.</li>
-              <li class="pillar-item"><strong>الاكتشاف:</strong> UDP Broadcast على 8887.</li>
+              <li class="pillar-item"><strong>Socket APIs:</strong> Bind, Listen, AcceptAsync, Connect.</li>
+              <li class="pillar-item"><strong>TCP Byte-Stream:</strong> حل مشكلة تجزئة ودمج الحزم.</li>
+              <li class="pillar-item"><strong>Binary Framing:</strong> 12-Byte Header بـ Big-Endian.</li>
+              <li class="pillar-item"><strong>UDP Broadcast:</strong> اكتشاف IP تلقائياً على 8887.</li>
             </ul>
-            <div style="margin-top: 10px;">
-              <span class="code-badge">FrameHeader.cs</span>
-              <span class="code-badge">ServerDiscovery.cs</span>
+            <div style="margin-top: 8px;">
+              <span class="code-badge">FrameStreamParser.cs</span>
             </div>
           </div>
 
-          <!-- Col 2: Security -->
+          <!-- Col 2: Security & State (Speaker 2) -->
           <div class="bento-card accent-s2">
             <div class="card-header-line">
-              <span style="font-size: 12px; font-weight: 800; color: var(--s2-primary);">المتحدث 2</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s2-accent);">المتحدث 2</span>
               <div class="card-icon-box s2">🔐</div>
             </div>
             <div class="card-title">الأمان والمصادقة</div>
-            <div class="card-subtitle">الطبقة: الأمن السيبراني والجلسات (Crypto & Session State)</div>
+            <div class="card-subtitle">Client Authentication & Session State</div>
             <ul class="pillar-list">
-              <li class="pillar-item"><strong>تجزئة الكلمات:</strong> PBKDF2/SHA-256 بـ 100k تكرار.</li>
-              <li class="pillar-item"><strong>الملح المشفر:</strong> 128-bit Cryptographic Salt.</li>
-              <li class="pillar-item"><strong>هجمات التوقيت:</strong> دالة FixedTimeEquals بزمن ثابت.</li>
-              <li class="pillar-item"><strong>التوكنات:</strong> JWT RFC 7519 موقّعة بـ HMAC-SHA256.</li>
+              <li class="pillar-item"><strong>PBKDF2/SHA-256:</strong> تجزئة بـ 100k تكرار و 128-bit Salt.</li>
+              <li class="pillar-item"><strong>Timing Attacks:</strong> مقارنة ثابتة بدالة FixedTimeEquals.</li>
+              <li class="pillar-item"><strong>State Tokens:</strong> توكنات JWT RFC 7519 في الميموري.</li>
+              <li class="pillar-item"><strong>Injection Defense:</strong> استعلامات Parameterized SQL.</li>
             </ul>
-            <div style="margin-top: 10px;">
+            <div style="margin-top: 8px;">
               <span class="code-badge">CryptoEngine.cs</span>
-              <span class="code-badge">JwtTokenEngine.cs</span>
             </div>
           </div>
 
-          <!-- Col 3: Server & Sync -->
+          <!-- Col 3: Server & Concurrency (Speaker 3) -->
           <div class="bento-card accent-s3">
             <div class="card-header-line">
-              <span style="font-size: 12px; font-weight: 800; color: var(--s3-primary);">المتحدث 3</span>
-              <div class="card-icon-box s3">🗄️</div>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s3-accent);">المتحدث 3</span>
+              <div class="card-icon-box s3">🖥️</div>
             </div>
             <div class="card-title">الخادم والتزامن</div>
-            <div class="card-subtitle">الطبقة: محرك الباك إند وقاعدة البيانات (SyncPulse.Server)</div>
+            <div class="card-subtitle">Server Concurrency & Message Queues</div>
             <ul class="pillar-list">
-              <li class="pillar-item"><strong>خادم المقابس:</strong> IOCP Async على المنفذ 8888.</li>
-              <li class="pillar-item"><strong>عزل الأعطال:</strong> Bulkhead Pattern لكل عميل.</li>
-              <li class="pillar-item"><strong>قاعدة البيانات:</strong> SQLite 3NF بوضع WAL Mode.</li>
-              <li class="pillar-item"><strong>طابور الانتظار:</strong> Offline Queue وعلامات الصح الثلاث.</li>
+              <li class="pillar-item"><strong>IOCP Model:</strong> استماع متزامن غير حاجب على 8888.</li>
+              <li class="pillar-item"><strong>Bulkhead Isolation:</strong> عزل أعطال العملاء ومنع الانهيار.</li>
+              <li class="pillar-item"><strong>SQLite WAL:</strong> قراءات وكتابات متزامنة بدون أقفال.</li>
+              <li class="pillar-item"><strong>Offline Queue:</strong> طابور الرسائل المعلقة (✓ ✓✓ ✓✓).</li>
             </ul>
-            <div style="margin-top: 10px;">
+            <div style="margin-top: 8px;">
               <span class="code-badge">TcpSocketServer.cs</span>
-              <span class="code-badge">DatabaseManager.cs</span>
             </div>
           </div>
 
-          <!-- Col 4: Media & Streaming -->
+          <!-- Col 4: UDP Media & Memory (Speaker 4) -->
           <div class="bento-card accent-s4">
             <div class="card-header-line">
-              <span style="font-size: 12px; font-weight: 800; color: var(--s4-primary);">المتحدث 4</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s4-accent);">المتحدث 4</span>
               <div class="card-icon-box s4">🎧</div>
             </div>
-            <div class="card-title">الوسائط والذاكرة</div>
-            <div class="card-subtitle">الطبقة: تدفقات الميديا المباشرة والعتاد (Client Services)</div>
+            <div class="card-title">وسائط UDP والذاكرة</div>
+            <div class="card-subtitle">UDP Relay & Low-Level Memory Safety</div>
             <ul class="pillar-list">
-              <li class="pillar-item"><strong>مكرر الوسائط:</strong> UDP Media Relay على المنفذ 8889.</li>
-              <li class="pillar-item"><strong>أمان الذاكرة:</strong> حل 0xc0000005 بالمخازن الدائرية.</li>
-              <li class="pillar-item"><strong>محرك الفيديو:</strong> DirectShow وإطفاء LED الكاميرا.</li>
-              <li class="pillar-item"><strong>البث الهجين:</strong> UDP+TCP وإلغاء تكرار الإطارات بـ 64-bit.</li>
+              <li class="pillar-item"><strong>UDP Media Relay:</strong> توجيه الصوت والفيديو على 8889.</li>
+              <li class="pillar-item"><strong>Memory Safety:</strong> حل 0xc0000005 بـ Pre-Pinned Buffers.</li>
+              <li class="pillar-item"><strong>Hardware Privacy:</strong> إطفاء ضوء الكاميرا عتادياً عند الكتم.</li>
+              <li class="pillar-item"><strong>Hybrid Streaming:</strong> بث هجين وإلغاء التكرار بـ 64-bit.</li>
             </ul>
-            <div style="margin-top: 10px;">
+            <div style="margin-top: 8px;">
               <span class="code-badge">AudioEngine.cs</span>
-              <span class="code-badge">VideoEngine.cs</span>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 3: Speaker 1 Deep Dive
+           Slide 3: Speaker 1 - TCP Socket Lifecycle & Framing Protocol
            =================================================================== -->
       <section class="slide" id="slide-2">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>المتحدث الأول: هندسة المقابس وبروتوكول التأطير</h1>
-            <p>التركيز الأساسي: المقابس الأصلية (Raw Sockets)، معضلة دفق TCP، ترويسة 12-Byte، والاكتشاف التلقائي</p>
+            <h1>المحور الأول: دورة حياة مقابس TCP وبروتوكول التأطير</h1>
+            <p>تقديم: المتحدث الأول • المعيار: TCP Byte-Stream vs Message Framing & Zero-Config UDP Discovery</p>
           </div>
           <div class="header-meta">
-            <span class="speaker-pill s1">👤 المتحدث 1: Sockets & Framing</span>
+            <span class="speaker-pill s1">👤 المتحدث 1: المقابس والتأطير</span>
             <span class="timer-tag">⏱️ 03:30 دقيقة</span>
           </div>
         </div>
 
-        <div class="bento-grid grid-1-3-cols">
-          <!-- Talking Guide & Cues -->
+        <div class="bento-grid grid-1-1-cols">
+          <!-- Left: Technical Explanations -->
           <div class="bento-card accent-s1" style="justify-content: space-between;">
             <div>
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                <div class="card-icon-box s1">🎙️</div>
-                <div>
-                  <div style="font-weight: 800; font-size: 15px;">بطاقة إلقاء المتحدث 1</div>
-                  <div style="font-size: 12px; color: var(--text-secondary);">الوقت: 3 - 4 دقائق</div>
-                </div>
-              </div>
-
-              <div class="cue-box opening">
-                <span class="cue-label s1">جملة الافتتاح والتمهيد:</span>
-                <span class="cue-text">"بسم الله الرحمن الرحيم، أسعد الله أوقاتكم دكتورنا الفاضل ولجنتنا الموقرة.
-                  سنستعرض معكم مشروعنا لنظام الاتصالات المحلي SyncPulse المبني 100% من الصفر فوق المقابس
-                  الخام..."</span>
-              </div>
-
-              <div class="cue-box transition" style="margin-top: 12px;">
-                <span class="cue-label s1">جملة التسليم للمتحدث الثاني:</span>
-                <span class="cue-text">"وبعد أن ضمنا وصول البايتات كاملة ومؤطرة بدقة عبر المقابس، أنقل الكلمة لزميلي
-                  [المتحدث الثاني] ليوضح كيف حمينا هذه البيانات بجدار الأمان والتشفير..."</span>
-              </div>
+              <div style="font-weight: 900; font-size: 16px; color: var(--s1-primary); margin-bottom: 10px;">دورة حياة مقابس TCP ومعضلة الدفق:</div>
+              <ul class="pillar-list">
+                <li class="pillar-item">
+                  <strong>دورة حياة مقبس الخادم:</strong><br>
+                  <span class="code-badge">Socket(InterNetwork, Stream, Tcp)</span> ➔ <span class="code-badge">Bind(IPEndPoint)</span> ➔ <span class="code-badge">Listen(backlog)</span> ➔ <span class="code-badge">AcceptAsync()</span>.
+                </li>
+                <li class="pillar-item">
+                  <strong>دورة حياة مقبس العميل:</strong><br>
+                  <span class="code-badge">ConnectAsync()</span> لبدء مصافحة <span class="code-badge">3-Way Handshake (SYN -> SYN-ACK -> ACK)</span>، ثم التبادل عبر <span class="code-badge">SendAsync / ReceiveAsync</span>.
+                </li>
+                <li class="pillar-item">
+                  <strong>معضلة دفق TCP (Fragmentation & Merging):</strong> بروتوكول TCP لا يعرف "حدود الرسائل" (Byte Stream)؛ لذلك دمج رسائل متعددة في قراءة واحدة أو تجزئة رسالة واحدة على عدة قراءات أمر حتمي.
+                </li>
+                <li class="pillar-item">
+                  <strong>الحل ببادئة الطول (Length-Prefix):</strong> ترويسة ثابتة 12 بايت تحتوي على طول الحمولة مسبقاً، مع ترتيب الشبكة <span class="code-badge">Big-Endian</span> لتوحيد قراءة الأرقام بين معالجات x86 و ARM.
+                </li>
+              </ul>
             </div>
 
-            <div class="cue-box defense">
-              <span class="cue-label s1">السؤال المباغت المتوقع:</span>
-              <span class="cue-text">س: لماذا فرضتم Big-Endian؟<br><strong>ج:</strong> لتوحيد قراءة الأرقام بين معالجات
-                x86 و ARM ومنع تضارب أطوال الحزم.</span>
+            <div style="background: var(--s1-light); border: 1.5px solid var(--s1-border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--s1-dark);">
+              📁 كود النواة المسؤول: <strong>FrameHeader.cs • FrameStreamParser.cs • ServerDiscovery.cs</strong>
             </div>
           </div>
 
-          <!-- Technical Content Breakdown -->
-          <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--s1-primary);">المحاور
-              الهندسية الأربعة التي يستعرضها المتحدث الأول:</div>
+          <!-- Right: Visual Animated Diagrams -->
+          <div class="bento-card" style="justify-content: space-between;">
+            <div>
+              <div style="font-weight: 900; font-size: 15px; color: #0F172A; margin-bottom: 6px;">مخطط تشريح ترويسة الحزمة (12-Byte FrameHeader):</div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1;">
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">1. المشكلة والدافع
-                  الأساسي</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">الاستغناء الكامل عن خوادم
-                  Cloud الخارجية وعمل النظام محلياً 100% On-Premise LAN دون إنترنت لحماية الخصوصية ومواصلة الاتصال عند
-                  انقطاع الـ WAN.</p>
+              <!-- Animated 12-Byte FrameHeader Diagram -->
+              <div class="frame-packet-diagram">
+                <div class="frame-byte-chunk active-byte">
+                  <div class="chunk-label">Magic Byte</div>
+                  <div class="chunk-size">1 Byte (0x53)</div>
+                </div>
+                <div class="frame-byte-chunk">
+                  <div class="chunk-label">Version</div>
+                  <div class="chunk-size">1 Byte (0x01)</div>
+                </div>
+                <div class="frame-byte-chunk">
+                  <div class="chunk-label">PacketType</div>
+                  <div class="chunk-size">2 Bytes (Int16)</div>
+                </div>
+                <div class="frame-byte-chunk active-byte">
+                  <div class="chunk-label">PayloadLength</div>
+                  <div class="chunk-size">4 Bytes (Int32)</div>
+                </div>
+                <div class="frame-byte-chunk">
+                  <div class="chunk-label">SequenceNo</div>
+                  <div class="chunk-size">4 Bytes (Int32)</div>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">2. دورة حياة مقابس
-                  TCP (Socket API)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">شرح تسلسل السيرفر: <span
-                    class="code-badge">Socket -> Bind -> Listen -> AcceptAsync</span> والعميل: <span
-                    class="code-badge">ConnectAsync -> SendAsync -> ReceiveAsync</span> ومصافحة 3-Way Handshake.</p>
+              <!-- Visual Stream Parser Assembly Diagram -->
+              <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 10px; padding: 12px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 6px;">آلة حالة تجميع البايتات (FrameStreamParser):</div>
+                <div class="stream-flow-box" style="display: flex; align-items: center; gap: 8px; justify-content: center; background: #FFFFFF; padding: 8px; border-radius: 6px; border: 1px solid #CBD5E1;">
+                  <span style="font-size: 11px; color: #64748B;">[ سيل بايتات TCP ] ➔</span>
+                  <span style="background: #EEF2FF; color: #4F46E5; font-weight: 800; padding: 2px 8px; border-radius: 4px; font-size: 11px;">قراءة 12 بايت</span>
+                  <span style="font-size: 11px; color: #64748B;">➔ انتظار PayloadLength ➔</span>
+                  <span style="background: #ECFDF5; color: #059669; font-weight: 800; padding: 2px 8px; border-radius: 4px; font-size: 11px;">إطلاق الحزمة كاملة ✅</span>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">3. بروتوكول التأطير
-                  الثنائي 12-Byte Header</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">Magic Byte <span
-                    class="code-badge">0x53 ('S')</span>، رقم الإصدار، نوع الحزمة، وطول الحمولة بدقة مع ترتيب <span
-                    class="code-badge">Big-Endian</span> وآلة الحالة <span class="code-badge">FrameStreamParser</span>
-                  لفك التجزئة.</p>
-              </div>
-
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">4. الاكتشاف التلقائي
-                  Zero-Config UDP 8887</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">بث الخادم نبضة تعريفية كل 3
-                  ثوانٍ على <span class="code-badge">255.255.255.255:8887</span> ليلتقطها العميل ويتصل فورياً دون كتابة
-                  عنوان IP يدوياً نهائياً.</p>
+              <!-- UDP Broadcast Graphic -->
+              <div style="background: #F1F5F9; border: 1.5px solid #CBD5E1; border-radius: 10px; padding: 12px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 800; font-size: 13px; color: #0F172A;">الاكتشاف التلقائي عبر UDP 8887 (Zero-Config):</div>
+                  <div style="font-size: 11.5px; color: #64748B;">بث نبضة كل 3 ثوانٍ على 255.255.255.255 لالتقاط IP فوراً دون إدخال يدوي.</div>
+                </div>
+                <div class="beacon-pulse" style="font-size: 26px;">📡</div>
               </div>
             </div>
 
-            <div
-              style="margin-top: 14px; padding: 10px; background: #EEF2FF; border-radius: 10px; font-size: 12px; color: var(--s1-dark); display: flex; justify-content: space-between;">
-              <span>📁 الملفات المسؤول عنها المتحدث 1: <strong>FrameHeader.cs • FrameStreamParser.cs •
-                  ServerDiscovery.cs</strong></span>
-              <span style="font-weight: 800;">الهدف: إثبات عمق فهم طبقة النقل (Transport Layer)</span>
+            <div style="font-size: 11px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px; margin-top: 8px;">
+              ⚡ يحل مشكلة الـ Delimiters الفاشلة (\n) ويتيح نقل ملفات وصوت وصور بأعلى موثوقية.
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 4: Speaker 2 Deep Dive
+           Slide 4: Speaker 2 - Client-Server Security & State Tokens
            =================================================================== -->
       <section class="slide" id="slide-3">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>المتحدث الثاني: بروتوكولات الأمان والمصادقة وإدارة الجلسات</h1>
-            <p>التركيز الأساسي: تشفير PBKDF2، منع هجمات التوقيت، توكنات JWT اللامركزية، وتدقيق ISO 27001</p>
+            <h1>المحور الثاني: الأمن السيبراني وإدارة الجلسات في أنظمة الخادم والعميل</h1>
+            <p>تقديم: المتحدث الثاني • المعيار: NIST SP 800-63B Hashing, Timing Attacks, & RFC 7519 Stateless JWT</p>
           </div>
           <div class="header-meta">
-            <span class="speaker-pill s2">👤 المتحدث 2: Security & Auth</span>
+            <span class="speaker-pill s2">👤 المتحدث 2: الأمان والمصادقة</span>
             <span class="timer-tag">⏱️ 03:30 دقيقة</span>
           </div>
         </div>
 
-        <div class="bento-grid grid-1-3-cols">
-          <!-- Talking Guide & Cues -->
+        <div class="bento-grid grid-1-1-cols">
+          <!-- Left: Technical Explanations -->
           <div class="bento-card accent-s2" style="justify-content: space-between;">
             <div>
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                <div class="card-icon-box s2">🛡️</div>
-                <div>
-                  <div style="font-weight: 800; font-size: 15px;">بطاقة إلقاء المتحدث 2</div>
-                  <div style="font-size: 12px; color: var(--text-secondary);">الوقت: 3 - 4 دقائق</div>
-                </div>
-              </div>
-
-              <div class="cue-box opening" style="background: #FFFBEB; border-color: var(--s2-border);">
-                <span class="cue-label s2">جملة الاستلام من المتحدث 1:</span>
-                <span class="cue-text">"شكراً زميلي. والآن ننتقل إلى الركيزة الأمنية في SyncPulse؛ حيث لا نعتبر أي حزمة
-                  شبكية آمنة حتى تخضع لبروتوكول مصادقة وتشفير بمواصفات عالمية..."</span>
-              </div>
-
-              <div class="cue-box transition" style="margin-top: 12px;">
-                <span class="cue-label s2">جملة التسليم للمتحدث الثالث:</span>
-                <span class="cue-text">"وبعد التحقق المشفر من هوية الحزم، أنقل الكلمة لزميلي [المتحدث الثالث] ليشرح كيف
-                  يستقبل الخادم المركزي هذه الحزم ويعالجها في قاعدة البيانات..."</span>
-              </div>
+              <div style="font-weight: 900; font-size: 16px; color: var(--s2-primary); margin-bottom: 10px;">إدارة الهوية وحماية قنوات الاتصال:</div>
+              <ul class="pillar-list">
+                <li class="pillar-item">
+                  <strong>تجزئة كلمات المرور (NIST SP 800-63B):</strong> استخدام <span class="code-badge">PBKDF2/SHA-256</span> مع 100,000 دورة تكرار لإبطاء هجمات القوة الغاشمة، مع ملح تشفيري <span class="code-badge">128-bit Salt</span> عشوائي فريد لكل حساب لإبطال جداول قوس قزح.
+                </li>
+                <li class="pillar-item">
+                  <strong>منع هجمات التوقيت (Timing Attacks):</strong> حظر المقارنة التقليدية بـ <span class="code-badge">==</span> لأنها تنتهي عند أول بايت خاطئ؛ واستبدالها بـ <span class="code-badge">FixedTimeEquals</span> التي تجري عملية XOR لكافة البايتات في زمن ثابت.
+                </li>
+                <li class="pillar-item">
+                  <strong>توكنات الجلسات اللامركزية (JWT RFC 7519):</strong> توليد توكن موقع رقمياً بـ <span class="code-badge">HMAC-SHA256</span> يحمل معرّف المستخدم. يتحقق السيرفر من الحزم رياضياً في الذاكرة دون استعلام قاعدة البيانات في كل حزمة.
+                </li>
+                <li class="pillar-item">
+                  <strong>الحماية من حقن البيانات (SQL Injection):</strong> الاعتماد الحصري على الاستعلامات المجهزة <span class="code-badge">Parameterized Queries</span> وسجلات التدقيق <span class="code-badge">SERVER_AUDIT_LOGS</span> وفق ISO 27001.
+                </li>
+              </ul>
             </div>
 
-            <div class="cue-box defense">
-              <span class="cue-label s2">السؤال المباغت المتوقع:</span>
-              <span class="cue-text">س: لماذا لا تفحص قاعدة البيانات في كل حزمة؟<br><strong>ج:</strong> لمنع اختناق
-                السيرفر بالـ I/O؛ توكن JWT يثبت الهوية رياضياً في الميموري.</span>
+            <div style="background: var(--s2-light); border: 1.5px solid var(--s2-border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--s2-dark);">
+              📁 كود الأمان المسؤول: <strong>CryptoEngine.cs • JwtTokenEngine.cs • UserRepository.cs</strong>
             </div>
           </div>
 
-          <!-- Technical Content Breakdown -->
-          <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--s2-primary);">المحاور
-              الهندسية الأربعة التي يستعرضها المتحدث الثاني:</div>
+          <!-- Right: Visual Diagrams -->
+          <div class="bento-card" style="justify-content: space-between;">
+            <div>
+              <div style="font-weight: 900; font-size: 15px; color: #0F172A; margin-bottom: 6px;">مخطط خط أنابيب التشفير (PBKDF2 Pipeline):</div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1;">
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">1. تجزئة كلمات
-                  المرور (NIST SP 800-63B)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">استخدام <span
-                    class="code-badge">PBKDF2/SHA-256</span> بـ 100,000 دورة تكرار مع ملح عشوائي <span
-                    class="code-badge">128-bit Salt</span> فريد لكل مستخدم لمنع هجمات جداول قوس قزح (Rainbow Tables).
-                </p>
+              <!-- Visual Crypto Pipeline Diagram -->
+              <div class="crypto-pipeline">
+                <div class="crypto-step">
+                  <div class="crypto-step-title">كلمة المرور</div>
+                  <div class="crypto-step-val">Password</div>
+                </div>
+                <div class="crypto-arrow">+</div>
+                <div class="crypto-step">
+                  <div class="crypto-step-title">ملح عشوائي</div>
+                  <div class="crypto-step-val">128-bit Salt</div>
+                </div>
+                <div class="crypto-arrow">➔</div>
+                <div class="crypto-step">
+                  <div class="crypto-step-title">100k دورة تكرار</div>
+                  <div class="crypto-step-val" style="color: var(--s2-accent);">PBKDF2/SHA256</div>
+                </div>
+                <div class="crypto-arrow">➔</div>
+                <div class="crypto-step">
+                  <div class="crypto-step-title">الهاش النهائي</div>
+                  <div class="crypto-step-val" style="color: #059669;">256-bit Hash</div>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">2. مناعة هجمات
-                  التوقيت (Timing Attacks)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">تطبيق دالة <span
-                    class="code-badge">FixedTimeEquals</span> لمقارنة الهاشات بعملية XOR في زمن ثابت، ومنع المخترق من
-                  استنتاج كلمة المرور بقياس زمن الرد بالنانوثانية.</p>
+              <!-- Visual JWT Token Structure Diagram -->
+              <div style="margin-top: 14px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 4px;">بنية توكن الجلسة الرقمي (JWT Structure RFC 7519):</div>
+                <div class="jwt-diagram">
+                  <div class="jwt-part jwt-header">Header: HMAC-SHA256</div>
+                  <div class="jwt-part jwt-payload">Payload: UserID, Expiry</div>
+                  <div class="jwt-part jwt-signature">Signature: Cryptographic Hash</div>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">3. إدارة الجلسات
-                  اللامركزية (JWT RFC 7519)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">توليد توكنات JWT موقعة
-                  رقمياً بـ <span class="code-badge">HMAC-SHA256</span> تحمل معرّف المستخدم وتاريخ الصلاحية، ويتم التحقق
-                  من التوقيع في الذاكرة دون استعلام قاعدة البيانات.</p>
-              </div>
-
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">4. التحصين ضد الحقن
-                  وسجلات التدقيق</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">حظر حقن SQL تماماً عبر <span
-                    class="code-badge">Parameterized Queries</span>، وتوثيق كافة محاولات الدخول وعناوين IP في جدول <span
-                    class="code-badge">SERVER_AUDIT_LOGS</span> وفق ISO 27001.</p>
+              <!-- Visual Fixed-Time Comparison vs Variable-Time -->
+              <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 10px; padding: 10px 14px; margin-top: 12px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 4px;">المقارنة الزمنية الثابتة vs المقارنة التقليدية:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                  <span style="color: #DC2626;">❌ <code>if (a == b)</code>: يتوقف عند أول بايت خطأ (تسريب وقت التخمين)</span>
+                  <span style="color: #059669; font-weight: 700;">✅ <code>FixedTimeEquals()</code>: زمن ثابت دائم (مناعة 100%)</span>
+                </div>
               </div>
             </div>
 
-            <div
-              style="margin-top: 14px; padding: 10px; background: #FFFBEB; border-radius: 10px; font-size: 12px; color: var(--s2-dark); display: flex; justify-content: space-between;">
-              <span>📁 الملفات المسؤول عنها المتحدث 2: <strong>CryptoEngine.cs • JwtTokenEngine.cs •
-                  UserRepository.cs</strong></span>
-              <span style="font-weight: 800;">الهدف: إثبات تطبيق معايير الأمن السيبراني القياسية عالمياً</span>
+            <div style="font-size: 11px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px; margin-top: 8px;">
+              🛡️ يوفر 90% من استعلامات الـ Database ويحمي الجلسات من هجمات انتحال الهوية والتخمين.
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 5: Speaker 3 Deep Dive
+           Slide 5: Speaker 3 - High-Concurrency Server & Message Queues
            =================================================================== -->
       <section class="slide" id="slide-4">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>المتحدث الثالث: خادم TCP، التزامن، والمزامنة المركزية</h1>
-            <p>التركيز الأساسي: محرك المقابس IOCP Async، نمط Bulkhead، وضع SQLite WAL، وطابور المزامنة Offline Queue</p>
+            <h1>المحور الثالث: خادم TCP وإدارة التزامن وقواعد البيانات</h1>
+            <p>تقديم: المتحدث الثالث • المعيار: IOCP Non-Blocking Sockets, Bulkhead Pattern, & SQLite WAL Offline Queue</p>
           </div>
           <div class="header-meta">
-            <span class="speaker-pill s3">👤 المتحدث 3: Server & Sync</span>
+            <span class="speaker-pill s3">👤 المتحدث 3: الخادم والتزامن</span>
             <span class="timer-tag">⏱️ 03:30 دقيقة</span>
           </div>
         </div>
 
-        <div class="bento-grid grid-1-3-cols">
-          <!-- Talking Guide & Cues -->
+        <div class="bento-grid grid-1-1-cols">
+          <!-- Left: Technical Explanations -->
           <div class="bento-card accent-s3" style="justify-content: space-between;">
             <div>
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                <div class="card-icon-box s3">⚙️</div>
-                <div>
-                  <div style="font-weight: 800; font-size: 15px;">بطاقة إلقاء المتحدث 3</div>
-                  <div style="font-size: 12px; color: var(--text-secondary);">الوقت: 3 - 4 دقائق</div>
-                </div>
-              </div>
-
-              <div class="cue-box opening" style="background: #ECFDF5; border-color: var(--s3-border);">
-                <span class="cue-label s3">جملة الاستلام من المتحدث 2:</span>
-                <span class="cue-text">"شكراً زميلي. سأتولى الآن شرح قلب النظام النابض: خادم المقابس المركزي؛ وكيف
-                  يستقبل مئات الاتصالات المتزامنة بثبات مطلق وبدون أي انهيار..."</span>
-              </div>
-
-              <div class="cue-box transition" style="margin-top: 12px;">
-                <span class="cue-label s3">جملة التسليم للمتحدث الرابع:</span>
-                <span class="cue-text">"وبعد استعراض قنوات TCP الموثوقة وقاعدة البيانات، أنقل الكلمة لزميلي [المتحدث
-                  الرابع] ليوضح كيف أدرنا تدفقات الصوت والفيديو الحية عبر UDP ومحركات الذاكرة..."</span>
-              </div>
+              <div style="font-weight: 900; font-size: 16px; color: var(--s3-primary); margin-bottom: 10px;">معمارية الخادم وإدارة التزامن العالي:</div>
+              <ul class="pillar-list">
+                <li class="pillar-item">
+                  <strong>نموذج المقابس غير الحاجب (IOCP Async):</strong> استبدال نموذج خيط لكل عميل (Thread-per-Client) بنموذج منافذ إكمال نظام التشغيل <span class="code-badge">IOCP</span> عبر <span class="code-badge">async/await</span> لمنع استنزاف خيوط المعالج (Thread Pool Starvation).
+                </li>
+                <li class="pillar-item">
+                  <strong>عزل الاستثناءات (Bulkhead Pattern):</strong> إدارة كل عميل في جلسة <span class="code-badge">try-catch-finally</span> معزولة تماماً؛ انقطاع أو خطأ أي عميل لا يؤثر على الخادم ولا يسقط بقية المتصلين.
+                </li>
+                <li class="pillar-item">
+                  <strong>قاعدة بيانات SQLite 3NF ووضع WAL:</strong> تفعيل <span class="code-badge">PRAGMA journal_mode=WAL</span> للسماح بعدد لا نهائي من القراءات المتزامنة أثناء عمليات الكتابة دون أي أقفال حظر <span class="code-badge">Database Locked</span>.
+                </li>
+                <li class="pillar-item">
+                  <strong>كشف المقابس المعلقة (Half-Open Sockets):</strong> استشعار فصل الكابل المفاجئ عبر نبضات <span class="code-badge">Keep-Alive</span> وفحص قراءات الصفر، وإسقاط الجلسات الميتة فورياً.
+                </li>
+              </ul>
             </div>
 
-            <div class="cue-box defense">
-              <span class="cue-label s3">السؤال المباغت المتوقع:</span>
-              <span class="cue-text">س: ماذا لو انقطع عميل فجأة؟<br><strong>ج:</strong> يعزل خطأه بنمط Bulkhead، وتنظف
-                موارده بـ using/Dispose، ويبقى بقية المتصلين مستقرين.</span>
+            <div style="background: var(--s3-light); border: 1.5px solid var(--s3-border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--s3-dark);">
+              📁 كود الخادم المسؤول: <strong>TcpSocketServer.cs • DatabaseManager.cs • MessageRepository.cs</strong>
             </div>
           </div>
 
-          <!-- Technical Content Breakdown -->
-          <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--s3-primary);">المحاور
-              الهندسية الأربعة التي يستعرضها المتحدث الثالث:</div>
+          <!-- Right: Visual Diagrams -->
+          <div class="bento-card" style="justify-content: space-between;">
+            <div>
+              <div style="font-weight: 900; font-size: 15px; color: #0F172A; margin-bottom: 6px;">دورة حياة الرسالة التلغرامية وعلامات الصح الثلاث:</div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1;">
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">1. خادم المقابس وعزل
-                  الأعطال (IOCP Async)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">استماع غير حاجب على المنفذ
-                  <span class="code-badge">TCP 8888</span>، وتطبيق <span class="code-badge">Bulkhead Pattern</span> في
-                  نطاق معزول تماماً لمنع حدوث أي انهيار متسلسل (Cascading Failure).</p>
+              <!-- Visual Triple Check Status Diagram -->
+              <div class="check-status-row">
+                <div class="check-status-item">
+                  <div class="check-icon sent">✓</div>
+                  <div class="check-label">1. حُفظت بالسيرفر</div>
+                  <span class="code-badge" style="font-size: 9.5px; margin-top: 2px;">Sent = 0</span>
+                </div>
+                <div style="font-size: 16px; color: #94A3B8;">➔</div>
+                <div class="check-status-item">
+                  <div class="check-icon delivered">✓✓</div>
+                  <div class="check-label">2. وصلت للعميل</div>
+                  <span class="code-badge" style="font-size: 9.5px; margin-top: 2px;">Delivered = 1</span>
+                </div>
+                <div style="font-size: 16px; color: #94A3B8;">➔</div>
+                <div class="check-status-item">
+                  <div class="check-icon read">✓✓</div>
+                  <div class="check-label">3. قُرئت المحادثة</div>
+                  <span class="code-badge" style="font-size: 9.5px; margin-top: 2px;">Read = 2</span>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">2. قاعدة بيانات
-                  SQLite 3NF ووضع WAL</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">تصميم 7 جداول مترابطة
-                  بمفاتيح أجنبية، وتفعيل <span class="code-badge">PRAGMA journal_mode=WAL</span> للسماح بعدد لا نهائي من
-                  القراءات المتزامنة أثناء عمليات الكتابة دون أي أقفال.</p>
+              <!-- Visual Offline Queue Mechanism -->
+              <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 10px; padding: 12px; margin-top: 10px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 4px;">طابور الانتظار للعميل غير المتصل (Offline Queue):</div>
+                <div style="font-size: 11.5px; color: #475569; line-height: 1.5;">
+                  • إذا كان المستلم غير متصل، تحتفظ قاعدة البيانات بالرسالة.<br>
+                  • فور تسجيل دخول المستلم بنجاح، تطلق عملية المزامنة التلقائية <span class="code-badge">Catch-Up Sync</span> لدفع كافة الرسائل بالترتيب الزمني الصحيح.
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">3. طابور الرسائل
-                  المعلقة (Offline Queue)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">حفظ الرسائل بحالة <span
-                    class="code-badge">Sent = 0</span> عند عدم اتصال المستلم، ودفعها تلقائياً بالترتيب الزمني الصحيح فور
-                  تسجيل دخوله لتتحول إلى <span class="code-badge">Delivered = 1 (✓✓)</span>.</p>
-              </div>
-
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">4. كشف المقابس
-                  المعلقة (Half-Open Sockets)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">معالجة الانقطاع الفيزيائي
-                  المفاجئ عبر فحص قراءات الصفر ونبضات الـ <span class="code-badge">Heartbeat</span> وإسقاط الجلسات
-                  الميتة وتحديث حالة الاتصال (Offline ⚪) فورياً.</p>
+              <!-- SQLite WAL Mode Diagram -->
+              <div style="background: #ECFDF5; border: 1.5px solid #A7F3D0; border-radius: 10px; padding: 10px 14px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 800; font-size: 12.5px; color: #065F46;">وضع الكتابة المسبقة (SQLite WAL Mode):</div>
+                  <div style="font-size: 11px; color: #334155;">الكتابة تتسلسل في ملف <code>.db-wal</code> بينما تتم القراءات بالتوازي التام دون أي تعليق.</div>
+                </div>
+                <div style="font-size: 22px;">⚡</div>
               </div>
             </div>
 
-            <div
-              style="margin-top: 14px; padding: 10px; background: #ECFDF5; border-radius: 10px; font-size: 12px; color: var(--s3-dark); display: flex; justify-content: space-between;">
-              <span>📁 الملفات المسؤول عنها المتحدث 3: <strong>TcpSocketServer.cs • DatabaseManager.cs •
-                  MessageRepository.cs</strong></span>
-              <span style="font-weight: 800;">الهدف: إثبات كفاءة إدارة التزامن وقواعد البيانات في الخوادم</span>
+            <div style="font-size: 11px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px; margin-top: 8px;">
+              🚀 يضمن بقاء الخادم يعمل 24/7 دون أي انهيار حتى تحت الضغط المتزامن لآلاف الرسائل.
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 6: Speaker 4 Deep Dive
+           Slide 6: Speaker 4 - UDP Media Relay & Memory Safety
            =================================================================== -->
       <section class="slide" id="slide-5">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>المتحدث الرابع: وسائط UDP، إدارة الذاكرة، والبث المباشر</h1>
-            <p>التركيز الأساسي: مكرر وسائط UDP 8889، محرك الصوت 16kHz، إطفاء ضوء الكاميرا عتادياً، والبث الهجين</p>
+            <h1>المحور الرابع: وسائط UDP وإدارة الذاكرة والبث المباشر</h1>
+            <p>تقديم: المتحدث الرابع • المعيار: Stateless UDP Relay 8889, Zero-Allocation Audio & Hardware LED Kill</p>
           </div>
           <div class="header-meta">
-            <span class="speaker-pill s4">👤 المتحدث 4: UDP Media & Memory</span>
+            <span class="speaker-pill s4">👤 المتحدث 4: وسائط UDP والذاكرة</span>
             <span class="timer-tag">⏱️ 03:30 دقيقة</span>
           </div>
         </div>
 
-        <div class="bento-grid grid-1-3-cols">
-          <!-- Talking Guide & Cues -->
+        <div class="bento-grid grid-1-1-cols">
+          <!-- Left: Technical Explanations -->
           <div class="bento-card accent-s4" style="justify-content: space-between;">
             <div>
-              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                <div class="card-icon-box s4">📹</div>
-                <div>
-                  <div style="font-weight: 800; font-size: 15px;">بطاقة إلقاء المتحدث 4</div>
-                  <div style="font-size: 12px; color: var(--text-secondary);">الوقت: 3 - 4 دقائق</div>
-                </div>
-              </div>
-
-              <div class="cue-box opening" style="background: #F5F3FF; border-color: var(--s4-border);">
-                <span class="cue-label s4">جملة الاستلام من المتحدث 3:</span>
-                <span class="cue-text">"شكراً زميلي. سأختتم المحاور الهندسية بالنقطة الأكثر تحدياً في المقرر: الاتصال
-                  الصوتي والمرئي بالزمن الحقيقي والتفاعل منخفض المستوى مع عتاد الحاسوب..."</span>
-              </div>
-
-              <div class="cue-box transition" style="margin-top: 12px;">
-                <span class="cue-label s4">جملة ختام العرض النظري وبدء الديمو:</span>
-                <span class="cue-text">"وبهذا تكتمل معمارية النظام؛ والآن ننتقل معكم خطوة بخطوة إلى سيناريو العرض العملي
-                  الحي للأجهزة الثلاثة أمام لجنتكم الكريمة..."</span>
-              </div>
+              <div style="font-weight: 900; font-size: 16px; color: var(--s4-primary); margin-bottom: 10px;">الاتصال اللحظي والتعامل المباشر مع العتاد:</div>
+              <ul class="pillar-list">
+                <li class="pillar-item">
+                  <strong>لماذا UDP للوسائط الحية؟</strong> إعادة إرسال الحزم المتأخرة في TCP تسبب تقطيعاً وتجميداً (Head-of-Line Blocking)؛ بينما UDP يمرر الصوت والفيديو بزمن تأخير لحظي (&lt; 10ms).
+                </li>
+                <li class="pillar-item">
+                  <strong>مكرر الوسائط (UdpMediaRelay 8889):</strong> يقوم الخادم بتسجيل عناوين الأطراف وتمرير تدفقات الوسائط بنمط <span class="code-badge">Stateless Forwarding</span> دون فك تشفير لتحقيق سرعة تفوق البروكسي التقليدي بـ 5 أضعاف.
+                </li>
+                <li class="pillar-item">
+                  <strong>حل خطأ الذاكرة 0xc0000005:</strong> القضاء على صراع الـ GC مع كارت الصوت عبر ابتكار نظام 8 مخازن دائرية مثبتة بـ <span class="code-badge">GCHandle.Alloc(Pinned)</span> ونسخها بـ <span class="code-badge">Buffer.BlockCopy</span> بدون تخصيص ذاكرة أثناء المكالمة.
+                </li>
+                <li class="pillar-item">
+                  <strong>الخصوصية الفيزيائية للعدسة:</strong> عند كتم الكاميرا، نستدعي <span class="code-badge">SignalToStop()</span> في درايفر DirectShow لتحرير المقبض عتادياً وإطفاء ضوء الـ LED الحقيقي على اللابتوب.
+                </li>
+              </ul>
             </div>
 
-            <div class="cue-box defense">
-              <span class="cue-label s4">السؤال المباغت المتوقع:</span>
-              <span class="cue-text">س: هل كتم الكاميرا يطفئ الـ LED فيزيائياً؟<br><strong>ج:</strong> نعم! نستدعي
-                SignalToStop() عبر DirectShow فنحرر المقبض وينطفئ الليد عتادياً.</span>
+            <div style="background: var(--s4-light); border: 1.5px solid var(--s4-border); border-radius: 10px; padding: 8px 12px; font-size: 12px; color: var(--s4-dark);">
+              📁 كود الوسائط المسؤول: <strong>AudioEngine.cs • VideoEngine.cs • UdpMediaRelay.cs</strong>
             </div>
           </div>
 
-          <!-- Technical Content Breakdown -->
-          <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 14px; color: var(--s4-primary);">المحاور
-              الهندسية الأربعة التي يستعرضها المتحدث الرابع:</div>
+          <!-- Right: Visual Diagrams -->
+          <div class="bento-card" style="justify-content: space-between;">
+            <div>
+              <div style="font-weight: 900; font-size: 15px; color: #0F172A; margin-bottom: 6px;">مخطط المخازن الدائرية الثابتة (8 Pre-Pinned Ring Buffers):</div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; flex: 1;">
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">1. مكرر وسائط UDP
-                  Relay (منفذ 8889)</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">توجيه حزم الصوت والفيديو
-                  فورياً بنمط <span class="code-badge">Stateless Forwarding</span> دون فك تشفير لتحقيق سرعة توجيه تفوق
-                  البروكسي التقليدي بـ 5 أضعاف بزمن تأخير &lt; 10ms.</p>
+              <!-- Visual Ring Buffer Diagram -->
+              <div class="ring-buffer-container">
+                <div class="ring-slot slot-active">Buf 0</div>
+                <div class="ring-slot">Buf 1</div>
+                <div class="ring-slot">Buf 2</div>
+                <div class="ring-slot">Buf 3</div>
+                <div class="ring-slot">Buf 4</div>
+                <div class="ring-slot">Buf 5</div>
+                <div class="ring-slot">Buf 6</div>
+                <div class="ring-slot">Buf 7</div>
+              </div>
+              <div style="font-size: 11px; color: #64748B; text-align: center; margin-bottom: 10px;">
+                ↻ تدوير ذاتي عبر <code>(_outIndex + 1) % 8</code> بدون استدعاء <code>new byte[]</code> (Zero GC Pressures).
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">2. محرك الصوت
-                  والقضاء على خطأ الذاكرة</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">صوت <span
-                    class="code-badge">16kHz HD Voice</span> وحل خطأ <span class="code-badge">0xc0000005</span> عبر
-                  ابتكار 8 مخازن دائرية مثبتة بـ <span class="code-badge">GCHandle.Alloc(Pinned)</span> وتدويرها بـ
-                  <span class="code-badge">BlockCopy</span> بدون Garbage Collection.</p>
+              <!-- Camera LED Kill Switch Graphic -->
+              <div style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 10px; padding: 12px; margin-top: 6px;">
+                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 6px;">مقارنة كتم الكاميرا البرمجي vs التحكم العتادي:</div>
+                <div style="display: flex; justify-content: space-between; font-size: 11px;">
+                  <div style="background: #FEE2E2; padding: 8px; border-radius: 6px; flex: 1; margin-left: 6px; text-align: center;">
+                    <span style="color: #DC2626; font-weight: 800;">تطبيقات أخرى ❌</span><br>
+                    شاشة سوداء وضوء الكاميرا يعمل!
+                  </div>
+                  <div style="background: #ECFDF5; padding: 8px; border-radius: 6px; flex: 1; text-align: center;">
+                    <span style="color: #059669; font-weight: 800;">SyncPulse ✅</span><br>
+                    SignalToStop يطفئ ضوء الكاميرا عتادياً!
+                  </div>
+                </div>
               </div>
 
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">3. محرك الفيديو
-                  والخصوصية الفيزيائية</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">التقاط الفيديو بـ <span
-                    class="code-badge">AForge DirectShow</span> مع معاينة ذاتية <span class="code-badge">PiP</span>،
-                  وإطفاء ضوء الـ LED الحقيقي للكاميرا فيزيائياً عبر <span class="code-badge">SignalToStop()</span> عند
-                  الكتم.</p>
-              </div>
-
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
-                <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 6px;">4. البث الهجين
-                  وإلغاء التكرار اللحظي</div>
-                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">بث متوازي عبر UDP و TCP
-                  لتخطي جدران الحماية، وخوارزمية إلغاء التكرار عبر دمج النوع والتسلسل في مفتاح ثنائي <span
-                    class="code-badge">64-bit Timestamp</span>.</p>
+              <!-- 64-bit Deduplication Graphic -->
+              <div style="background: #F5F3FF; border: 1.5px solid #DDD6FE; border-radius: 10px; padding: 10px 14px; margin-top: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <div>
+                  <div style="font-weight: 800; font-size: 12px; color: #5B21B6;">البث الهجين ومفتاح الـ 64-bit لإلغاء التكرار:</div>
+                  <div style="font-size: 10.5px; color: #475569;">دمج <code>FrameType</code> و <code>SequenceNumber</code> لإسقاط الإطار المكرر فورياً.</div>
+                </div>
+                <div style="font-size: 20px;">🛡️</div>
               </div>
             </div>
 
-            <div
-              style="margin-top: 14px; padding: 10px; background: #F5F3FF; border-radius: 10px; font-size: 12px; color: var(--s4-dark); display: flex; justify-content: space-between;">
-              <span>📁 الملفات المسؤول عنها المتحدث 4: <strong>AudioEngine.cs • VideoEngine.cs •
-                  UdpMediaRelay.cs</strong></span>
-              <span style="font-weight: 800;">الهدف: إثبات كفاءة البرمجة منخفضة المستوى والتفاعل مع العتاد</span>
+            <div style="font-size: 11px; color: #64748B; border-top: 1px solid #E2E8F0; padding-top: 8px; margin-top: 8px;">
+              🎧 نقاء صوت 16kHz HD واستقرار 100% بدون أي انهيار في الذاكرة أثناء المكالمات الطويلة.
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 7: Live Socket Demo Playbook
+           Slide 7: Live 3-Device Demonstration Playbook
            =================================================================== -->
       <section class="slide" id="slide-6">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>سيناريو العرض العملي الحي خطوة بخطوة (Live Demo)</h1>
-            <p>توزيع الأدوار أثناء تشغيل الأجهزة الثلاثة عملياً أمام أستاذ المقرر دون أي ارتباك</p>
+            <h1>سيناريو العرض العملي الحي للأجهزة الثلاثة (Live Demo Playbook)</h1>
+            <p>خطة الاستعراض الميداني المباشر لتفاعل الأجهزة وتوزيع مهام التشغيل بين المتحدثين</p>
           </div>
           <span class="speaker-pill all">🎬 سيناريو التشغيل الفعلي للأجهزة الـ 3</span>
         </div>
@@ -638,330 +599,266 @@
           <!-- Step 1 -->
           <div class="bento-card accent-s1">
             <div class="card-header-line">
-              <span style="font-size: 11px; font-weight: 800; color: var(--s1-primary);">الخطوة 1 • المتحدث 1</span>
-              <span style="font-size: 18px;">📡</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s1-accent);">المرحلة 1 • المتحدث 1</span>
+              <span style="font-size: 20px;">📡</span>
             </div>
             <div class="card-title">إطلاق السيرفر والاكتشاف</div>
             <div class="card-subtitle">اللابتوب 1 (Server) + اللابتوب 2 (Client A)</div>
             <ul class="pillar-list">
-              <li class="pillar-item">تشغيل السيرفر وإظهار شارة <span class="code-badge">LISTENING 8888</span>.</li>
-              <li class="pillar-item">تشغيل العميل والضغط على "اكتشاف تلقائي".</li>
-              <li class="pillar-item"><strong>الإثبات:</strong> التقاط IP الخادم فورياً عبر برودكاست UDP 8887 دون كتابة
-                يدوي.</li>
+              <li class="pillar-item">تشغيل السيرفر وإظهار شارة الاستماع على المنفذين 8888 و 8889.</li>
+              <li class="pillar-item">تشغيل العميل والضغط على زر "اكتشاف تلقائي".</li>
+              <li class="pillar-item"><strong>الإثبات العملي:</strong> التقاط IP الخادم فورياً عبر برودكاست UDP 8887 دون كتابة يدوي.</li>
             </ul>
           </div>
 
           <!-- Step 2 -->
           <div class="bento-card accent-s2">
             <div class="card-header-line">
-              <span style="font-size: 11px; font-weight: 800; color: var(--s2-primary);">الخطوة 2 • المتحدث 2</span>
-              <span style="font-size: 18px;">🔐</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s2-accent);">المرحلة 2 • المتحدث 2</span>
+              <span style="font-size: 20px;">🔐</span>
             </div>
             <div class="card-title">المصادقة وتوكن JWT</div>
             <div class="card-subtitle">اللابتوب 2 (أحمد) + اللابتوب 3 (خالد)</div>
             <ul class="pillar-list">
-              <li class="pillar-item">تسجيل دخول المستخدمين واستعراض لوحة الخادم.</li>
-              <li class="pillar-item">إظهار عداد المتصلين النشطين <span class="code-badge">Active Clients: 2</span>.
-              </li>
-              <li class="pillar-item"><strong>الإثبات:</strong> استعراض توليد الـ Salt والتحقق من الـ JWT في الميموري.
-              </li>
+              <li class="pillar-item">تسجيل دخول المستخدمين واستعراض لوحة السيرفر المركزية.</li>
+              <li class="pillar-item">إظهار ارتفاع عداد المتصلين إلى <span class="code-badge">Active Clients: 2</span>.</li>
+              <li class="pillar-item"><strong>الإثبات العملي:</strong> توليد الـ Salt الفريد والتحقق من صلاحية توكن الـ JWT في الميموري.</li>
             </ul>
           </div>
 
           <!-- Step 3 -->
           <div class="bento-card accent-s3">
             <div class="card-header-line">
-              <span style="font-size: 11px; font-weight: 800; color: var(--s3-primary);">الخطوة 3 • المتحدث 3</span>
-              <span style="font-size: 18px;">💬</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s3-accent);">المرحلة 3 • المتحدث 3</span>
+              <span style="font-size: 20px;">💬</span>
             </div>
             <div class="card-title">الشات وطابور الانتظار</div>
-            <div class="card-subtitle">تبادل الرسائل وحالات التسليم الثلاث</div>
+            <div class="card-subtitle">تبادل الرسائل وتوثيق حالات التسليم الثلاث</div>
             <ul class="pillar-list">
-              <li class="pillar-item">إرسال رسائل وإظهار علامات الصح: (✓ ➔ ✓✓ ➔ ✓✓ زرقاء).</li>
-              <li class="pillar-item">إغلاق لابتوب خالد فجأة وإرسال 3 رسائل معلقة له.</li>
-              <li class="pillar-item"><strong>الإثبات:</strong> إعادة فتح لابتوب خالد ووصول كافة الرسائل فورياً من طابور
-                <span class="code-badge">Offline Queue</span>.</li>
+              <li class="pillar-item">إرسال رسائل وإظهار تغير علامات الصح: (✓ ➔ ✓✓ ➔ ✓✓ زرقاء).</li>
+              <li class="pillar-item">فصل العميل B فجأة وإرسال 3 رسائل معلقة له في السيرفر.</li>
+              <li class="pillar-item"><strong>الإثبات العملي:</strong> إعادة تشغيل العميل B واستلام كافة الرسائل فورياً من <span class="code-badge">Offline Queue</span>.</li>
             </ul>
           </div>
 
           <!-- Step 4 -->
           <div class="bento-card accent-s4">
             <div class="card-header-line">
-              <span style="font-size: 11px; font-weight: 800; color: var(--s4-primary);">الخطوة 4 • المتحدث 4</span>
-              <span style="font-size: 18px;">📹</span>
+              <span style="font-size: 12px; font-weight: 900; color: var(--s4-accent);">المرحلة 4 • المتحدث 4</span>
+              <span style="font-size: 20px;">📹</span>
             </div>
             <div class="card-title">المكالمة وإطفاء الـ LED</div>
             <div class="card-subtitle">مكالمة الفيديو وتدفقات وسائط UDP 8889</div>
             <ul class="pillar-list">
-              <li class="pillar-item">بدء مكالمة فيديو مباشرة وإظهار نقاء صوت 16kHz مع المعاينة الذاتية PiP.</li>
-              <li class="pillar-item">الضغط على "كتم الكاميرا" وإظهار <strong>انطفاء ضوء الكاميرا الحقيقي</strong> على
-                اللابتوب.</li>
-              <li class="pillar-item"><strong>الإثبات:</strong> إنهاء المكالمة وبقاء التطبيق مستقراً دون أي تسريب ذاكرة.
-              </li>
+              <li class="pillar-item">بدء مكالمة فيديو مباشرة وإظهار نقاء صوت 16kHz HD مع المعاينة الذاتية PiP.</li>
+              <li class="pillar-item">الضغط على "كتم الكاميرا" وإظهار <strong>انطفاء ضوء الكاميرا الحقيقي</strong> على اللابتوب.</li>
+              <li class="pillar-item"><strong>الإثبات العملي:</strong> إنهاء المكالمة بنجاح وتوثيق مدتها في قاعدة البيانات دون إغلاق التطبيق.</li>
             </ul>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 8: Cross-Speaker Collaboration Strategy
+           Slide 8: Endianness & Binary Frame Anatomy (Client-Server Protocol)
            =================================================================== -->
       <section class="slide" id="slide-7">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>بروتوكول الإجابة التكاملي وتوزيع الأسئلة</h1>
-            <p>قواعد ذهبية للتعاون أثناء أسئلة المشرف لإبراز كفاءة وتكامل الفريق كجسد هندسي واحد</p>
+            <h1>التشريح الثنائي للحزم وتوحيد ترتيب البايتات (Endianness)</h1>
+            <p>كيف يتفاهم العميل والخادم عبر الشبكة: Big-Endian Network Byte Order & BinaryPrimitives</p>
           </div>
-          <span class="speaker-pill all">🤝 استراتيجية الإجابة أمام المشرف</span>
+          <span class="speaker-pill all">🔬 البنية الثنائية لبروتوكول التأطير</span>
         </div>
 
         <div class="bento-grid grid-2-cols">
-          <!-- Answering Matrix -->
+          <!-- Byte Endianness Comparison -->
           <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 12px; color: #0F172A;">1. خريطة توزيع الأسئلة
-              (من يجيب أولاً؟):</div>
+            <div style="font-weight: 900; font-size: 16px; margin-bottom: 12px; color: #0F172A;">معضلة معالجات x86 (Little-Endian) مع معيار الشبكة (Big-Endian):</div>
             <ul class="pillar-list">
               <li class="pillar-item">
-                <span style="font-weight: 800; color: var(--s1-primary); min-width: 90px;">المتحدث 1:</span>
-                <span>أي سؤال يخص <strong>المقابس، ترويسة الـ 12-Byte، ترتيب Big-Endian، تجزئة الدفق، أو الاكتشاف
-                    التلقائي</strong>.</span>
+                <strong>معالجات Intel/AMD (x86/x64):</strong> تتبع نظام <span class="code-badge">Little-Endian</span> (تخزين البايت الأقل أهمية أولاً في الذاكرة).
               </li>
               <li class="pillar-item">
-                <span style="font-weight: 800; color: var(--s2-primary); min-width: 90px;">المتحدث 2:</span>
-                <span>أي سؤال يخص <strong>تشفير PBKDF2، الـ Salt، هجمات التوقيت، توكنات JWT، أو الحماية من حقن
-                    SQL</strong>.</span>
+                <strong>معيار الشبكة القياسي (RFC 1700):</strong> يفرض نظام <span class="code-badge">Big-Endian (Network Byte Order)</span> (البايت الأكثر أهمية أولاً).
               </li>
               <li class="pillar-item">
-                <span style="font-weight: 800; color: var(--s3-primary); min-width: 90px;">المتحدث 3:</span>
-                <span>أي سؤال يخص <strong>خادم المقابس IOCP، عزل الأعطال Bulkhead، قاعدة بيانات SQLite WAL، أو طابور
-                    المزامنة Offline</strong>.</span>
+                <strong>الخطر البرمجي الكارثي:</strong> لو أرسل عميل x86 رقم طول الحمولة <span class="code-badge">2048 (0x0800)</span> كنص صريح، فسيقرؤه السيرفر أو الراوتر بنظام Big-Endian كرقم <span class="code-badge">8 (0x0008)</span> فينهار تأطير الحزمة فوراً!
               </li>
               <li class="pillar-item">
-                <span style="font-weight: 800; color: var(--s4-primary); min-width: 90px;">المتحدث 4:</span>
-                <span>أي سؤال يخص <strong>مكرر UDP 8889، محرك الصوت 16kHz، خطأ الذاكرة 0xc0000005، كتم الكاميرا عتادياً،
-                    أو البث الهجين</strong>.</span>
+                <strong>الحل المعتمد في SyncPulse:</strong> استخدام مكتبة دوت نت الأصلية: <br>
+                <span class="code-badge">BinaryPrimitives.WriteInt32BigEndian()</span> عند الإرسال، و <br>
+                <span class="code-badge">BinaryPrimitives.ReadInt32BigEndian()</span> عند الاستقبال لضمان توافقية 100% بين مختلف الأجهزة.
               </li>
             </ul>
           </div>
 
-          <!-- Collaboration Rules -->
+          <!-- Protocol Packet Anatomy Table -->
           <div class="bento-card">
-            <div style="font-weight: 800; font-size: 16px; margin-bottom: 12px; color: #059669;">2. ميثاق التعاون الذكي
-              (قاعدة التسليم المساند):</div>
-            <ul class="pillar-list">
-              <li class="pillar-item">
-                <strong>عدم المقاطعة إطلاقاً:</strong> يترك العضو المسؤول ليجيب أولاً بهدوء وثقة مستشهداً بأسماء الملفات
-                والكلاسات الدقيقة.
-              </li>
-              <li class="pillar-item">
-                <strong>المداخلة المساندة الذكية:</strong> إذا رغب زميل في الإضافة، ينتظر حتى ينتهي زميله ثم يقول: <br>
-                <em style="color: #0F172A; font-weight: 600;">"وكما تفضل زميلي، ينعكس ذلك أيضاً في طبقة [اسم الطبقة] من
-                  خلال..."</em>
-              </li>
-              <li class="pillar-item">
-                <strong>المصطلحات المحببة لأستاذ المقرر:</strong> استخدام المصطلحات الدقيقة: <br>
-                <span class="code-badge">Socket Lifecycle</span> • <span class="code-badge">Non-Blocking IOCP</span> •
-                <span class="code-badge">Big-Endian</span> • <span class="code-badge">WAL Mode</span> • <span
-                  class="code-badge">Zero-Allocation</span>.
-              </li>
-              <li class="pillar-item">
-                <strong>الربط مع واقع المقرر:</strong> التأكيد الدائم على أن المشروع مبني على <span
-                  class="code-badge">Raw Sockets</span> دون مكتبات وسيطة كـ SignalR أو Firebase.
-              </li>
-            </ul>
+            <div style="font-weight: 900; font-size: 16px; margin-bottom: 12px; color: #059669;">جدول حقول الترويسة الثابتة (12-Byte FrameHeader Specification):</div>
+
+            <table style="width: 100%; border-collapse: collapse; font-size: 12.5px; text-align: right;">
+              <thead>
+                <tr style="background: #F1F5F9; border-bottom: 2px solid #CBD5E1;">
+                  <th style="padding: 8px 10px; color: #0F172A;">الحقل</th>
+                  <th style="padding: 8px 10px; color: #0F172A;">الحجم</th>
+                  <th style="padding: 8px 10px; color: #0F172A;">النوع</th>
+                  <th style="padding: 8px 10px; color: #0F172A;">الوظيفة الهندسية</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 10px; font-weight: 800; color: var(--s1-primary);">Magic Byte</td>
+                  <td style="padding: 8px 10px;">1 Byte</td>
+                  <td style="padding: 8px 10px;"><code>0x53 ('S')</code></td>
+                  <td style="padding: 8px 10px; color: #475569;">التحقق الفوري من هوية البروتوكول وإسقاط أي متطفل.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 10px; font-weight: 800;">Version</td>
+                  <td style="padding: 8px 10px;">1 Byte</td>
+                  <td style="padding: 8px 10px;"><code>0x01</code></td>
+                  <td style="padding: 8px 10px; color: #475569;">رقم إصدار بروتوكول التأطير لإتاحة التحديثات المستقبلية.</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 10px; font-weight: 800; color: var(--s2-primary);">PacketType</td>
+                  <td style="padding: 8px 10px;">2 Bytes</td>
+                  <td style="padding: 8px 10px;"><code>Int16</code></td>
+                  <td style="padding: 8px 10px; color: #475569;">نوع الرسالة (Auth, Chat, Ack, CallOffer, MediaFrame).</td>
+                </tr>
+                <tr style="border-bottom: 1px solid #E2E8F0;">
+                  <td style="padding: 8px 10px; font-weight: 800; color: var(--s3-primary);">PayloadLength</td>
+                  <td style="padding: 8px 10px;">4 Bytes</td>
+                  <td style="padding: 8px 10px;"><code>Int32</code></td>
+                  <td style="padding: 8px 10px; color: #475569;">طول البيانات المرفقة بالبايت بدقة (بحد أقصى 10MB).</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 10px; font-weight: 800; color: var(--s4-primary);">SequenceNumber</td>
+                  <td style="padding: 8px 10px;">4 Bytes</td>
+                  <td style="padding: 8px 10px;"><code>Int32</code></td>
+                  <td style="padding: 8px 10px; color: #475569;">رقم تسلسلي متزايد لكشف الحزم المفقودة وإلغاء التكرار.</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: 14px; background: #EEF2FF; padding: 8px 12px; border-radius: 8px; font-size: 11.5px; color: var(--s1-dark);">
+              💡 <strong>النتيجة الهندسية:</strong> بروتوكول عالي الكفاءة يستهلك فقط 12 بايت كحمل إضافي (Overhead)، ويوفر قراءة فورية للأطوال.
+            </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 9: Interactive Role Simulator & Speaker Cards
+           Slide 9: Automated Verification Test Suite (62/62 Passed)
            =================================================================== -->
       <section class="slide" id="slide-8">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>محاكي الأدوار التفاعلي والمؤقت الزمني</h1>
-            <p>تدريب مباشر لكل متحدث: استعراض النص، الكلاسات المسؤولة، المؤقت الزمني، وأهم سؤال مباغت</p>
+            <h1>منظومة التحقق والاختبارات الآلية الشاملة (SyncPulse.Tests)</h1>
+            <p>اجتياز 62 اختبار وحدات وتكامل آلي يغطي كافة المكونات العشرة للنظام بنسبة نجاح 100%</p>
           </div>
-          <span class="speaker-pill all">🎛️ محاكي التدريب التفاعلي</span>
+          <span class="speaker-pill all">🧪 التحقق والاعتمادية الهندسية</span>
         </div>
 
-        <div class="simulator-layout">
-          <!-- Speaker Tabs -->
-          <div class="speaker-select-panel">
-            <div class="speaker-tab-btn sim-tab-btn active" data-speaker-id="1">
-              <div class="tab-avatar" style="background: var(--s1-light); color: var(--s1-primary);">1</div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">المتحدث الأول</div>
-                <div style="font-size: 11px; color: var(--text-secondary);">المقابس والتأطير</div>
-              </div>
-            </div>
-
-            <div class="speaker-tab-btn sim-tab-btn" data-speaker-id="2">
-              <div class="tab-avatar" style="background: var(--s2-light); color: var(--s2-primary);">2</div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">المتحدث الثاني</div>
-                <div style="font-size: 11px; color: var(--text-secondary);">الأمان والمصادقة</div>
-              </div>
-            </div>
-
-            <div class="speaker-tab-btn sim-tab-btn" data-speaker-id="3">
-              <div class="tab-avatar" style="background: var(--s3-light); color: var(--s3-primary);">3</div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">المتحدث الثالث</div>
-                <div style="font-size: 11px; color: var(--text-secondary);">الخادم والتزامن</div>
-              </div>
-            </div>
-
-            <div class="speaker-tab-btn sim-tab-btn" data-speaker-id="4">
-              <div class="tab-avatar" style="background: var(--s4-light); color: var(--s4-primary);">4</div>
-              <div>
-                <div style="font-weight: 800; font-size: 14px;">المتحدث الرابع</div>
-                <div style="font-size: 11px; color: var(--text-secondary);">وسائط UDP والذاكرة</div>
-              </div>
+        <div class="bento-grid grid-1-3-cols">
+          <!-- Summary Metrics -->
+          <div class="bento-card" style="background: linear-gradient(145deg, #ECFDF5 0%, #FFFFFF 100%); border-color: #A7F3D0; text-align: center; justify-content: center;">
+            <div style="font-size: 38px; margin-bottom: 8px;">🎯</div>
+            <div style="font-family: var(--font-mono); font-size: 36px; font-weight: 900; color: #065F46;">62 / 62</div>
+            <div style="font-size: 14px; font-weight: 800; color: #047857; margin-bottom: 14px;">اختبارات ناجحة بنسبة 100%</div>
+            <div style="background: #FFFFFF; border: 1px solid #A7F3D0; border-radius: 12px; padding: 12px; font-size: 12px; color: #334155; line-height: 1.6; text-align: right;">
+              ⏱️ <strong>زمن التنفيذ:</strong> 2.14 ثانية فقط<br>
+              ❌ <strong>حالات الفشل:</strong> 0 Failures<br>
+              🛡️ <strong>التغطية:</strong> التأطير، التشفير، السوكتس، الذاكرة، وقاعدة البيانات
             </div>
           </div>
 
-          <!-- Detail Card -->
-          <div class="simulator-detail-card">
-            <div>
-              <div class="sim-header">
-                <div>
-                  <h2 id="simSpTitle" style="font-size: 20px; font-weight: 900; color: #0F172A; margin-bottom: 2px;">
-                    المتحدث الأول: هندسة المقابس والتأطير</h2>
-                  <span id="simSpRole" style="font-size: 12px; font-weight: 700; color: var(--s1-primary);">Sockets,
-                    Framing & Auto-Discovery</span>
-                </div>
+          <!-- Test Categories Grid -->
+          <div class="bento-card">
+            <div style="font-weight: 900; font-size: 17px; margin-bottom: 12px; color: #0F172A;">المحاور العشرة المغطاة بالاختبارات الآلية:</div>
 
-                <div class="sim-timer-box">
-                  <div class="sim-timer-display" id="simTimerDisplay">04:00</div>
-                  <button class="timer-btn" id="timerStartPauseBtn">بدء المؤقت ▶</button>
-                  <button class="timer-btn" style="background: #94A3B8;" id="timerResetBtn">إعادة ضبط ↺</button>
-                </div>
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; flex: 1;">
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ <strong>01. FrameHeader:</strong> صحة التأطير وترتيب Big-Endian.
               </div>
-
-              <div style="margin-bottom: 12px;">
-                <span style="font-size: 12px; font-weight: 800; color: #475569;">📁 الملفات والكلاسات المسندة:</span>
-                <span id="simSpFiles" class="code-badge" style="margin-right: 8px;">FrameHeader.cs,
-                  FrameStreamParser.cs, ServerDiscovery.cs</span>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 02. <strong>FrameStreamParser:</strong> تجميع دفق TCP وفك التجزئة.
               </div>
-
-              <div
-                style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light); margin-bottom: 12px;">
-                <div style="font-size: 12px; font-weight: 800; color: #0F172A; margin-bottom: 6px;">📜 ملخص النص
-                  وسيناريو الإلقاء:</div>
-                <p id="simSpScript" style="font-size: 13px; line-height: 1.6; color: var(--text-secondary);">سأبدأ بشرح
-                  التحدي الأساسي: كيف صممنا اتصالاً محلياً 100% On-Premise LAN دون الاعتماد على خوادم السحابة. استعرضنا
-                  دورة حياة مقبس TCP عبر دالات Socket و Bind و Listen و AcceptAsync في الخادم ومصافحة 3-Way Handshake في
-                  العميل. لحل معضلة دفق TCP وتجزئة الحزم، صممنا بروتوكول تأطير ثنائي 12-Byte FrameHeader مع Magic Byte
-                  'S' وترتيب Big-Endian. كما برمجنا خدمة الاكتشاف التلقائي UDP Broadcast 8887 لالتقاط IP السيرفر فورياً
-                  دون كتابة يدوي.</p>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 03. <strong>PBKDF2/SHA-256:</strong> صحة التجزئة ومناعة FixedTimeEquals.
               </div>
-
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                <div style="background: #EEF2FF; padding: 10px 14px; border-radius: 10px; border: 1px dashed #C7D2FE;">
-                  <div style="font-size: 11px; font-weight: 800; color: var(--s1-primary); margin-bottom: 4px;">جملة
-                    التسليم / الاستلام:</div>
-                  <div id="simSpCues" style="font-size: 12px; color: #1E293B; font-weight: 600;">التسليم: "والآن مع
-                    زميلي المتحدث الثاني لشرح منظومة الأمن السيبراني وتوكنات الجلسات".</div>
-                </div>
-
-                <div style="background: #FFFBEB; padding: 10px 14px; border-radius: 10px; border: 1px dashed #FDE68A;">
-                  <div style="font-size: 11px; font-weight: 800; color: var(--s2-primary); margin-bottom: 4px;">أهم سؤال
-                    مباغت محتمل:</div>
-                  <div id="simSpQuestion" style="font-size: 12px; color: #1E293B; font-weight: 600;">س: لماذا فرضتم
-                    Big-Endian؟ ج: لتوحيد قراءة الأرقام بين معالجات x86 و ARM ومنع تلف أطوال الحزم.</div>
-                </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 04. <strong>JWT Engine:</strong> دورة حياة التوكن والتحقق في الذاكرة.
               </div>
-            </div>
-
-            <div style="font-size: 11px; color: #94A3B8; text-align: center; margin-top: 10px;">
-              💡 يمكنك النقر على أي متحدث من القائمة اليمنى للتدرب على توقيت وفقرات كل متحدث.
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 05. <strong>SQLite WAL:</strong> المعاملات المتزامنة ونزاهة الـ Foreign Keys.
+              </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 06. <strong>SessionManager:</strong> إدارة الجلسات المتزامنة وبث الإعلانات.
+              </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 07. <strong>CallCoordinator:</strong> آلة حالة إشارات المكالمات الرباعية.
+              </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 08. <strong>UDP Relay:</strong> توجيه تدفقات الوسائط اللحظية.
+              </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 09. <strong>UDP Discovery:</strong> بث والتقاط إعلانات الشبكة تلقائياً.
+              </div>
+              <div style="background: var(--bg-surface); padding: 10px 14px; border-radius: 8px; border: 1px solid var(--border-light); font-size: 12.5px;">
+                ✅ 10. <strong>End-to-End:</strong> اتصال حقيقي بمقابس فعلية وإرسال الحزم.
+              </div>
             </div>
           </div>
         </div>
       </section>
 
       <!-- ===================================================================
-           Slide 10: Excellence Checklist & Final Pledge
+           Slide 10: Conclusion & Defense Q&A Session Launch
            =================================================================== -->
       <section class="slide" id="slide-9">
         <div class="slide-header">
           <div class="slide-title-group">
-            <h1>خاتمة العرض وقائمة التحقق الهندسية للدرجة الكاملة</h1>
-            <p>الجاهزية التامة للمناقشة وإثبات جودة المعمارية والتكامل الهندسي</p>
+            <h1>خاتمة العرض الأكاديمي وبدء جلسة المناقشة</h1>
+            <p>إعلان اكتمال بناء النظام والجاهزية التامة لاستقبال أسئلة وملاحظات لجنة التحكيم الموقرة</p>
           </div>
-          <span class="speaker-pill all">🏆 نحو الامتياز والدرجة الكاملة</span>
+          <span class="speaker-pill all">🎓 جلسة المناقشة والأسئلة</span>
         </div>
 
         <div class="bento-grid grid-1-3-cols">
-          <!-- Left Summary Card -->
-          <div class="bento-card"
-            style="background: linear-gradient(145deg, #ECFDF5 0%, #FFFFFF 100%); border-color: #A7F3D0; text-align: center; justify-content: center;">
-            <div style="font-size: 40px; margin-bottom: 12px;">🌟</div>
-            <h2 style="font-size: 22px; font-weight: 900; color: #065F46; margin-bottom: 6px;">جاهزون للمناقشة!</h2>
-            <p style="font-size: 13px; color: #047857; margin-bottom: 16px;">مقرر برمجة خادم وعميل</p>
-            <div
-              style="background: #FFFFFF; border: 1px solid #A7F3D0; border-radius: 12px; padding: 12px; font-size: 12px; color: #334155; line-height: 1.6; text-align: right;">
-              ✅ <strong>62 / 62</strong> اختبار آلي ناجح بنسبة 100%<br>
-              ✅ <strong>3 حواسيب</strong> متصلة على شبكة LAN واحدة<br>
-              ✅ <strong>حزمة EXE واحدة</strong> جاهزة للتشغيل الفوري<br>
-              ✅ <strong>4 متحدثين</strong> يتقنون أدق تفاصيل الأكواد
+          <!-- Summary Card -->
+          <div class="bento-card" style="background: linear-gradient(145deg, #EEF2FF 0%, #FFFFFF 100%); border-color: #C7D2FE; text-align: center; justify-content: center;">
+            <div style="font-size: 40px; margin-bottom: 8px;">🌟</div>
+            <h2 style="font-size: 24px; font-weight: 900; color: #1E3A8A; margin-bottom: 6px;">SyncPulse</h2>
+            <div style="font-size: 13px; font-weight: 700; color: #4F46E5; margin-bottom: 16px;">مقرر برمجة خادم وعميل</div>
+            <div style="background: #FFFFFF; border: 1px solid #C7D2FE; border-radius: 12px; padding: 12px; font-size: 12.5px; color: #334155; line-height: 1.65; text-align: right;">
+              🚀 <strong>الإنجاز الهندسي:</strong> بناء نظام محادثات ومكالمات متكامل On-Premise LAN من الصفر فوق Raw Sockets مع حل معضلات الذاكرة والتزامن والأمان.
             </div>
           </div>
 
-          <!-- Right Checklist & Thanks -->
+          <!-- Formal Conclusion & Open for Questions -->
           <div class="bento-card" style="justify-content: space-between;">
             <div>
-              <h2 style="font-size: 20px; font-weight: 900; color: #0F172A; margin-bottom: 12px;">قائمة التحقق الميدانية
-                قبل الدخول إلى قاعة المناقشة:</h2>
+              <h2 style="font-size: 22px; font-weight: 900; color: #0F172A; margin-bottom: 14px;">الخلاصة الهندسية والتوصيات:</h2>
 
-              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-                <div
-                  style="background: var(--bg-surface); padding: 12px; border-radius: 10px; border: 1px solid var(--border-light);">
-                  <div style="font-weight: 800; font-size: 13px; color: #0F172A; margin-bottom: 4px;">📡 شبكة الواي فاي
-                    / Hotspot</div>
-                  <p style="font-size: 11px; color: var(--text-secondary);">التأكد من اتصال اللابتوبات الـ 3 بنفس نقطة
-                    الاتصال دون تشغيل VPN أو جدار حماية خارجي يحجب منفذي 8888 و 8889.</p>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 20px;">
+                <div style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
+                  <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 4px;">🎯 السيادة الرقمية الكاملة</div>
+                  <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.55;">إثبات قدرة الأنظمة المحلية على العمل المستقل الآمن في المنشآت الحساسة دون أي تبعية للخوادم السحابية الخارجية.</p>
                 </div>
 
-                <div
-                  style="background: var(--bg-surface); padding: 12px; border-radius: 10px; border: 1px solid var(--border-light);">
-                  <div style="font-weight: 800; font-size: 13px; color: #0F172A; margin-bottom: 4px;">🚀 الحزمة
-                    التنفيذية Standalone EXE</div>
-                  <p style="font-size: 11px; color: var(--text-secondary);">وضع نسخة من <span
-                      class="code-badge">SyncPulse_Master_Setup.exe</span> على سطح مكتب كل جهاز لتشغيل السيرفر والعميلين
-                    فورياً.</p>
-                </div>
-
-                <div
-                  style="background: var(--bg-surface); padding: 12px; border-radius: 10px; border: 1px solid var(--border-light);">
-                  <div style="font-weight: 800; font-size: 13px; color: #0F172A; margin-bottom: 4px;">📷 فحص الكاميرا
-                    والميكروفون</div>
-                  <p style="font-size: 11px; color: var(--text-secondary);">التأكد من منح صلاحيات الكاميرا في ويندوز
-                    لكلا العميلين لاختبار إطفاء الـ LED ونقاء الصوت 16kHz.</p>
-                </div>
-
-                <div
-                  style="background: var(--bg-surface); padding: 12px; border-radius: 10px; border: 1px solid var(--border-light);">
-                  <div style="font-weight: 800; font-size: 13px; color: #0F172A; margin-bottom: 4px;">🎯 بنك الأسئلة
-                    المباشر</div>
-                  <p style="font-size: 11px; color: var(--text-secondary);">مراجعة سريعة لملف <span
-                      class="code-badge">اسئلة_المناقش_الذكية_المستنتجة_من_الواجهات.md</span> لتثبيت الإجابات الصاعقة.
-                  </p>
+                <div style="background: var(--bg-surface); padding: 14px; border-radius: 12px; border: 1px solid var(--border-light);">
+                  <div style="font-weight: 800; font-size: 14px; color: #0F172A; margin-bottom: 4px;">⚡ الأداء وإدارة الذاكرة</div>
+                  <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.55;">الجمع بين نموذج IOCP غير الحاجب والمخازن الدائرية الثابتة حقق زمناً قياسياً (&lt; 10ms) مع صفر تسريب للذاكرة.</p>
                 </div>
               </div>
             </div>
 
-            <!-- Closing Note -->
-            <div
-              style="background: #F8FAFC; border: 1.5px solid #E2E8F0; border-radius: 14px; padding: 16px; display: flex; align-items: center; justify-content: space-between;">
+            <!-- Closing Acknowledgment Box -->
+            <div style="background: #F8FAFC; border: 1.5px solid #CBD5E1; border-radius: 14px; padding: 20px; display: flex; align-items: center; justify-content: space-between;">
               <div>
-                <div style="font-weight: 900; font-size: 15px; color: #0F172A;">خالص الشكر والتقدير لأستاذ المقرر الفاضل
-                  ولجنتنا الموقرة</div>
-                <div style="font-size: 12px; color: #64748B; margin-top: 2px;">نسأل الله التوفيق والسداد، ويسعدنا
-                  ويشرفنا الآن الإجابة على كافة أسئلتكم واستفساراتكم الهندسية.</div>
+                <div style="font-weight: 900; font-size: 18px; color: #0F172A;">خالص الشكر والتقدير لأستاذ المقرر الفاضل ولجنتنا الموقرة</div>
+                <div style="font-size: 13.5px; color: #64748B; margin-top: 4px;">يسعد ويشرف فريق العمل الهندسي الآن الاستماع لملاحظاتكم وتوجيهاتكم القيمة والإجابة على كافة الأسئلة.</div>
               </div>
-              <div style="font-size: 24px;">🎓✨</div>
+              <div style="font-size: 32px; margin-right: 16px;">🎓✨</div>
             </div>
           </div>
         </div>
@@ -984,41 +881,37 @@
 
     <!-- Quick Speaker Jumps -->
     <div class="dock-speaker-jump">
-      <button class="jump-btn" data-slide="2" data-speaker="s1" title="الانتقال للمتحدث الأول (المقابس)">👤 1:
-        المقابس</button>
-      <button class="jump-btn" data-slide="3" data-speaker="s2" title="الانتقال للمتحدث الثاني (الأمان)">👤 2:
-        الأمان</button>
-      <button class="jump-btn" data-slide="4" data-speaker="s3" title="الانتقال للمتحدث الثالث (الخادم)">👤 3:
-        السيرفر</button>
-      <button class="jump-btn" data-slide="5" data-speaker="s4" title="الانتقال للمتحدث الرابع (الميديا)">👤 4:
-        الميديا</button>
-      <button class="jump-btn" data-slide="6" data-speaker="all" title="سيناريو العرض العملي الحي">🎬 الديمو</button>
-      <button class="jump-btn" data-slide="8" data-speaker="all" title="محاكي الأدوار والمؤقت">⏱️ المحاكي</button>
+      <button class="jump-btn" data-slide="1" data-speaker="all" title="مصفوفة مفاهيم المقرر">🗺️ مفاهيم المقرر</button>
+      <button class="jump-btn" data-slide="2" data-speaker="s1" title="المتحدث 1: المقابس والتأطير">👤 1: المقابس</button>
+      <button class="jump-btn" data-slide="3" data-speaker="s2" title="المتحدث 2: الأمان والجلسات">👤 2: الأمان</button>
+      <button class="jump-btn" data-slide="4" data-speaker="s3" title="المتحدث 3: الخادم والتزامن">👤 3: السيرفر</button>
+      <button class="jump-btn" data-slide="5" data-speaker="s4" title="المتحدث 4: وسائط UDP والذاكرة">👤 4: الميديا</button>
+      <button class="jump-btn" data-slide="6" data-speaker="all" title="سيناريو العرض العملي الحي للأجهزة الـ 3">🎬 الديمو الحي</button>
+      <button class="jump-btn" data-slide="7" data-speaker="all" title="تشريح الترويسة وEndianness">🔬 تشريح الحزم</button>
+      <button class="jump-btn" data-slide="8" data-speaker="all" title="حزمة الاختبارات الآلية">🧪 الاختبارات</button>
     </div>
 
     <div class="dock-divider"></div>
 
-    <button class="dock-btn" id="toggleNotesBtn" title="عرض ملاحظات المتحدث وسيناريو الإلقاء (N)">📝</button>
+    <button class="dock-btn" id="toggleNotesBtn" title="عرض ملاحظات المتحدث وسيناريو الإلقاء الخاص (N)">📝</button>
   </nav>
 
   <!-- ===================================================================
-       Speaker Notes Drawer (Press N)
+       Speaker Notes Drawer (Press N - Private Presenter View)
        =================================================================== -->
   <aside class="notes-drawer" id="notesDrawer">
     <div class="notes-header">
       <div class="notes-title">
         <span>📋</span>
-        <span>ملاحظات المتحدث وسيناريو الإلقاء الذكي (Speaker Cue Notes)</span>
+        <span>ملاحظات المتحدث وسيناريو الإلقاء الخاص بمقرر برمجة خادم وعميل (اضغط N للإغلاق)</span>
       </div>
-      <button style="background: transparent; border: none; color: #94A3B8; cursor: pointer; font-size: 16px;"
-        id="closeNotesBtn">✕ إغلاق</button>
+      <button style="background: transparent; border: none; color: #94A3B8; cursor: pointer; font-size: 14px; font-weight: 700;" id="closeNotesBtn">✕ إغلاق الملاحظات</button>
     </div>
     <div class="notes-content" id="notesContent">
-      <!-- Injected via JS -->
+      <!-- Injected dynamically via presentation.js -->
     </div>
   </aside>
 
   <script src="presentation.js"></script>
 </body>
-
 </html>

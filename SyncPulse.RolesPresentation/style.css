@@ -1,6 +1,6 @@
 /* ==========================================================================
-   SyncPulse Roles Keynote Deck - Executive Light Theme
-   Color-Coded 4-Speaker Defense Presentation for Public Display (CSS)
+   SyncPulse Roles Keynote Deck - Animated Diagrams & Visual Components
+   Full Vector & Keyframe Animation Library (CSS)
    ========================================================================== */
 
 :root {
@@ -93,7 +93,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 36px 60px 96px 60px;
+  padding: 30px 56px 90px 56px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -117,7 +117,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .header-meta {
@@ -157,15 +157,15 @@ body {
 }
 
 .slide-title-group h1 {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 900;
   color: var(--text-primary);
-  line-height: 1.25;
+  line-height: 1.2;
   margin-bottom: 4px;
 }
 
 .slide-title-group p {
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text-muted);
   font-weight: 600;
 }
@@ -175,7 +175,7 @@ body {
    ========================================================================== */
 .bento-grid {
   display: grid;
-  gap: 18px;
+  gap: 16px;
   flex: 1;
 }
 
@@ -187,19 +187,19 @@ body {
   grid-template-columns: repeat(2, 1fr);
 }
 
-.grid-1-3-cols {
-  grid-template-columns: 1fr 2.5fr;
+.grid-1-2-cols {
+  grid-template-columns: 1fr 1.8fr;
 }
 
-.grid-3-cols {
-  grid-template-columns: repeat(3, 1fr);
+.grid-1-1-cols {
+  grid-template-columns: 1.1fr 1fr;
 }
 
 .bento-card {
   background: var(--bg-card);
   border: 1.5px solid var(--border-light);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   box-shadow: var(--shadow-sm);
@@ -214,26 +214,26 @@ body {
 }
 
 /* Card Accent Variations */
-.bento-card.accent-s1 { border-top: 6px solid var(--s1-accent); }
-.bento-card.accent-s2 { border-top: 6px solid var(--s2-accent); }
-.bento-card.accent-s3 { border-top: 6px solid var(--s3-accent); }
-.bento-card.accent-s4 { border-top: 6px solid var(--s4-accent); }
+.bento-card.accent-s1 { border-top: 5px solid var(--s1-accent); }
+.bento-card.accent-s2 { border-top: 5px solid var(--s2-accent); }
+.bento-card.accent-s3 { border-top: 5px solid var(--s3-accent); }
+.bento-card.accent-s4 { border-top: 5px solid var(--s4-accent); }
 
 .card-header-line {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 .card-icon-box {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 20px;
 }
 
 .card-icon-box.s1 { background: var(--s1-light); color: var(--s1-primary); }
@@ -242,17 +242,17 @@ body {
 .card-icon-box.s4 { background: var(--s4-light); color: var(--s4-primary); }
 
 .card-title {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 900;
   color: var(--text-primary);
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .card-subtitle {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--text-muted);
-  line-height: 1.5;
-  margin-bottom: 16px;
+  line-height: 1.4;
+  margin-bottom: 14px;
   font-weight: 600;
 }
 
@@ -261,7 +261,7 @@ body {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex: 1;
 }
 
@@ -269,11 +269,11 @@ body {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.5;
   color: var(--text-secondary);
   background: var(--bg-surface);
-  padding: 10px 14px;
+  padding: 8px 12px;
   border-radius: var(--radius-sm);
   border: 1px solid var(--border-light);
 }
@@ -285,10 +285,10 @@ body {
 
 .code-badge {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 11.5px;
   background: #FFFFFF;
   border: 1px solid #CBD5E1;
-  padding: 2px 8px;
+  padding: 2px 7px;
   border-radius: 4px;
   color: #0F172A;
   direction: ltr;
@@ -297,29 +297,267 @@ body {
   font-weight: 700;
 }
 
-/* Technical Metric Callout */
-.metric-box {
-  background: #F8FAFC;
-  border: 1.5px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 14px;
+/* ==========================================================================
+   ANIMATED & INTERACTIVE DIAGRAMS (KEYNOTE VISUALS)
+   ========================================================================== */
+
+/* 1. Header Frame Diagram */
+.frame-packet-diagram {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  margin: 10px 0;
+  direction: ltr;
+}
+
+.frame-byte-chunk {
+  flex: 1;
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  border-radius: 8px;
+  padding: 8px 6px;
+  text-align: center;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.frame-byte-chunk.active-byte {
+  border-color: var(--s1-accent);
+  background: var(--s1-light);
+  box-shadow: 0 0 12px rgba(79, 70, 229, 0.2);
+}
+
+.chunk-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: #1E293B;
+}
+
+.chunk-size {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--s1-primary);
+  margin-top: 2px;
+}
+
+/* 2. Pulse Animation for Radio Waves */
+@keyframes pulseRadio {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.08); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.beacon-pulse {
+  animation: pulseRadio 2s infinite ease-in-out;
+}
+
+/* 3. Stream Flow Animation (TCP Fragmentation) */
+@keyframes flowStream {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-12px); }
+  100% { transform: translateX(0); }
+}
+
+.stream-flow-box {
+  animation: flowStream 3s infinite ease-in-out;
+}
+
+/* 4. Crypto Pipeline Graphic */
+.crypto-pipeline {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 14px;
+  background: #FFFBEB;
+  border: 1.5px dashed var(--s2-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  margin: 10px 0;
 }
 
-.metric-number {
+.crypto-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.crypto-step-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--s2-primary);
+}
+
+.crypto-step-val {
   font-family: var(--font-mono);
-  font-size: 24px;
+  font-size: 12px;
   font-weight: 900;
-  color: var(--s1-primary);
+  color: #0F172A;
+  margin-top: 2px;
 }
 
-.metric-desc {
-  font-size: 12px;
+.crypto-arrow {
+  font-size: 16px;
+  color: var(--s2-accent);
+  font-weight: 900;
+}
+
+/* 5. JWT Token Structure Graphic */
+.jwt-diagram {
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid #CBD5E1;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  margin: 10px 0;
+  direction: ltr;
+}
+
+.jwt-part {
+  padding: 8px 12px;
+  font-weight: 800;
+  text-align: center;
+  flex: 1;
+}
+
+.jwt-header { background: #FEE2E2; color: #DC2626; border-right: 1.5px solid #FCA5A5; }
+.jwt-payload { background: #EDE9FE; color: #7C3AED; border-right: 1.5px solid #C4B5FD; }
+.jwt-signature { background: #E0F2FE; color: #0284C7; }
+
+/* 6. Ring Buffer Diagram (Audio Zero-Alloc) */
+.ring-buffer-container {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 4px;
+  margin: 10px 0;
+  direction: ltr;
+}
+
+.ring-slot {
+  background: #FFFFFF;
+  border: 1.5px solid #DDD6FE;
+  border-radius: 6px;
+  padding: 6px 2px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
   font-weight: 700;
-  color: var(--text-muted);
+  color: #4C1D95;
+  transition: all 0.2s;
+}
+
+.ring-slot.slot-active {
+  background: #7C3AED;
+  color: #FFFFFF;
+  border-color: #5B21B6;
+  box-shadow: 0 0 10px rgba(124, 58, 237, 0.4);
+}
+
+/* 7. Triple Check Status Icons */
+.check-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  background: #F0FDF4;
+  border: 1.5px solid #BBF7D0;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+}
+
+.check-status-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.check-icon {
+  font-size: 18px;
+  font-weight: 900;
+}
+
+.check-icon.sent { color: #64748B; }
+.check-icon.delivered { color: #0284C7; }
+.check-icon.read { color: #2563EB; text-shadow: 0 0 8px rgba(37, 99, 235, 0.4); }
+
+.check-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #334155;
+  margin-top: 2px;
+}
+
+/* 8. Live Network Topology Diagram (Slide 7) */
+.topology-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  background: #F8FAFC;
+  border: 1.5px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 18px 24px;
+  margin: 12px 0;
+}
+
+.topo-node {
+  background: #FFFFFF;
+  border: 2px solid #CBD5E1;
+  border-radius: 14px;
+  padding: 12px 18px;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+.topo-node:hover {
+  transform: scale(1.04);
+}
+
+.topo-node.server-node { border-color: var(--s1-accent); background: var(--s1-light); }
+.topo-node.client-node-a { border-color: var(--s2-accent); background: var(--s2-light); }
+.topo-node.client-node-b { border-color: var(--s3-accent); background: var(--s3-light); }
+
+.topo-title {
+  font-size: 14px;
+  font-weight: 900;
+  color: #0F172A;
+}
+
+.topo-badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  margin-top: 4px;
+  display: block;
+}
+
+.topo-link {
+  flex: 1;
+  height: 2px;
+  background: repeating-linear-gradient(90deg, #94A3B8, #94A3B8 6px, transparent 6px, transparent 12px);
+  position: relative;
+  margin: 0 10px;
+}
+
+.topo-link::after {
+  content: 'TCP:8888 / UDP:8889';
+  position: absolute;
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 800;
+  color: #64748B;
+  background: #FFFFFF;
+  padding: 1px 6px;
+  border-radius: 4px;
+  border: 1px solid #E2E8F0;
 }
 
 /* ==========================================================================
@@ -327,7 +565,7 @@ body {
    ========================================================================== */
 .floating-dock {
   position: fixed;
-  bottom: 20px;
+  bottom: 18px;
   left: 50%;
   transform: translateX(-50%);
   background: rgba(255, 255, 255, 0.96);
@@ -417,7 +655,7 @@ body {
   background: #0F172A;
   color: #F8FAFC;
   border-top: 3px solid var(--s1-accent);
-  padding: 24px 60px;
+  padding: 22px 56px;
   box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.4);
   transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 200;
@@ -433,7 +671,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .notes-title {
@@ -446,7 +684,7 @@ body {
 }
 
 .notes-content {
-  font-size: 14.5px;
+  font-size: 14px;
   line-height: 1.7;
   color: #CBD5E1;
   overflow-y: auto;
@@ -457,7 +695,6 @@ body {
   color: #FFFFFF;
 }
 
-/* Helper pill */
 .help-pill {
   font-size: 11px;
   color: var(--text-muted);
