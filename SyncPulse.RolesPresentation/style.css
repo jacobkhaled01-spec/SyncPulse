@@ -1,0 +1,465 @@
+/* ==========================================================================
+   SyncPulse Roles Keynote Deck - Executive Light Theme
+   Color-Coded 4-Speaker Defense Presentation for Public Display (CSS)
+   ========================================================================== */
+
+:root {
+  --bg-main: #F8FAFC;
+  --bg-card: #FFFFFF;
+  --bg-surface: #F1F5F9;
+  --text-primary: #0F172A;
+  --text-secondary: #334155;
+  --text-muted: #64748B;
+  --border-light: #E2E8F0;
+  --border-card: #CBD5E1;
+
+  /* Speaker 1: Royal Indigo (Sockets & Framing) */
+  --s1-primary: #3730A3;
+  --s1-accent: #4F46E5;
+  --s1-light: #EEF2FF;
+  --s1-border: #C7D2FE;
+
+  /* Speaker 2: Deep Amber (Security & Auth) */
+  --s2-primary: #92400E;
+  --s2-accent: #D97706;
+  --s2-light: #FFFBEB;
+  --s2-border: #FDE68A;
+
+  /* Speaker 3: Emerald Forest (Server & Sync) */
+  --s3-primary: #065F46;
+  --s3-accent: #059669;
+  --s3-light: #ECFDF5;
+  --s3-border: #A7F3D0;
+
+  /* Speaker 4: Royal Violet (UDP Media & Memory) */
+  --s4-primary: #5B21B6;
+  --s4-accent: #7C3AED;
+  --s4-light: #F5F3FF;
+  --s4-border: #DDD6FE;
+
+  --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 6px 16px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.05);
+  --shadow-lg: 0 16px 32px -4px rgba(15, 23, 42, 0.1);
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
+
+  --font-arabic: 'Cairo', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Consolas', monospace;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-arabic);
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  direction: rtl;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  user-select: none;
+}
+
+/* ==========================================================================
+   Presentation Shell (16:9 Aspect Ratio Container)
+   ========================================================================== */
+.deck-container {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  background: radial-gradient(circle at 15% 15%, #F1F5F9 0%, #F8FAFC 100%);
+}
+
+.slide-stage {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 36px 60px 96px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(14px) scale(0.99);
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide.active {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+  z-index: 10;
+}
+
+/* ==========================================================================
+   Slide Header Elements
+   ========================================================================== */
+.slide-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+.header-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.speaker-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: var(--radius-full);
+  font-size: 14px;
+  font-weight: 800;
+  border: 1.5px solid transparent;
+}
+
+.speaker-pill.s1 { background: var(--s1-light); color: var(--s1-primary); border-color: var(--s1-border); }
+.speaker-pill.s2 { background: var(--s2-light); color: var(--s2-primary); border-color: var(--s2-border); }
+.speaker-pill.s3 { background: var(--s3-light); color: var(--s3-primary); border-color: var(--s3-border); }
+.speaker-pill.s4 { background: var(--s4-light); color: var(--s4-primary); border-color: var(--s4-border); }
+.speaker-pill.all { background: #EEF2FF; color: #3730A3; border-color: #C7D2FE; }
+
+.timer-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.slide-title-group h1 {
+  font-size: 32px;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin-bottom: 4px;
+}
+
+.slide-title-group p {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   Bento Cards & Layouts
+   ========================================================================== */
+.bento-grid {
+  display: grid;
+  gap: 18px;
+  flex: 1;
+}
+
+.grid-4-cols {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-2-cols {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-1-3-cols {
+  grid-template-columns: 1fr 2.5fr;
+}
+
+.grid-3-cols {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.bento-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.bento-card:hover {
+  border-color: var(--border-card);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+/* Card Accent Variations */
+.bento-card.accent-s1 { border-top: 6px solid var(--s1-accent); }
+.bento-card.accent-s2 { border-top: 6px solid var(--s2-accent); }
+.bento-card.accent-s3 { border-top: 6px solid var(--s3-accent); }
+.bento-card.accent-s4 { border-top: 6px solid var(--s4-accent); }
+
+.card-header-line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.card-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.card-icon-box.s1 { background: var(--s1-light); color: var(--s1-primary); }
+.card-icon-box.s2 { background: var(--s2-light); color: var(--s2-primary); }
+.card-icon-box.s3 { background: var(--s3-light); color: var(--s3-primary); }
+.card-icon-box.s4 { background: var(--s4-light); color: var(--s4-primary); }
+
+.card-title {
+  font-size: 19px;
+  font-weight: 900;
+  color: var(--text-primary);
+  margin-bottom: 6px;
+}
+
+.card-subtitle {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+/* Item List Inside Cards */
+.pillar-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.pillar-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+}
+
+.pillar-item strong {
+  color: var(--text-primary);
+  font-weight: 800;
+}
+
+.code-badge {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  padding: 2px 8px;
+  border-radius: 4px;
+  color: #0F172A;
+  direction: ltr;
+  display: inline-block;
+  unicode-bidi: isolate;
+  font-weight: 700;
+}
+
+/* Technical Metric Callout */
+.metric-box {
+  background: #F8FAFC;
+  border: 1.5px solid var(--border-light);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.metric-number {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 900;
+  color: var(--s1-primary);
+}
+
+.metric-desc {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* ==========================================================================
+   Floating Navigation Dock
+   ========================================================================== */
+.floating-dock {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(20px);
+  border: 1.5px solid var(--border-card);
+  border-radius: var(--radius-full);
+  padding: 6px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: var(--shadow-lg);
+  z-index: 100;
+}
+
+.dock-btn {
+  background: transparent;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 15px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dock-btn:hover {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+}
+
+.dock-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--border-light);
+}
+
+.dock-speaker-jump {
+  display: flex;
+  gap: 6px;
+}
+
+.jump-btn {
+  padding: 4px 12px;
+  border-radius: var(--radius-full);
+  font-size: 12px;
+  font-weight: 800;
+  border: 1px solid var(--border-light);
+  background: #FFFFFF;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-family: var(--font-arabic);
+  transition: all 0.15s ease;
+}
+
+.jump-btn:hover {
+  border-color: var(--text-primary);
+}
+
+.jump-btn.active-s1 { background: var(--s1-accent); color: #FFFFFF; border-color: var(--s1-accent); }
+.jump-btn.active-s2 { background: var(--s2-accent); color: #FFFFFF; border-color: var(--s2-accent); }
+.jump-btn.active-s3 { background: var(--s3-accent); color: #FFFFFF; border-color: var(--s3-accent); }
+.jump-btn.active-s4 { background: var(--s4-accent); color: #FFFFFF; border-color: var(--s4-accent); }
+.jump-btn.active-all { background: #0F172A; color: #FFFFFF; border-color: #0F172A; }
+
+.slide-counter {
+  font-size: 13px;
+  font-weight: 900;
+  color: var(--text-secondary);
+  min-width: 50px;
+  text-align: center;
+  font-family: var(--font-mono);
+}
+
+/* ==========================================================================
+   Speaker Notes Drawer (Press N)
+   ========================================================================== */
+.notes-drawer {
+  position: fixed;
+  bottom: -340px;
+  left: 0;
+  width: 100%;
+  height: 300px;
+  background: #0F172A;
+  color: #F8FAFC;
+  border-top: 3px solid var(--s1-accent);
+  padding: 24px 60px;
+  box-shadow: 0 -12px 40px rgba(0, 0, 0, 0.4);
+  transition: bottom 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+.notes-drawer.open {
+  bottom: 0;
+}
+
+.notes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.notes-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.notes-content {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: #CBD5E1;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.notes-content strong {
+  color: #FFFFFF;
+}
+
+/* Helper pill */
+.help-pill {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 700;
+}
